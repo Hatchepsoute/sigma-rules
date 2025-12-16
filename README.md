@@ -146,7 +146,41 @@ Correlation should be implemented using native SIEM alerting or SOAR playbooks.
 - https://foresiet.com/blog/apt-c-08-winrar-directory-traversal-exploit/  
 - https://www.secpod.com/blog/archive-terror-dissecting-the-winrar-cve-2025-6218-exploit-apt-c-08s-stealth-move/
 ---
+## ⚠️ False Positives Considerations
 
+While the provided Sigma rules are designed to detect suspicious WinRAR behavior related to CVE-2025-6218 exploitation, certain legitimate scenarios may trigger alerts.
+
+### Potential False Positive Scenarios
+
+- **Legitimate use of WinRAR by IT administrators**
+  - Extraction of archives containing complex directory structures
+  - Use of command-line options such as `-x`, `-ep`, or `-o+` in scripts or automation
+
+- **Software deployment or packaging tools**
+  - Applications or installers using WinRAR or UnRAR internally
+  - Automated extraction into system or startup directories during legitimate installations
+
+- **Forensic or analysis environments**
+  - Malware analysts extracting samples in controlled environments
+  - Sandboxes or lab systems simulating attacker behavior
+
+### Reduction Recommendations
+
+- Restrict alerts to **non-administrative users**
+- Correlate with:
+  - Archive origin (email, browser download)
+  - User interaction (recent download activity)
+- Exclude known trusted paths, scripts, or service accounts
+- Prioritize alerts where **both Sigma rules are triggered within a short time window**
+
+### Analyst Guidance
+
+An alert should be considered **high confidence** when:
+- WinRAR performs path traversal during extraction **and**
+- A file is written to a Windows persistence location shortly after
+
+Single-rule matches should be treated as **suspicious but informational** until further context is obtained.
+---
 ## 👤 Author
 
 **Adama Assiongbon**  
