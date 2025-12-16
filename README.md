@@ -6,7 +6,7 @@
 
 ## 🚨 WinRAR CVE-2025-6218 - Sigma Detection Pack
 
-## 🎯 Objective
+### 🎯 Objective
 This repository provides production-ready Sigma rules to detect exploitation attempts of the WinRAR directory traversal vulnerability (CVE-2025-6218) on Windows systems.
 
 The vulnerability allows attackers to extract files outside the intended directory, enabling payload drops and persistence mechanisms.
