@@ -1,3 +1,9 @@
+![Sigma](https://img.shields.io/badge/Sigma-Rules-blue)
+![Windows](https://img.shields.io/badge/Platform-Windows-informational)
+![CVE](https://img.shields.io/badge/CVE-2025--6218-critical)
+![License](https://img.shields.io/badge/License-MIT-green)
+![SOC](https://img.shields.io/badge/Use--case-SOC%20%7C%20CTI-blueviolet)
+
 # WinRAR CVE-2025-6218 — Pack de Détection Sigma
 
 ## 🎯 Objectif
