@@ -16,7 +16,6 @@ The detection approach follows Sigma best practices:
 - SIEM / SOAR-level correlation
 - Cross-platform portability
 
----
 
 ## 📌 CVE Overview
 
@@ -28,7 +27,6 @@ The detection approach follows Sigma best practices:
 | OS | Windows |
 | Impact | Arbitrary file write |
 
----
 
 ## 📂 Repository Content
 
@@ -49,7 +47,6 @@ The detection approach follows Sigma best practices:
 
 High confidence is achieved when both detections are correlated within a short time window.
 
----
 
 ## ⚙️ Step-by-Step Conversion Guide
 
@@ -107,7 +104,6 @@ sigma convert -t net_witness WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
 sigma convert -t net_witness WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
 ```
 
----
 
 ## 🧭 Pipeline Selection Guide
 
