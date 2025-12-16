@@ -147,7 +147,6 @@ La corrélation doit être implémentée via les mécanismes natifs du SIEM ou �
 - Accès initial : T1566 (Phishing – archive piégée)
 - Exécution : T1204 (Exécution par l’utilisateur)
 - Persistance : T1547 (Dossier Startup / Tâche planifiée)
----
 
 ---
 ## 🔗 References
@@ -157,6 +156,42 @@ La corrélation doit être implémentée via les mécanismes natifs du SIEM ou �
 - https://foresiet.com/blog/apt-c-08-winrar-directory-traversal-exploit/  
 - https://www.secpod.com/blog/archive-terror-dissecting-the-winrar-cve-2025-6218-exploit-apt-c-08s-stealth-move/
 ---
+## ⚠️ Gestion des faux positifs
+
+Bien que les règles Sigma fournies visent à détecter des comportements suspects liés à l’exploitation de la CVE-2025-6218 affectant WinRAR, certains scénarios légitimes peuvent générer des alertes.
+
+### Scénarios potentiels de faux positifs
+
+- **Utilisation légitime de WinRAR par des administrateurs IT**
+  - Extraction d’archives contenant des arborescences complexes
+  - Utilisation d’options en ligne de commande telles que `-x`, `-ep` ou `-o+` dans des scripts
+
+- **Outils de déploiement ou d’installation logicielle**
+  - Logiciels utilisant WinRAR ou UnRAR pour l’extraction de composants
+  - Installations automatisées écrivant dans des répertoires système ou de démarrage
+
+- **Environnements de test ou d’analyse**
+  - Analystes malware extrayant des échantillons à des fins d’analyse
+  - Bacs à sable ou laboratoires simulant des comportements malveillants
+
+### Recommandations pour réduire les faux positifs
+
+- Restreindre les alertes aux **utilisateurs non administrateurs**
+- Corréler avec :
+  - L’origine de l’archive (email, téléchargement web)
+  - Les actions récentes de l’utilisateur
+- Exclure les chemins, scripts ou comptes de service de confiance
+- Prioriser les alertes lorsque **les deux règles Sigma sont déclenchées dans un intervalle de temps court**
+
+### Guide pour les analystes SOC
+
+Une alerte doit être considérée comme **à forte probabilité de compromission** lorsque :
+- WinRAR exécute une extraction avec traversée de répertoires **et**
+- Un fichier est créé dans un emplacement de persistance Windows peu de temps après
+
+Les déclenchements isolés d’une seule règle doivent être traités comme **suspects mais informatifs**, en attente de contexte complémentaire.
+
+
 ## 👤 Auteur
 
 **Adama Assiongbon**  
