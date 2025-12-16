@@ -1,156 +1,140 @@
-# WinRAR CVE-2025-6218 - Sigma Detection Pack
+![Sigma](https://img.shields.io/badge/Sigma-Rules-blue)
+![Windows](https://img.shields.io/badge/Platform-Windows-informational)
+![CVE](https://img.shields.io/badge/CVE-2025--6218-critical)
+![License](https://img.shields.io/badge/License-MIT-green)
+![SOC](https://img.shields.io/badge/Use--case-SOC%20%7C%20CTI-blueviolet)
 
-## 🎯 Objective
-This repository provides production-ready Sigma rules to detect exploitation attempts of the WinRAR directory traversal vulnerability (CVE-2025-6218) on Windows systems.
+# 🚨 WinRAR CVE-2025-6218 — Sigma Detection Pack
 
-The vulnerability allows attackers to extract files outside the intended directory, enabling payload drops and persistence mechanisms.
-
-The detection approach follows Sigma best practices:
-- Atomic detection rules
-- SIEM / SOAR-level correlation
-- Cross-platform portability
+This repository provides **Sigma detection rules** to identify exploitation attempts of the **WinRAR directory traversal vulnerability (CVE-2025-6218)**, actively exploited and added to the **CISA Known Exploited Vulnerabilities (KEV)** catalog.
 
 ---
 
-## 📌 CVE Overview
+## 🧩 📌 CVE Overview
 
-| Field | Value |
-|------|-------|
-| CVE | CVE-2025-6218 |
-| Type | Directory Traversal |
-| Product | WinRAR |
-| OS | Windows |
-| Impact | Arbitrary file write |
+- **CVE:** CVE-2025-6218  
+- **Vulnerability Type:** Directory Traversal during archive extraction  
+- **Affected Software:** WinRAR (Windows)  
+- **Impact:** Arbitrary file write → Payload drop → Persistence  
+- **Threat Context:** Actively exploited in the wild (CISA KEV)
 
 ---
 
 ## 📂 Repository Content
 
-- WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-- WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-- README.md
-- README_FR.md
+| File | Description |
+|----|----|
+| `WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml` | 🧠 Detects WinRAR executions abusing path traversal during extraction |
+| `WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml` | 🧠 Detects file writes by WinRAR into Windows persistence locations |
+| `README.md` | 📘 Documentation and SOC usage guide |
+| `README_FR.md` | 📘 Documentation et guide SOC (français) |
 
 ---
 
-## 🧠 Detection Strategy
+## 🔍 Detection Strategy
 
-1. **Initial exploitation detection**
-   - WinRAR extraction abusing directory traversal patterns
+🧠 The detection approach is **atomic and modular**:
 
-2. **Post-exploitation detection**
-   - WinRAR writing files into Windows persistence locations
-
-High confidence is achieved when both detections are correlated within a short time window.
+- Each Sigma rule focuses on **one specific malicious behavior**
+- **High-confidence detection** is achieved through **correlation at the SIEM / SOAR level**
+- Rules are intentionally **portable and backend-agnostic**
 
 ---
 
-## ⚙️ Step-by-Step Conversion Guide
+## 🔗 🧠 Correlation Logic (SIEM / SOAR)
 
-### 1️⃣ Prerequisites
+### 🇬🇧 English
 
-- Sigma CLI v2.x
-- Sysmon enabled (recommended)
-- Logs ingested into a SIEM
+Although Sigma CLI has limited support for `type: correlation`, these rules are **designed to be correlated downstream**.
 
-#### Verify installation:
+✅ Trigger a **high-severity alert** when:
 
-```bash
-sigma list pipelines
-sigma list targets
-```
-#### 📥 Rule validation
+1️⃣ WinRAR is executed with **path traversal patterns** during extraction  
+2️⃣ WinRAR writes files into **Windows persistence locations**
 
-Validate the rules using Sigma CLI:
-
-```bash
-sigma check WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma check WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
-### 2️⃣ OpenSearch (Sysmon)
-
-```bash
-sigma convert -t opensearch_lucene -p sysmon WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t opensearch_lucene -p sysmon WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
-
-### 3️⃣ Elastic (ECS / Winlogbeat)
-
-```bash
-sigma convert -t lucene -p ecs_windows WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t lucene -p ecs_windows WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
-
-### 4️⃣ EQL (Elastic Security):
-```bash
-sigma convert -t eql -p ecs_windows WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t eql -p ecs_windows WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
-
-### 5️⃣ Splunk
-
-```bash
-sigma convert -t splunk -p splunk_windows WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t splunk -p splunk_windows WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
-
-### 6️⃣ NetWitness
-
-```bash
-sigma convert -t net_witness WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t net_witness WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
+⏱️ Time window: **10 minutes**  
+🔑 Correlation keys: **Hostname, User**
 
 ---
 
-## 🧭 Pipeline Selection Guide
+### 🇫🇷 Français
 
-| SIEM | Logs | Recommended Pipeline | Target |
-|------|------|----------------------|--------|
+✅ Déclencher une **alerte critique** lorsque :
+
+1️⃣ WinRAR est exécuté avec des **motifs de traversée de répertoires**  
+2️⃣ WinRAR écrit des fichiers dans des **emplacements de persistance Windows**
+
+⏱️ Fenêtre temporelle : **10 minutes**  
+🔑 Clés : **Machine, Utilisateur**
+
+---
+
+## 🧭 🛠️ Pipeline Selection Guide
+
+⚠️ Choosing the correct pipeline is critical.  
+An incorrect pipeline may result in queries that do not match any events.
+
+| SIEM | Logs | Pipeline | Target |
+|----|----|----|----|
 | OpenSearch | Sysmon | `sysmon` | `opensearch_lucene` |
-| Elastic | Winlogbeat (ECS) | `ecs_windows` | `lucene`, `eql` |
-| Splunk | Windows Logs | `splunk_windows` | `splunk` |
-| SentinelOne | Endpoint Telemetry | *(none)* | `sentinel_one` |
-| NetWitness | Windows Logs | *(none)* | `net_witness` |
-
-
-> ⚠️ Choosing the correct pipeline is critical.  
-> An incorrect pipeline may result in queries that do not match any events.
+| Elastic | Winlogbeat ECS | `ecs_windows` | `lucene`, `eql` |
+| Splunk | Windows | `splunk_windows` | `splunk` |
+| SentinelOne | Endpoint | none | `sentinel_one` |
+| NetWitness | Windows | none | `net_witness` |
 
 ---
 
-## 🔗 Correlation Logic (SIEM / SOAR)
+## 🧠 ⚠️ False Positives Management
 
-Trigger a HIGH severity alert if:
-- Rule 1 AND Rule 2
-- Same host (and ideally same user)
-- Within 10 minutes
-Correlation should be implemented using native SIEM alerting or SOAR playbooks.
----
-## 🧬 MITRE ATT&CK Mapping
+Possible false positives include:
 
-- Initial Access: T1566 (Phishing – weaponized archive)
-- Execution: T1204 (User Execution)
-- Persistence: T1547 (Startup Folder / Scheduled Task)
+- Legitimate WinRAR extraction of developer archives
+- Administrative scripts using WinRAR with advanced options
+- Software deployment using archives
+
+🛡️ **Mitigation tips:**
+- Correlate with persistence write detection
+- Exclude trusted users or signed archives
+- Apply allowlists for known extraction paths
+
 ---
-## 🔗 References
+
+## 🛡️ 🚑 Response & Triage Recommendations
+
+**Immediate actions:**
+- Isolate affected endpoint
+- Inspect extracted archive and dropped files
+- Review Startup folders & Scheduled Tasks
+- Validate WinRAR version
+
+**Mitigation:**
+- Patch WinRAR immediately
+- Restrict archive execution from email/web downloads
+- Enable Sysmon command-line & file write logging
+
+---
+
+## 🔗 📚 References
 
 - https://nvd.nist.gov/vuln/detail/CVE-2025-6218  
+- https://www.cisa.gov/news-events/alerts/2025/12/09/cisa-adds-two-known-exploited-vulnerabilities-catalog  
 - https://thehackernews.com/2025/12/warning-winrar-vulnerability-cve-2025.html  
 - https://foresiet.com/blog/apt-c-08-winrar-directory-traversal-exploit/  
 - https://www.secpod.com/blog/archive-terror-dissecting-the-winrar-cve-2025-6218-exploit-apt-c-08s-stealth-move/
+
 ---
 
-## 👤 Author
+## 👤 ✍️ Author
 
 **Adama Assiongbon**  
 SOC / CTI Analyst Consultant  
 
-GitHub: https://github.com/hatchepsoout  
-LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
+- GitHub: https://github.com/Hatchepsoute  
+- LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
 
 ---
 
 ### ⚠️ Disclaimer
 
-These rules are provided for defensive purposes only. Always test before production deployment.
+These rules are provided **for defensive security purposes only**.  
+They do **not** include exploit code or offensive payloads and must be tested before production deployment.
