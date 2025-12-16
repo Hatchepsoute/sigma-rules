@@ -103,7 +103,7 @@ sigma convert -t splunk -p splunk_windows WinRAR_Persistence_Startup_Write_CVE-2
 sigma convert -t net_witness WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
 sigma convert -t net_witness WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
 ```
-
+---
 
 ## 🧭 Pipeline Selection Guide
 
@@ -118,8 +118,6 @@ sigma convert -t net_witness WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
 
 > ⚠️ Choosing the correct pipeline is critical.  
 > An incorrect pipeline may result in queries that do not match any events.
-
----
 
 ## 🔗 Correlation Logic (SIEM / SOAR)
 
@@ -185,7 +183,6 @@ SOC / CTI Analyst Consultant
 GitHub: https://github.com/hatchepsoout  
 LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
 
----
 
 ## ⚠️ Disclaimer
 
