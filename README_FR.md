@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![SOC](https://img.shields.io/badge/Use--case-SOC%20%7C%20CTI-blueviolet)
 
-# WinRAR CVE-2025-6218 — Pack de Détection Sigma
+# 🚨 WinRAR CVE-2025-6218 — Pack de Détection Sigma
 
 ## 🎯 Objectif
 Ce dépôt fournit des règles Sigma prêtes pour la production afin de détecter l’exploitation de la vulnérabilité CVE-2025-6218 affectant WinRAR sous Windows.
@@ -167,7 +167,7 @@ LinkedIn : https://www.linkedin.com/in/adama-assiongbon-9029893a/
 
 ---
 
-## ⚠️ Avertissement
+### ⚠️ Avertissement
 
 Ces règles sont fournies à des fins défensives uniquement. Toujours tester et adapter les règles à votre environnement avant toute mise en production.
 
