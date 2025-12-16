@@ -151,7 +151,6 @@ LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
 
 ---
 
-## ⚠️ Disclaimer
+### ⚠️ Disclaimer
 
 These rules are provided for defensive purposes only. Always test before production deployment.
-Hatchepsoute
