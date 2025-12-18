@@ -1,189 +1,101 @@
-![Sigma](https://img.shields.io/badge/Sigma-Rules-blue)
-![Windows](https://img.shields.io/badge/Platform-Windows-informational)
-![CVE](https://img.shields.io/badge/CVE-2025--6218-critical)
-![License](https://img.shields.io/badge/License-MIT-green)
-![SOC](https://img.shields.io/badge/Use--case-SOC%20%7C%20CTI-blueviolet)
+# 🛡️ sigma-rules
+### Community Sigma Rules for CVE Detection & Blue Team Operations
 
-## 🚨 WinRAR CVE-2025-6218 - Sigma Detection Pack
+## 🎯 Objectif du dépôt
+Ce dépôt fournit une collection de règles Sigma orientées Blue Team, organisées par CVE,
+afin de détecter l’exploitation de vulnérabilités connues et les comportements post-exploitation
+observés en environnement SOC.
 
-### 🎯 Objective
-This repository provides production-ready Sigma rules to detect exploitation attempts of the WinRAR directory traversal vulnerability (CVE-2025-6218) on Windows systems.
+Approche : comportementale, agnostique SIEM (ELK, OpenSearch, Splunk, Sentinel, Wazuh, EDR).
 
-The vulnerability allows attackers to extract files outside the intended directory, enabling payload drops and persistence mechanisms.
+## 🧠 Philosophie
+❌ Signatures statiques uniquement  
+✅ Détection comportementale et contextuelle
 
-The detection approach follows Sigma best practices:
-- Atomic detection rules
-- SIEM / SOAR-level correlation
-- Cross-platform portability
+## 📦 Organisation
+Chaque CVE est traitée comme un pack indépendant.
 
-
-## 📌 CVE Overview
-
-| Field | Value |
-|------|-------|
-| CVE | CVE-2025-6218 |
-| Type | Directory Traversal |
-| Product | WinRAR |
-| OS | Windows |
-| Impact | Arbitrary file write |
-
-
-## 📂 Repository Content
-
-- WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-- WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-- README.md
-- README_FR.md
-
----
-
-## 🧠 Detection Strategy
-
-1. **Initial exploitation detection**
-   - WinRAR extraction abusing directory traversal patterns
-
-2. **Post-exploitation detection**
-   - WinRAR writing files into Windows persistence locations
-
-High confidence is achieved when both detections are correlated within a short time window.
-
-
-## ⚙️ Step-by-Step Conversion Guide
-
-### 1️⃣ Prerequisites
-
-- Sigma CLI v2.x
-- Sysmon enabled (recommended)
-- Logs ingested into a SIEM
-
-#### Verify installation:
-
-```bash
-sigma list pipelines
-sigma list targets
 ```
-#### 📥 Rule validation
-
-Validate the rules using Sigma CLI:
-
-```bash
-sigma check WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma check WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
-### 2️⃣ OpenSearch (Sysmon)
-
-```bash
-sigma convert -t opensearch_lucene -p sysmon WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t opensearch_lucene -p sysmon WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
+sigma-rules/
+├── README.md
+├── packs/
+│   ├── CVE-2025-6218_WinRAR/
+│   └── CVE-2025-50165_WindowsGraphics/
+└── diagrams/
 ```
 
-### 3️⃣ Elastic (ECS / Winlogbeat)
+## 🧩 Packs disponibles
+- CVE-2025-6218 – WinRAR (Path Traversal / Persistence)
+- CVE-2025-50165 – Windows Graphics Component (weaponized images)
 
+## 🛡️ Niveaux de règles
+- BROAD : hunting, couverture maximale
+- STRICT : production SOC, faible bruit
+
+## 🔁 Conversion Sigma → SIEM
+Utiliser sigma-cli :
 ```bash
-sigma convert -t lucene -p ecs_windows WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t lucene -p ecs_windows WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
+pip install sigma-cli
+sigma convert -t splunk rule.yml
+sigma convert -t elasticsearch rule.yml
+sigma convert -t sentinel rule.yml
 ```
 
-### 4️⃣ EQL (Elastic Security):
-```bash
-sigma convert -t eql -p ecs_windows WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t eql -p ecs_windows WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
-
-### 5️⃣ Splunk
-
-```bash
-sigma convert -t splunk -p splunk_windows WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t splunk -p splunk_windows WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
-
-### 6️⃣ NetWitness
-
-```bash
-sigma convert -t net_witness WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml
-sigma convert -t net_witness WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml
-```
----
-
-## 🧭 Pipeline Selection Guide
-
-| SIEM | Logs | Recommended Pipeline | Target |
-|------|------|----------------------|--------|
-| OpenSearch | Sysmon | `sysmon` | `opensearch_lucene` |
-| Elastic | Winlogbeat (ECS) | `ecs_windows` | `lucene`, `eql` |
-| Splunk | Windows Logs | `splunk_windows` | `splunk` |
-| SentinelOne | Endpoint Telemetry | *(none)* | `sentinel_one` |
-| NetWitness | Windows Logs | *(none)* | `net_witness` |
-
-
-> ⚠️ Choosing the correct pipeline is critical.  
-> An incorrect pipeline may result in queries that do not match any events.
-
-## 🔗 Correlation Logic (SIEM / SOAR)
-
-Trigger a HIGH severity alert if:
-- Rule 1 AND Rule 2
-- Same host (and ideally same user)
-- Within 10 minutes
-Correlation should be implemented using native SIEM alerting or SOAR playbooks.
----
-## 🧬 MITRE ATT&CK Mapping
-
-- Initial Access: T1566 (Phishing – weaponized archive)
-- Execution: T1204 (User Execution)
-- Persistence: T1547 (Startup Folder / Scheduled Task)
----
-## 🔗 References
-
-- https://nvd.nist.gov/vuln/detail/CVE-2025-6218  
-- https://thehackernews.com/2025/12/warning-winrar-vulnerability-cve-2025.html  
-- https://foresiet.com/blog/apt-c-08-winrar-directory-traversal-exploit/  
-- https://www.secpod.com/blog/archive-terror-dissecting-the-winrar-cve-2025-6218-exploit-apt-c-08s-stealth-move/
----
-## ⚠️ False Positives Considerations
-
-While the provided Sigma rules are designed to detect suspicious WinRAR behavior related to CVE-2025-6218 exploitation, certain legitimate scenarios may trigger alerts.
-
-### Potential False Positive Scenarios
-
-- **Legitimate use of WinRAR by IT administrators**
-  - Extraction of archives containing complex directory structures
-  - Use of command-line options such as `-x`, `-ep`, or `-o+` in scripts or automation
-
-- **Software deployment or packaging tools**
-  - Applications or installers using WinRAR or UnRAR internally
-  - Automated extraction into system or startup directories during legitimate installations
-
-- **Forensic or analysis environments**
-  - Malware analysts extracting samples in controlled environments
-  - Sandboxes or lab systems simulating attacker behavior
-
-### Reduction Recommendations
-
-- Restrict alerts to **non-administrative users**
-- Correlate with:
-  - Archive origin (email, browser download)
-  - User interaction (recent download activity)
-- Exclude known trusted paths, scripts, or service accounts
-- Prioritize alerts where **both Sigma rules are triggered within a short time window**
-
-### Analyst Guidance
-
-An alert should be considered **high confidence** when:
-- WinRAR performs path traversal during extraction **and**
-- A file is written to a Windows persistence location shortly after
-
-Single-rule matches should be treated as **suspicious but informational** until further context is obtained.
----
-## 👤 Author
-
-**Adama Assiongbon**  
-SOC / CTI Analyst Consultant  
-
-GitHub: https://github.com/hatchepsoout  
-LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
-
+## 🤝 Contribution
+Chaque nouvelle CVE doit être ajoutée sous le dossier packs/.
 
 ## ⚠️ Disclaimer
+Usage défensif uniquement. Tester avant production.
 
-These rules are provided for defensive purposes only. Always test before production deployment.
+---
+
+# 🛡️ sigma-rules
+### Community Sigma Rules for CVE Detection & Blue Team Operations
+
+## 🎯 Repository Objective
+This repository provides a collection of **Blue Team–oriented Sigma rules**, organized by CVE,
+to detect the exploitation of known vulnerabilities and **post-exploitation behaviors**
+observed in SOC environments.
+
+Approach: **behavior-based**, **SIEM-agnostic** (ELK, OpenSearch, Splunk, Microsoft Sentinel, Wazuh, EDR).
+
+## 🧠 Detection Philosophy
+❌ Static signature-based detection only  
+✅ **Behavioral and contextual detection**
+
+## 📦 Repository Organization
+Each vulnerability is treated as an **independent CVE pack**.
+
+```
+sigma-rules/
+├── README.md
+├── packs/
+│   ├── CVE-2025-6218_WinRAR/
+│   └── CVE-2025-50165_WindowsGraphics/
+└── diagrams/
+```
+
+## 🧩 Available CVE Packs
+- **CVE-2025-6218** – WinRAR (Path Traversal / Persistence)
+- **CVE-2025-50165** – Windows Graphics Component (weaponized images)
+
+## 🛡️ Rule Levels
+- **BROAD**: threat hunting, maximum coverage
+- **STRICT**: production SOC, low noise
+
+## 🔁 Sigma → SIEM Conversion
+Use `sigma-cli`:
+
+```bash
+pip install sigma-cli
+sigma convert -t splunk rule.yml
+sigma convert -t elasticsearch rule.yml
+sigma convert -t sentinel rule.yml
+```
+
+## 🤝 Contribution
+Each new CVE must be added under the `packs/` directory.
+
+## ⚠️ Disclaimer
+Defensive use only.
+Rules must be tested and adapted to each environment before production deployment.
