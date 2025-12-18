@@ -17,6 +17,7 @@ packs/
     ├── README_FR.md
     └── rule.yml
 ```
+---
 # 📦 CVE Packs
 
 This directory contains all CVE packs.
