@@ -100,10 +100,3 @@ Each new CVE must be added under the `packs/` directory.
 Defensive use only.
 Rules must be tested and adapted to each environment before production deployment.
 
-### 👤 Author
-
-**Adama Assiongbon**  
-SOC / CTI Analyst Consultant  
-
-GitHub: https://github.com/hatchepsoout  
-LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
