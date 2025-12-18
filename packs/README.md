@@ -17,3 +17,24 @@ packs/
     ├── README_FR.md
     └── rule.yml
 ```
+This directory contains all CVE packs.
+
+Convention
+
+1 directory = 1 CVE
+
+Each pack includes:
+
+README (EN / FR)
+
+Sigma rules (.yml)
+
+Optional: diagrams, scenarios
+## Example
+```
+packs/
+└── CVE-2025-XXXX_Product/
+    ├── README_EN.md
+    ├── README_FR.md
+    └── rule.yml
+```
