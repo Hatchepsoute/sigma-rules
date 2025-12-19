@@ -143,10 +143,10 @@ This repository provides **two complementary Sigma rules** designed to detect **
 The goal is **not** to detect a malicious archive itself, but to **detect exploitation and persistence behaviors**, as observed in **real attack scenarios**.
 
 These rules are designed for:
--🔹🟢  **SOC teams**
--🔹🟢**Blue Team analysts**
--🔹🟢 **CTI / Threat Hunting use cases**
--🔹🟢 **SIEM / SOAR integration**
+- 🟢  **SOC teams**
+- 🟢  **Blue Team analysts**
+- 🟢  **CTI / Threat Hunting use cases**
+- 🟢  **SIEM / SOAR integration**
 
 ---
 
