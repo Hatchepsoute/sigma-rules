@@ -21,10 +21,10 @@ Ce dépôt fournit **deux règles Sigma complémentaires** conçues pour détect
 L’objectif n’est pas de détecter une archive malveillante en soi, mais de **détecter le comportement d’exploitation et de persistance**, tel qu’observé dans des **scénarios d’attaque réels**.
 
 Ces règles sont pensées pour :
-🟢 - les équipes **SOC**
-🟢 - les analystes **Blue Team**
-🟢 - les cas d’usage **CTI / Threat Hunting**
-🟢 - une intégration **SIEM / SOAR**
+ - 🟢 les équipes **SOC**
+ - 🟢 les analystes **Blue Team**
+ - 🟢 les cas d’usage **CTI / Threat Hunting**
+ - 🟢 une intégration **SIEM / SOAR**
 
 ---
 
@@ -143,10 +143,10 @@ This repository provides **two complementary Sigma rules** designed to detect **
 The goal is **not** to detect a malicious archive itself, but to **detect exploitation and persistence behaviors**, as observed in **real attack scenarios**.
 
 These rules are designed for:
-🟢 -🔹**SOC teams**
-🟢 -🔹**Blue Team analysts**
-🟢 -🔹**CTI / Threat Hunting use cases**
-🟢 -🔹**SIEM / SOAR integration**
+-🔹🟢  **SOC teams**
+-🔹🟢**Blue Team analysts**
+-🔹🟢 **CTI / Threat Hunting use cases**
+-🔹🟢 **SIEM / SOAR integration**
 
 ---
 
