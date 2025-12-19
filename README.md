@@ -14,7 +14,7 @@ This document is bilingual (French and English).  The French version appears fir
 # 🚨 WinRAR CVE-2025-6218 - Sigma Detection Rules (Blue Team)
 
 🇫🇷 Version Française
-## 🎯 Objectif du pack
+## 🎯 Objectif 
 
 Ce dépôt fournit **deux règles Sigma complémentaires** conçues pour détecter **l’exploitation réelle** de la vulnérabilité **CVE-2025-6218 affectant WinRAR sous Windows**.
 
@@ -44,12 +44,12 @@ La vulnérabilité permet à un attaquant de **forcer WinRAR à extraire des fic
 
 ## 🧬 Scénario d’attaque (vision Blue Team)
 
-1️⃣  L’attaquant distribue une **archive piégée** (email, web, téléchargement).
-2️⃣  L’archive contient des chemins de type `../` (path traversal).
-3️⃣  La victime ouvre l’archive avec WinRAR.
-4️⃣  WinRAR extrait un fichier **hors du dossier cible**.
-5️⃣  Le fichier est écrit dans un **emplacement de persistance Windows**.
-6️⃣  À la reconnexion ou au redémarrage, le code malveillant s’exécute.
+- 1️⃣  L’attaquant distribue une **archive piégée** (email, web, téléchargement).
+- 2️⃣  L’archive contient des chemins de type `../` (path traversal).
+- 3️⃣  La victime ouvre l’archive avec WinRAR.
+- 4️⃣  WinRAR extrait un fichier **hors du dossier cible**.
+- 5️⃣  Le fichier est écrit dans un **emplacement de persistance Windows**.
+- 6️⃣  À la reconnexion ou au redémarrage, le code malveillant s’exécute.
 
 👉 **Les deux règles Sigma couvrent deux étapes distinctes de ce scénario.**
 
@@ -64,14 +64,14 @@ La vulnérabilité permet à un attaquant de **forcer WinRAR à extraire des fic
 Détecter **la phase d’exploitation initiale**.
 
 #### 🔍 Ce que la règle détecte
-🟢 L’exécution de `WinRAR.exe`
-🟢 L’utilisation de motifs de traversée (`../`, `..\\`, encodage URL)
-🟢 Des commandes d’extraction (`x`, `e`, `-o+`, etc.)
+- 🟢 L’exécution de `WinRAR.exe`
+- 🟢 L’utilisation de motifs de traversée (`../`, `..\\`, encodage URL)
+- 🟢 Des commandes d’extraction (`x`, `e`, `-o+`, etc.)
 
 #### 🧠 Pourquoi c’est important
 Cette règle signale :
-🟢 une **tentative d’exploitation**
-🟢 un comportement anormal impossible dans un usage WinRAR légitime standard
+- 🟢 une **tentative d’exploitation**
+- 🟢 un comportement anormal impossible dans un usage WinRAR légitime standard
 
 👉🏿 Elle constitue un **signal faible mais précoce**, idéal pour :
 - le **threat hunting**
@@ -118,23 +118,23 @@ Ce comportement indique :
 
 ## 🧬 Mapping MITRE ATT&CK
 
-▪️Initial Access : **T1566** (Archive piégée)
-▪️ Execution : **T1204** (User Execution)
-▪️ Persistence : **T1547** (Startup / Scheduled Task)
+-▪️Initial Access : **T1566** (Archive piégée)
+-▪️ Execution : **T1204** (User Execution)
+-▪️ Persistence : **T1547** (Startup / Scheduled Task)
 
 ---
 
 ## 👥 Public cible
 Ces règles sont utiles pour :
-▪️SOC N1 / N2 (détection et triage)
-▪️SOC N3 / IR (confirmation exploitation)
-▪️Blue Team / CTI
-▪️Déploiements SIEM multi-clients
----
-## ⚠️ Avertissement
+- ▪️SOC N1 / N2 (détection et triage)
+- ▪️SOC N3 / IR (confirmation exploitation)
+- ▪️Blue Team / CTI
+- ▪️Déploiements SIEM multi-clients
+
+### ⚠️ Avertissement
 Ces règles sont fournies **à des fins défensives uniquement**.  Toujours tester et adapter les règles à votre environnement avant déploiement en production.
 ---
-## ## 🇬🇧 English Version
+ 🇬🇧 English Version
 
 # 🚨 WinRAR CVE-2025-6218 – Sigma Detection Rules (Blue Team)
 
@@ -144,10 +144,10 @@ This repository provides **two complementary Sigma rules** designed to detect **
 The goal is **not** to detect a malicious archive itself, but to **detect exploitation and persistence behaviors**, as observed in **real attack scenarios**.
 
 These rules are designed for:
-🔹**SOC teams**
-🔹**Blue Team analysts**
-🔹**CTI / Threat Hunting use cases**
-🔹**SIEM / SOAR integration**
+-🔹**SOC teams**
+-🔹**Blue Team analysts**
+-🔹**CTI / Threat Hunting use cases**
+-🔹**SIEM / SOAR integration**
 
 ---
 
@@ -167,16 +167,16 @@ This vulnerability allows an attacker to **force WinRAR to extract files outside
 
 ## 🧬 Attack Scenario (Blue Team View)
 
-1️⃣  The attacker distributes a **weaponized archive** (email, web, download).
-2️⃣  The archive contains `../` path traversal sequences.
-3️⃣  The victim opens the archive using WinRAR.
-4️⃣  WinRAR extracts a file **outside the target directory**.
-5️⃣  The file is written to a **Windows persistence location**.
-6️⃣ On user logon or system reboot, the malicious code executes.
+1️⃣ .  The attacker distributes a **weaponized archive** (email, web, download).
+2️⃣ .  The archive contains `../` path traversal sequences.
+3️⃣ . The victim opens the archive using WinRAR.
+4️⃣ . WinRAR extracts a file **outside the target directory**.
+5️⃣ . The file is written to a **Windows persistence location**.
+6️⃣ . On user logon or system reboot, the malicious code executes.
 
 👉🏿 **The two Sigma rules cover two distinct stages of this scenario.**
 
----
+----
 
 ## 🛡️ Role of the Sigma Rules in the Scenario
 
@@ -187,19 +187,19 @@ This vulnerability allows an attacker to **force WinRAR to extract files outside
 Detect the **initial exploitation phase**.
 
 #### 🔍 What the rule detects
-🟢 Execution of `WinRAR.exe`
-🟢 Use of traversal patterns (`../`, `..\\`, URL-encoded variants)
-🟢 Extraction commands (`x`, `e`, `-o+`, etc.)
+- 🟢 Execution of `WinRAR.exe`
+- 🟢 Use of traversal patterns (`../`, `..\\`, URL-encoded variants)
+- 🟢 Extraction commands (`x`, `e`, `-o+`, etc.)
 
 #### 🧠 Why it matters
 This rule indicates:
-🟢 an **exploitation attempt**
-🟢 an abnormal behavior not consistent with standard legitimate WinRAR usage
+-  🟢 an **exploitation attempt**
+-  🟢 an abnormal behavior not consistent with standard legitimate WinRAR usage
 
 👉🏿 It provides a **low-signal but early indicator**, ideal for:
-▪️ **threat hunting**
-▪️ CTI enrichment
-▪️ SOAR correlation
+- ▪️ **threat hunting**
+- ▪️ CTI enrichment
+- ▪️ SOAR correlation
 ---
 ### 🔹 Rule 2 — *Persistence File Write*
 **`WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml`**
@@ -215,9 +215,9 @@ Detect the **post-exploitation persistence phase**.
 
 #### 🧠 Why it is critical
 This behavior indicates:
-🟢 a **successful exploitation**
-🟢 an **active persistence attempt**
-🟢 a high risk of automatic execution
+-  🟢 a **successful exploitation**
+-  🟢 an **active persistence attempt**
+-  🟢 a high risk of automatic execution
 
 👉🏿 This rule is **high-confidence** and suitable for **SOC production environments**.
 
@@ -239,19 +239,19 @@ This behavior indicates:
 
 ## 🧬 MITRE ATT&CK Mapping
 
-▪️ Initial Access: **T1566** (Phishing / Weaponized Archive)
-▪️ Execution: **T1204** (User Execution)
-▪️ Persistence: **T1547** (Startup Folder / Scheduled Task)
+- ▪️ Initial Access: **T1566** (Phishing / Weaponized Archive)
+- ▪️ Execution: **T1204** (User Execution)
+- ▪️ Persistence: **T1547** (Startup Folder / Scheduled Task)
 
 ---
 
 ## 👥 Target Audience
 
 These rules are valuable for:
-🔹 SOC L1 / L2 (detection and triage)
-🔹 SOC L3 / IR (exploitation confirmation)
-🔹 Blue Team / CTI analysts
-🔹 Multi-tenant SIEM deployments
+- 🔹 SOC L1 / L2 (detection and triage)
+- 🔹 SOC L3 / IR (exploitation confirmation)
+- 🔹 Blue Team / CTI analysts
+- 🔹 Multi-tenant SIEM deployments
 
 ---
 
