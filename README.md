@@ -10,191 +10,254 @@
 
 ---
 This document is bilingual (French and English).  The French version appears first, followed by the English version.
-## 🇫🇷 FR — Présentation
 
-### 🎯 Objectif
-Ce dépôt fournit une collection de **règles Sigma orientées Blue Team**, organisées par **vulnérabilité CVE**, afin de détecter :
-- l’exploitation de vulnérabilités connues
-- les comportements post-exploitation observés en environnement SOC
+# 🚨 WinRAR CVE-2025-6218 - Sigma Detection Rules (Blue Team)
 
-L’approche est :
-- **comportementale**
-- **agnostique SIEM** (Elastic, OpenSearch, Splunk, Sentinel, Wazuh, etc.)
-- pensée pour des **opérations SOC réelles**
+🇫🇷 Version Française
+## 🎯 Objectif du pack
 
----
+Ce dépôt fournit **deux règles Sigma complémentaires** conçues pour détecter **l’exploitation réelle** de la vulnérabilité **CVE-2025-6218 affectant WinRAR sous Windows**.
 
-### 🧠 Philosophie de détection
-❌ Signatures statiques uniquement  
-✅ Détection comportementale et contextuelle  
-✅ Alignement MITRE ATT&CK  
-✅ Détection + Réponse (Sigma + SOAR)
+L’objectif n’est pas de détecter une archive malveillante en soi, mais de **détecter le comportement d’exploitation et de persistance**, tel qu’observé dans des **scénarios d’attaque réels**.
+
+Ces règles sont pensées pour :
+- les équipes **SOC**
+- les analystes **Blue Team**
+- les cas d’usage **CTI / Threat Hunting**
+- une intégration **SIEM / SOAR**
 
 ---
 
-### 📦 Structure du dépôt
-```
-sigma-rules/
-├── README.md                     # (ce fichier – FR / EN)
-├── CHANGELOG.md
-├── CVE/
-│   ├── README_CVE.md              # Convention des packs CVE
-│   ├── diagrams/                 # Diagrammes globaux (SOC / méthode)
-│   ├── CVE-2025-6218_WinRAR/
-│   │   ├── rules/
-│   │   ├── playbook/
-│   │   └── diagrams/
-│   └── CVE-2025-50165_WindowsGraphics/
-│       ├── rules/
-│       ├── playbook/
-│       └── diagrams/
-└── diagrams/
-```
-👉 Chaque **CVE est autonome** (règles, playbooks, diagrammes).
+## 📌 Vulnérabilité concernée
+
+| Élément | Détail |
+|------|------|
+| CVE | **CVE-2025-6218** |
+| Logiciel | WinRAR |
+| Type | Traversée de répertoires |
+| Impact | Écriture de fichiers arbitraires |
+| Objectif attaquant | Persistance + exécution |
+
+La vulnérabilité permet à un attaquant de **forcer WinRAR à extraire des fichiers en dehors du répertoire prévu**, menant directement à une **persistance système**.
 
 ---
 
-### 🔗 Liens rapides (repo)
-- 📁 Packs CVE : `CVE/`
-- 📄 Guide structure packs : `CVE/README_CVE.md`
-- 🖼️ Diagrammes globaux : `CVE/diagrams/`
-- 🧾 Changelog : `CHANGELOG.md`
+## 🧬 Scénario d’attaque (vision Blue Team)
+
+1️⃣  L’attaquant distribue une **archive piégée** (email, web, téléchargement).
+2️⃣  L’archive contient des chemins de type `../` (path traversal).
+3️⃣  La victime ouvre l’archive avec WinRAR.
+4️⃣  WinRAR extrait un fichier **hors du dossier cible**.
+5️⃣  Le fichier est écrit dans un **emplacement de persistance Windows**.
+6️⃣  À la reconnexion ou au redémarrage, le code malveillant s’exécute.
+
+👉 **Les deux règles Sigma couvrent deux étapes distinctes de ce scénario.**
 
 ---
 
-### 🧩 Packs CVE disponibles
-- **CVE-2025-6218** — WinRAR (*Path Traversal, Persistence*)
-- **CVE-2025-50165** — Windows Graphics Component (*Weaponized images, renderer exploitation*)
+## 🛡️ Rôle des règles Sigma dans le scénario
+
+### 🔹 Règle 1 - *Path Traversal Extraction*
+**`WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml`**
+
+#### 🎯 Rôle
+Détecter **la phase d’exploitation initiale**.
+
+#### 🔍 Ce que la règle détecte
+🟢 L’exécution de `WinRAR.exe`
+🟢 L’utilisation de motifs de traversée (`../`, `..\\`, encodage URL)
+🟢 Des commandes d’extraction (`x`, `e`, `-o+`, etc.)
+
+#### 🧠 Pourquoi c’est important
+Cette règle signale :
+🟢 une **tentative d’exploitation**
+🟢 un comportement anormal impossible dans un usage WinRAR légitime standard
+
+👉🏿 Elle constitue un **signal faible mais précoce**, idéal pour :
+- le **threat hunting**
+- l’enrichissement CTI
+- la corrélation SOAR
 
 ---
 
-### 🛡️ Niveaux de règles Sigma
-- **BROAD / BROADPLUS** : threat hunting, couverture maximale
-- **STRICT** : production SOC, faible bruit / haute confiance
+### 🔹 Règle 2 — *Persistence File Write*
+**`WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml`**
+
+#### 🎯 Rôle
+Détecter **la phase post-exploitation et de persistance**.
+
+#### 🔍 Ce que la règle détecte
+- WinRAR écrivant des fichiers dans :
+  - dossiers **Startup**
+  - répertoires de **tâches planifiées**
+- Écriture directe depuis le processus WinRAR
+
+#### 🧠 Pourquoi c’est critique
+Ce comportement indique :
+- une **exploitation réussie**
+- une **tentative de persistance active**
+- un risque élevé d’exécution automatique
+
+👉🏿 Cette règle est **hautement fiable** et adaptée à la **production SOC**.
 
 ---
 
-### 🔁 Conversion Sigma → SIEM
-```bash
-pip install sigma-cli
-sigma convert -t elasticsearch rule.yml
-sigma convert -t opensearch_lucene rule.yml
-sigma convert -t splunk rule.yml
-sigma convert -t sentinel rule.yml
-```
+## 🔗 Puissance de la corrélation
+
+| Signal | Interprétation |
+|----|----|
+| Règle 1 seule | Tentative suspecte |
+| Règle 2 seule | Persistance suspecte |
+| **Règle 1 + Règle 2** | 🚨 **Exploitation confirmée** |
+
+⚠️ La corrélation volontairement **n’est pas codée dans Sigma** afin de :
+- préserver la portabilité
+- laisser le contrôle au SIEM / SOAR (Elastic, OpenSearch, TheHive, etc.)
 
 ---
 
-### 🤝 Contribution
-- **1 dossier = 1 CVE**
-- Documentation **FR + EN** recommandée
-- Diagrammes fortement encouragés (attaque + points de détection)
+## 🧬 Mapping MITRE ATT&CK
+
+▪️Initial Access : **T1566** (Archive piégée)
+▪️ Execution : **T1204** (User Execution)
+▪️ Persistence : **T1547** (Startup / Scheduled Task)
 
 ---
 
-### ⚠️ Avertissement
-Usage **défensif uniquement**.  
-Tester et adapter les règles avant déploiement en production.
+## 👥 Public cible
+Ces règles sont utiles pour :
+▪️SOC N1 / N2 (détection et triage)
+▪️SOC N3 / IR (confirmation exploitation)
+▪️Blue Team / CTI
+▪️Déploiements SIEM multi-clients
+---
+## ⚠️ Avertissement
+Ces règles sont fournies **à des fins défensives uniquement**.  Toujours tester et adapter les règles à votre environnement avant déploiement en production.
+---
+## ## 🇬🇧 English Version
+
+# 🚨 WinRAR CVE-2025-6218 – Sigma Detection Rules (Blue Team)
+
+## 🎯 Pack Objective
+
+This repository provides **two complementary Sigma rules** designed to detect **real-world exploitation** of **CVE-2025-6218 affecting WinRAR on Windows**.
+The goal is **not** to detect a malicious archive itself, but to **detect exploitation and persistence behaviors**, as observed in **real attack scenarios**.
+
+These rules are designed for:
+🔹**SOC teams**
+🔹**Blue Team analysts**
+🔹**CTI / Threat Hunting use cases**
+🔹**SIEM / SOAR integration**
 
 ---
 
-## 🇬🇧 EN - Overview
+## 📌 Targeted Vulnerability
 
-### 🎯 Objective
-This repository provides a collection of **Blue Team–oriented Sigma rules**, organized by **CVE**, designed to detect:
-- exploitation of known vulnerabilities
-- post-exploitation behaviors in SOC environments
+| Item | Details |
+|------|--------|
+| CVE | **CVE-2025-6218** |
+| Software | WinRAR |
+| Type | Directory Traversal |
+| Impact | Arbitrary file write |
+| Attacker goal | Persistence + execution |
 
-The approach is:
-- **behavior-based**
-- **SIEM-agnostic**
-- designed for **real-world SOC operations**
-
----
-
-### 🧠 Detection Philosophy
-❌ Static signatures only  
-✅ Behavioral and contextual detection  
-✅ MITRE ATT&CK aligned  
-✅ Detection + Response (Sigma + SOAR)
+This vulnerability allows an attacker to **force WinRAR to extract files outside the intended directory**, directly leading to **system persistence**.
 
 ---
 
-### 📦 Repository Structure
-```
-sigma-rules/
-├── README.md                     
-├── CHANGELOG.md
-├── CVE/
-│   ├── README.md
-│   ├── diagrams/
-│   ├── CVE-2025-6218_WinRAR/
-│   │   ├── rules/
-│   │   ├── playbook/
-│   │   └── diagrams/
-│   └── CVE-2025-50165_WindowsGraphics/
-│       ├── rules/
-│       ├── playbook/
-│       └── diagrams/
-└── diagrams/
-```
+## 🧬 Attack Scenario (Blue Team View)
+
+1️⃣  The attacker distributes a **weaponized archive** (email, web, download).
+2️⃣  The archive contains `../` path traversal sequences.
+3️⃣  The victim opens the archive using WinRAR.
+4️⃣  WinRAR extracts a file **outside the target directory**.
+5️⃣  The file is written to a **Windows persistence location**.
+6️⃣ On user logon or system reboot, the malicious code executes.
+
+👉🏿 **The two Sigma rules cover two distinct stages of this scenario.**
 
 ---
 
-### 🔗 Quick Links
-- 📁 CVE Packs: `CVE/`
-- 📄 Pack structure guide: `CVE/README_CVE.md`
-- 🖼️ Global diagrams: `CVE/diagrams/`
-- 🧾 Changelog: `CHANGELOG.md`
+## 🛡️ Role of the Sigma Rules in the Scenario
+
+### 🔹 Rule 1 — *Path Traversal Extraction*
+**`WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml`**
+
+#### 🎯 Role
+Detect the **initial exploitation phase**.
+
+#### 🔍 What the rule detects
+🟢 Execution of `WinRAR.exe`
+🟢 Use of traversal patterns (`../`, `..\\`, URL-encoded variants)
+🟢 Extraction commands (`x`, `e`, `-o+`, etc.)
+
+#### 🧠 Why it matters
+This rule indicates:
+🟢 an **exploitation attempt**
+🟢 an abnormal behavior not consistent with standard legitimate WinRAR usage
+
+👉🏿 It provides a **low-signal but early indicator**, ideal for:
+▪️ **threat hunting**
+▪️ CTI enrichment
+▪️ SOAR correlation
+---
+### 🔹 Rule 2 — *Persistence File Write*
+**`WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml`**
+
+#### 🎯 Role
+Detect the **post-exploitation persistence phase**.
+
+#### 🔍 What the rule detects
+- WinRAR writing files to:
+  - **Startup** folders
+  - **Scheduled Tasks** directories
+- Direct file write actions originating from the WinRAR process
+
+#### 🧠 Why it is critical
+This behavior indicates:
+🟢 a **successful exploitation**
+🟢 an **active persistence attempt**
+🟢 a high risk of automatic execution
+
+👉🏿 This rule is **high-confidence** and suitable for **SOC production environments**.
 
 ---
 
-### 🧩 Available CVE Packs
-- **CVE-2025-6218** — WinRAR (*Path Traversal, Persistence*)
-- **CVE-2025-50165** — Windows Graphics Component (*Weaponized images, renderer exploitation*)
+## 🔗 Correlation Value
+
+| Signal | Interpretation |
+|------|----------------|
+| Rule 1 only | Suspicious attempt |
+| Rule 2 only | Suspicious persistence |
+| **Rule 1 + Rule 2** | 🚨 **Confirmed exploitation** |
+
+⚠️ Correlation is **intentionally not implemented within Sigma** in order to:
+- preserve portability
+- allow full control at the SIEM / SOAR layer (Elastic, OpenSearch, TheHive, etc.)
 
 ---
 
-### 🛡️ Sigma Rule Levels
-- **BROAD / BROADPLUS**: threat hunting, maximum coverage
-- **STRICT**: production SOC, low noise / high confidence
+## 🧬 MITRE ATT&CK Mapping
+
+▪️ Initial Access: **T1566** (Phishing / Weaponized Archive)
+▪️ Execution: **T1204** (User Execution)
+▪️ Persistence: **T1547** (Startup Folder / Scheduled Task)
 
 ---
 
-### 🔁 Sigma → SIEM Conversion
-```bash
-pip install sigma-cli
-sigma convert -t elasticsearch rule.yml
-sigma convert -t opensearch_lucene rule.yml
-sigma convert -t splunk rule.yml
-sigma convert -t sentinel rule.yml
-```
+## 👥 Target Audience
+
+These rules are valuable for:
+🔹 SOC L1 / L2 (detection and triage)
+🔹 SOC L3 / IR (exploitation confirmation)
+🔹 Blue Team / CTI analysts
+🔹 Multi-tenant SIEM deployments
 
 ---
 
-### 🤝 Contribution
-- **One folder = one CVE**
-- FR + EN documentation recommended
-- Diagrams strongly encouraged (attack flow + detection points)
+## ⚠️ Disclaimer
+These rules are provided **for defensive purposes only**.  Always test and tune the rules for your environment before deploying them in production.
 
----
-
-### ⚠️ Disclaimer
-Defensive use only.  
-Rules must be tested and adapted before production deployment.
-
-### 🧾 Suivi des changements
-Toutes les évolutions du dépôt (nouvelles CVE, règles ajoutées, améliorations, corrections)
-sont documentées dans le fichier :
-
-👉 **[CHANGELOG.md](CHANGELOG.md)**
-
-### 🧾 Change Tracking
-All notable changes to this repository (new CVEs, rules, improvements, fixes)
-are documented in:
-
-👉 **[CHANGELOG.md](CHANGELOG.md)**
-## 🧾 Changelog
-➡️ See: [CHANGELOG.md](./CHANGELOG.md)
-
-
+#### 🙎🏾‍♂️ Author: |
+  Adama Assiongbon (SOC/CTI Analyst Consultant)
+  LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
