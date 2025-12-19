@@ -11,20 +11,20 @@
 ---
 This document is bilingual (French and English).  The French version appears first, followed by the English version.
 
-# 🚨 WinRAR CVE-2025-6218 - Sigma Detection Rules (Blue Team)
+## 🚨 WinRAR CVE-2025-6218 - Sigma detection rules (Blue Team)
 
 🇫🇷 Version Française
-## 🎯 Objectif 
+### 🎯 Objectif 
 
 Ce dépôt fournit **deux règles Sigma complémentaires** conçues pour détecter **l’exploitation réelle** de la vulnérabilité **CVE-2025-6218 affectant WinRAR sous Windows**.
 
 L’objectif n’est pas de détecter une archive malveillante en soi, mais de **détecter le comportement d’exploitation et de persistance**, tel qu’observé dans des **scénarios d’attaque réels**.
 
 Ces règles sont pensées pour :
-- les équipes **SOC**
-- les analystes **Blue Team**
-- les cas d’usage **CTI / Threat Hunting**
-- une intégration **SIEM / SOAR**
+🟢 - les équipes **SOC**
+🟢 - les analystes **Blue Team**
+🟢 - les cas d’usage **CTI / Threat Hunting**
+🟢 - une intégration **SIEM / SOAR**
 
 ---
 
@@ -51,7 +51,7 @@ La vulnérabilité permet à un attaquant de **forcer WinRAR à extraire des fic
 - 5️⃣  Le fichier est écrit dans un **emplacement de persistance Windows**.
 - 6️⃣  À la reconnexion ou au redémarrage, le code malveillant s’exécute.
 
-👉 **Les deux règles Sigma couvrent deux étapes distinctes de ce scénario.**
+👉🏿 **Les deux règles Sigma couvrent deux étapes distinctes de ce scénario.**
 
 ---
 
@@ -80,7 +80,7 @@ Cette règle signale :
 
 ---
 
-### 🔹 Règle 2 — *Persistence File Write*
+### 🔹 Règle 2  -  *Persistence File Write*
 **`WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml`**
 
 #### 🎯 Rôle
@@ -114,8 +114,6 @@ Ce comportement indique :
 - préserver la portabilité
 - laisser le contrôle au SIEM / SOAR (Elastic, OpenSearch, TheHive, etc.)
 
----
-
 ## 🧬 Mapping MITRE ATT&CK
 
 -▪️Initial Access : **T1566** (Archive piégée)
@@ -132,22 +130,23 @@ Ces règles sont utiles pour :
 - ▪️Déploiements SIEM multi-clients
 
 ### ⚠️ Avertissement
+
 Ces règles sont fournies **à des fins défensives uniquement**.  Toujours tester et adapter les règles à votre environnement avant déploiement en production.
 ---
  🇬🇧 English Version
 
-# 🚨 WinRAR CVE-2025-6218 – Sigma Detection Rules (Blue Team)
+##  🚨 WinRAR CVE-2025-6218 – Sigma detection rules (Blue Team)
 
-## 🎯 Pack Objective
+### 🎯 Pack Objective
 
 This repository provides **two complementary Sigma rules** designed to detect **real-world exploitation** of **CVE-2025-6218 affecting WinRAR on Windows**.
 The goal is **not** to detect a malicious archive itself, but to **detect exploitation and persistence behaviors**, as observed in **real attack scenarios**.
 
 These rules are designed for:
--🔹**SOC teams**
--🔹**Blue Team analysts**
--🔹**CTI / Threat Hunting use cases**
--🔹**SIEM / SOAR integration**
+🟢 -🔹**SOC teams**
+🟢 -🔹**Blue Team analysts**
+🟢 -🔹**CTI / Threat Hunting use cases**
+🟢 -🔹**SIEM / SOAR integration**
 
 ---
 
@@ -180,7 +179,7 @@ This vulnerability allows an attacker to **force WinRAR to extract files outside
 
 ## 🛡️ Role of the Sigma Rules in the Scenario
 
-### 🔹 Rule 1 — *Path Traversal Extraction*
+### 🔹 Rule 1 - *Path Traversal Extraction*
 **`WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml`**
 
 #### 🎯 Role
@@ -192,6 +191,7 @@ Detect the **initial exploitation phase**.
 - 🟢 Extraction commands (`x`, `e`, `-o+`, etc.)
 
 #### 🧠 Why it matters
+
 This rule indicates:
 -  🟢 an **exploitation attempt**
 -  🟢 an abnormal behavior not consistent with standard legitimate WinRAR usage
@@ -255,7 +255,8 @@ These rules are valuable for:
 
 ---
 
-## ⚠️ Disclaimer
+### ⚠️ Disclaimer
+
 These rules are provided **for defensive purposes only**.  Always test and tune the rules for your environment before deploying them in production.
 
 #### 🙎🏾‍♂️ Author: |
