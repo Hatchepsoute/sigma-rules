@@ -1,125 +1,79 @@
-# 🛡️ sigma-rules
-### Sigma Rules for CVE Detection & SOC / Blue Team Operations
+# 🛡️ sigma-rules — Packs de détection SOC (Sigma + Réponse)
 
-<!-- Badges -->
-![Sigma](https://img.shields.io/badge/Sigma-rules-blue)
-![SOC](https://img.shields.io/badge/SOC-ready-success)
-![SOAR](https://img.shields.io/badge/SOAR-playbooks-important)
-![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
-![License](https://img.shields.io/badge/License-MIT-informational)
+Un dépôt de **packs de détection SOC** pour des vulnérabilités à fort impact (Patch Tuesday, avis éditeurs),
+basé sur des **règles Sigma**, des **diagrammes d’attaque**, des **tables décisionnelles des analystes SOC N1/N2** et des **playbooks SOAR**.
+
+🌍 English version: [README.md](README.md)
 
 ---
 
-# 🚨 WinRAR CVE-2025-6218 – Sigma Detection Rules (Blue Team)
-
-## 🎯 Objectif du pack
-
-Ce dépôt fournit **deux règles Sigma complémentaires** conçues pour détecter **l’exploitation réelle** de la vulnérabilité **CVE-2025-6218 affectant WinRAR sous Windows**.
-
-L’objectif n’est pas de détecter une archive malveillante en soi, mais de **détecter le comportement d’exploitation et de persistance**, tel qu’observé dans des **scénarios d’attaque réels**.
-
-Ces règles sont pensées pour :
-- les équipes **SOC**
-- les analystes **Blue Team**
-- les cas d’usage **CTI / Threat Hunting**
-- une intégration **SIEM / SOAR**
+## 🎯 Contenu d’un pack
+- ✅ Règles Sigma (**BROAD** + **STRICT** lorsque pertinent)
+- 🧭 Diagrammes (SVG + PNG)
+- 📋 Tables décisionnelles analystes SOC N1/N2  (Markdown + PDF lorsque pertinent)
+- 🐝 Playbooks SOAR (templates YAML TheHive)
+- 📘 READMEs du pack (EN par défaut + FR)
 
 ---
 
-## 📌 Vulnérabilité concernée
+## 📦 Packs disponibles
 
-| Élément | Détail |
-|------|------|
-| CVE | **CVE-2025-6218** |
-| Logiciel | WinRAR |
-| Type | Traversée de répertoires |
-| Impact | Écriture de fichiers arbitraires |
-| Objectif attaquant | Persistance + exécution |
-
-La vulnérabilité permet à un attaquant de **forcer WinRAR à extraire des fichiers en dehors du répertoire prévu**, menant directement à une **persistance système**.
+| Pack | Focus | Artefacts |
+|---|---|---|
+| **CVE-2025-54100 – RCE Windows (Userland)** | Patterns PowerShell/IWR + exécution enfant | Règles + Diagrammes + Table décisionnelle + Playbook TheHive |
+| **CVE-2025-62221 – EoP Kernel Windows** | Anomalie User→SYSTEM + post‑EoP | Règles + Diagrammes + Table décisionnelle + Playbook TheHive |
+| **CVE-2025-50165 – Windows Graphics** | Exploitation documents/renderer | Règles + Diagrammes + Playbook |
+| **CVE-2025-6218 – WinRAR** | Exploitation archive + post‑exécution | Règles + Diagrammes + Playbook |
 
 ---
 
-## 🧬 Scénario d’attaque (vision Blue Team)
+## 🗂️ Structure du dépôt
 
-1. L’attaquant distribue une **archive piégée** (email, web, téléchargement).
-2. L’archive contient des chemins de type `../` (path traversal).
-3. La victime ouvre l’archive avec WinRAR.
-4. WinRAR extrait un fichier **hors du dossier cible**.
-5. Le fichier est écrit dans un **emplacement de persistance Windows**.
-6. À la reconnexion ou au redémarrage, le code malveillant s’exécute.
-
-👉 **Les deux règles Sigma couvrent deux étapes distinctes de ce scénario.**
-
----
-
-## 🛡️ Rôle des règles Sigma dans le scénario
-
-### 🔹 Règle 1 – Path Traversal Extraction
-**`WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml`**
-
-**Rôle :** détection de la **phase d’exploitation initiale**.
-
-**Ce que la règle détecte :**
-- Exécution de `WinRAR.exe`
-- Utilisation de motifs de traversée (`../`, `..\\`, encodage URL)
-- Commandes d’extraction (`x`, `e`, `-o+`, etc.)
-
-**Pourquoi c’est important :**  
-Cette règle signale une **tentative d’exploitation** et un comportement **anormal** dans un usage WinRAR standard.  
-Elle constitue un **signal faible mais précoce**, idéal pour le **threat hunting** et la **corrélation SOAR**.
+```text
+sigma-rules/
+├── CVE-2025-54100_WindowsUserland/
+├── CVE-2025-62221_WindowsKernel/
+├── CVE-2025-50165_WindowsGraphics/
+├── CVE-2025-6218_WinRAR/
+├── diagrams/                  # diagrammes globaux (overview, réutilisables)
+├── INSTALLATION.md            # guide d'installation / tooling Sigma
+├── CHANGELOG.md               # historique des releases
+├── README.md                  # EN (par défaut)
+└── README_FR.md               # FR
+```
 
 ---
 
-### 🔹 Règle 2 – Persistence File Write
-**`WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml`**
+## 🚀 Démarrage rapide
 
-**Rôle :** détection de la **phase post‑exploitation et de persistance**.
+### 1) Valider une règle
+```bash
+sigma check <rule.yml>
+```
 
-**Ce que la règle détecte :**
-- Écriture de fichiers par WinRAR dans :
-  - dossiers **Startup**
-  - répertoires de **tâches planifiées**
-- Écriture directe depuis le processus WinRAR
+### 2) Convertir vers un backend (ex: ElastAlert)
+```bash
+sigma convert -t elastalert -p windows-logsources <rule.yml>
+```
 
-**Pourquoi c’est critique :**  
-Indique une **exploitation réussie**, une **persistance active** et un risque élevé d’**exécution automatique**.  
-Cette règle est **hautement fiable** et adaptée à la **production SOC**.
-
----
-
-## 🔗 Puissance de la corrélation
-
-| Signal | Interprétation |
-|----|----|
-| Règle 1 seule | Tentative suspecte |
-| Règle 2 seule | Persistance suspecte |
-| **Règle 1 + Règle 2** | 🚨 **Exploitation confirmée** |
-
-La corrélation est volontairement laissée au **SIEM / SOAR** afin de préserver la portabilité des règles.
+> Pour OpenSearch Lucene, un processing pipeline peut être requis :
+> `sigma list pipelines opensearch_lucene`
 
 ---
 
-## 🧬 Mapping MITRE ATT&CK
+## 🧩 Conventions
 
-- Initial Access : **T1566**
-- Execution : **T1204**
-- Persistence : **T1547**
+### Nommage
+- Packs : `CVE-YYYY-NNNNN_Contexte/`
+- Règles : nommées par comportement (pas uniquement la CVE), suffixes `_broad` / `_strict`
+- Docs : `README.md` (EN par défaut) + `README_FR.md`
 
----
-
-## 👥 Public cible
-- Analyste SOC N1 / N2 (détection, triage)
-- Analyste SOC N3 / IR (confirmation exploitation)
-- Blue Team / CTI
-- Déploiements SIEM multi‑clients
+### Sévérité
+- BROAD : Medium (triage/hunting)
+- STRICT : High (action/containment)
 
 ---
 
-### ⚠️ Avertissement
-Ces règles sont fournies **à des fins défensives uniquement**.  Toujours tester et adapter les règles avant déploiement en production.
-
----
-**Author:** Adama Assiongbon  
-SOC / CTI Analyst Consultant  
-LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
+## 📌 Release v0.2.0
+- Ajout du pack complet **CVE-2025-54100** (règles + diagrammes + table décisionnelle + playbook TheHive).
+Voir : [CHANGELOG.md](CHANGELOG.md)

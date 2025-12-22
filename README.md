@@ -1,138 +1,81 @@
-# 🛡️ sigma-rules
-### Sigma Rules for CVE Detection & SOC / Blue Team Operations
+# 🛡️ sigma-rules — SOC Detection Packs (Sigma + Response)
 
-<!-- Badges (edit the links if you rename the repo/branch) -->
-![Sigma](https://img.shields.io/badge/Sigma-rules-blue)
-![SOC](https://img.shields.io/badge/SOC-ready-success)
-![SOAR](https://img.shields.io/badge/SOAR-playbooks-important)
-![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
-![License](https://img.shields.io/badge/License-MIT-informational)
+A curated repository of **SOC-ready detection packs** for high-impact vulnerabilities (Patch Tuesday, vendor advisories),
+built around **Sigma rules**, **attack-flow diagrams**, **SOC analyst L1/L2 decision tables**, and **SOAR playbooks**.
 
-
-##  🚨 WinRAR CVE-2025-6218 – Sigma detection rules (Blue Team)
-
-### 🎯 Pack Objective
-
-This repository provides **two complementary Sigma rules** designed to detect **real-world exploitation** of **CVE-2025-6218 affecting WinRAR on Windows**.
-The goal is **not** to detect a malicious archive itself, but to **detect exploitation and persistence behaviors**, as observed in **real attack scenarios**.
-
-These rules are designed for:
-- 🟢  **SOC teams**
-- 🟢  **Blue Team analysts**
-- 🟢  **CTI / Threat Hunting use cases**
-- 🟢  **SIEM / SOAR integration**
+🇫🇷 Version française: [README_FR.md](README_FR.md)
 
 ---
 
-## 📌 Targeted Vulnerability
-
-| Item | Details |
-|------|--------|
-| CVE | **CVE-2025-6218** |
-| Software | WinRAR |
-| Type | Directory Traversal |
-| Impact | Arbitrary file write |
-| Attacker goal | Persistence + execution |
-
-This vulnerability allows an attacker to **force WinRAR to extract files outside the intended directory**, directly leading to **system persistence**.
+## 🎯 What you get (per pack)
+- ✅ Sigma rules (**BROAD** + **STRICT** when applicable)
+- 🧭 Attack-flow diagrams (SVG + PNG)
+- 📋 SOC analyst L1/L2 decision tables (Markdown + PDF when relevant)
+- 🐝 SOAR-ready playbooks (TheHive YAML templates)
+- 📘 Pack READMEs (EN default + FR)
 
 ---
 
-## 🧬 Attack Scenario (Blue Team View)
+## 📦 Available Packs
 
-- 1️⃣ The attacker distributes a **weaponized archive** (email, web, download).
-- 2️⃣ The archive contains `../` path traversal sequences.
-- 3️⃣ The victim opens the archive using WinRAR.
-- 4️⃣ WinRAR extracts a file **outside the target directory**.
-- 5️⃣ The file is written to a **Windows persistence location**.
-- 6️⃣ On user logon or system reboot, the malicious code executes.
+| Pack | Focus | Artifacts |
+|---|---|---|
+| **CVE-2025-54100 – Windows Userland RCE** | PowerShell/IWR + child execution patterns | Rules + Diagrams + Decision Table + TheHive Playbook |
+| **CVE-2025-62221 – Windows Kernel EoP** | User→SYSTEM anomaly + post‑EoP execution | Rules + Diagrams + Decision Table + TheHive Playbook |
+| **CVE-2025-50165 – Windows Graphics** | Document/renderer exploitation patterns | Rules + Diagrams + Playbook |
+| **CVE-2025-6218 – WinRAR** | Archive exploitation + post‑execution | Rules + Diagrams + Playbook |
 
-👉🏿 **The two Sigma rules cover two distinct stages of this scenario.**
-
-----
-
-## 🛡️ Role of the Sigma Rules in the Scenario
-
-### 🔹 Rule 1 - *Path Traversal Extraction*
-**`WinRAR_Path_Traversal_Extraction_CVE-2025-6218.yml`**
-
-#### 🎯 Role
-Detect the **initial exploitation phase**.
-
-#### 🔍 What the rule detects
-- 🟢 Execution of `WinRAR.exe`
-- 🟢 Use of traversal patterns (`../`, `..\\`, URL-encoded variants)
-- 🟢 Extraction commands (`x`, `e`, `-o+`, etc.)
-
-#### 🧠 Why it matters
-
-This rule indicates:
--  🟢 an **exploitation attempt**
--  🟢 an abnormal behavior not consistent with standard legitimate WinRAR usage
-
-👉🏿 It provides a **low-signal but early indicator**, ideal for:
-- ▪️ **threat hunting**
-- ▪️ CTI enrichment
-- ▪️ SOAR correlation
----
-### 🔹 Rule 2 — *Persistence File Write*
-**`WinRAR_Persistence_Startup_Write_CVE-2025-6218.yml`**
-
-#### 🎯 Role
-Detect the **post-exploitation persistence phase**.
-
-#### 🔍 What the rule detects
-- WinRAR writing files to:
-  - **Startup** folders
-  - **Scheduled Tasks** directories
-- Direct file write actions originating from the WinRAR process
-
-#### 🧠 Why it is critical
-This behavior indicates:
--  🟢 a **successful exploitation**
--  🟢 an **active persistence attempt**
--  🟢 a high risk of automatic execution
-
-👉🏿 This rule is **high-confidence** and suitable for **SOC production environments**.
+> Repository structure is pack-first (one folder per CVE pack).
 
 ---
 
-## 🔗 Correlation Value
+## 🗂️ Repository Structure
 
-| Signal | Interpretation |
-|------|----------------|
-| Rule 1 only | Suspicious attempt |
-| Rule 2 only | Suspicious persistence |
-| **Rule 1 + Rule 2** | 🚨 **Confirmed exploitation** |
-
-⚠️ Correlation is **intentionally not implemented within Sigma** in order to:
-- preserve portability
-- allow full control at the SIEM / SOAR layer (Elastic, OpenSearch, TheHive, etc.)
-
----
-
-## 🧬 MITRE ATT&CK Mapping
-
-- ▪️ Initial Access: **T1566** (Phishing / Weaponized Archive)
-- ▪️ Execution: **T1204** (User Execution)
-- ▪️ Persistence: **T1547** (Startup Folder / Scheduled Task)
+```text
+sigma-rules/
+├── CVE-2025-54100_WindowsUserland/
+├── CVE-2025-62221_WindowsKernel/
+├── CVE-2025-50165_WindowsGraphics/
+├── CVE-2025-6218_WinRAR/
+├── diagrams/                  # Global diagrams (overview, reusable visuals)
+├── INSTALLATION.md            # Sigma tooling / install guidance
+├── CHANGELOG.md               # Release history
+├── README.md                  # EN (default)
+└── README_FR.md               # FR
+```
 
 ---
 
-## 👥 Target Audience
+## 🚀 Quickstart
 
-These rules are valuable for:
-- 🔹 SOC analyst  L1 / L2 (detection and triage)
-- 🔹 SOC analyst L3 / IR (exploitation confirmation)
-- 🔹 Blue Team / CTI analysts
-- 🔹 Multi-tenant SIEM deployments
+### 1) Validate a rule
+```bash
+sigma check <rule.yml>
+```
+
+### 2) Convert to a backend (example: ElastAlert)
+```bash
+sigma convert -t elastalert -p windows-logsources <rule.yml>
+```
+
+> For OpenSearch Lucene, you may need a processing pipeline:
+> `sigma list pipelines opensearch_lucene`
 
 ---
 
-### ⚠️ Disclaimer
+## 🧩 Conventions
 
-These rules are provided **for defensive purposes only**.  Always test and tune the rules for your environment before deploying them in production.
+### Naming
+- Packs: `CVE-YYYY-NNNNN_Context/`
+- Rules: behavior-based names (not only CVE), with `_broad` / `_strict` where relevant.
+- Docs: `README.md` (EN default) + `README_FR.md`
 
-#### 🙎🏾‍♂️ Author: |
-  Adama Assiongbon (SOC/CTI Analyst Consultant)
-  LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
+### Severity
+- BROAD: Medium (triage/hunting)
+- STRICT: High (actioning/containment)
+
+---
+
+## 📌 Release v0.2.0
+- Added full pack for **CVE-2025-54100** (rules + diagrams + decision table + TheHive playbook).
+See: [CHANGELOG.md](CHANGELOG.md)
