@@ -1,0 +1,73 @@
+####################################
+# OS / Editor
+####################################
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+####################################
+# Logs / temporaires
+####################################
+*.log
+*.tmp
+tmp/
+temp/
+.cache/
+
+####################################
+# Python (outils Sigma, scripts)
+####################################
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+####################################
+# Outils Sigma / build
+####################################
+converted/
+build/
+dist/
+*.ndjson
+
+####################################
+# Secrets / credentials (CRITIQUE)
+####################################
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+*.p12
+*.crt
+id_rsa
+id_rsa.pub
+credentials/
+secrets/
+
+####################################
+# Exports générés localement
+# (rapports, releases, brouillons)
+####################################
+*.docx
+*.pptx
+*.xlsx
+*.pdf
+exports/
+release/
+
+####################################
+# Archives
+####################################
+*.zip
+*.tar
+*.gz
+*.7z
+
