@@ -1,4 +1,12 @@
 # 🛡️ sigma-rules — Packs de détection SOC (Sigma + Réponse)
+### Sigma Rules for CVE Detection & SOC / Blue Team Operations
+
+<!-- Badges (edit the links if you rename the repo/branch) -->
+![Sigma](https://img.shields.io/badge/Sigma-rules-blue)
+![SOC](https://img.shields.io/badge/SOC-ready-success)
+![SOAR](https://img.shields.io/badge/SOAR-playbooks-important)
+![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
+![License](https://img.shields.io/badge/License-MIT-informational)
 
 Un dépôt de **packs de détection SOC** pour des vulnérabilités à fort impact (Patch Tuesday, avis éditeurs),
 basé sur des **règles Sigma**, des **diagrammes d’attaque**, des **tables décisionnelles des analystes SOC N1/N2** et des **playbooks SOAR**.
