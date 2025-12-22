@@ -40,12 +40,12 @@ This vulnerability allows an attacker to **force WinRAR to extract files outside
 
 ## 🧬 Attack Scenario (Blue Team View)
 
-1️⃣ .  The attacker distributes a **weaponized archive** (email, web, download).
-2️⃣ .  The archive contains `../` path traversal sequences.
-3️⃣ . The victim opens the archive using WinRAR.
-4️⃣ . WinRAR extracts a file **outside the target directory**.
-5️⃣ . The file is written to a **Windows persistence location**.
-6️⃣ . On user logon or system reboot, the malicious code executes.
+- 1️⃣ The attacker distributes a **weaponized archive** (email, web, download).
+- 2️⃣ The archive contains `../` path traversal sequences.
+- 3️⃣ The victim opens the archive using WinRAR.
+- 4️⃣ WinRAR extracts a file **outside the target directory**.
+- 5️⃣ The file is written to a **Windows persistence location**.
+- 6️⃣ On user logon or system reboot, the malicious code executes.
 
 👉🏿 **The two Sigma rules cover two distinct stages of this scenario.**
 
