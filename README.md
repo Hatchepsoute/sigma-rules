@@ -84,7 +84,12 @@ sigma convert -t elastalert -p windows-logsources <rule.yml>
 - STRICT: High (actioning/containment)
 
 ---
+## 🧠 Diagramme  SOC
+
+![Diagramme SOC ](diagrams/sigma-rules_vue_globale_soc_1.png)
 
 ## 📌 Release v0.2.0
 - Added full pack for **CVE-2025-54100** (rules + diagrams + decision table + TheHive playbook).
 See: [CHANGELOG.md](CHANGELOG.md)
+
+
