@@ -9,13 +9,8 @@
 ![License](https://img.shields.io/badge/License-MIT-informational)
 
 ---
-This document is bilingual (French and English).  The French version appears first, followed by the English version.
-
----
 
 # 🚨 WinRAR CVE-2025-6218 – Sigma Detection Rules (Blue Team)
-
-## 🇫🇷 Version Française
 
 ## 🎯 Objectif du pack
 
@@ -114,58 +109,17 @@ La corrélation est volontairement laissée au **SIEM / SOAR** afin de préserve
 ---
 
 ## 👥 Public cible
-- SOC L1 / L2 (détection, triage)
-- SOC L3 / IR (confirmation exploitation)
+- Analyste SOC N1 / N2 (détection, triage)
+- Analyste SOC N3 / IR (confirmation exploitation)
 - Blue Team / CTI
 - Déploiements SIEM multi‑clients
 
 ---
 
-## ⚠️ Avertissement
-Ces règles sont fournies **à des fins défensives uniquement**.  
-Toujours tester et adapter les règles avant déploiement en production.
+### ⚠️ Avertissement
+Ces règles sont fournies **à des fins défensives uniquement**.  Toujours tester et adapter les règles avant déploiement en production.
 
 ---
-
-### 🇬🇧 English Version
-
-## 🎯 Pack Objective
-
-This repository provides **two complementary Sigma rules** designed to detect **real‑world exploitation** of **CVE‑2025‑6218 affecting WinRAR on Windows**.
-
-The goal is **not** to detect a malicious archive itself, but to detect **exploitation and persistence behaviors** observed in real attack scenarios.
-
-Designed for:
-- **SOC teams**
-- **Blue Team analysts**
-- **CTI / Threat Hunting**
-- **SIEM / SOAR integration**
-
----
-
-## 🧬 Attack Scenario (Blue Team View)
-
-The attacker delivers a weaponized archive containing traversal paths.  
-When extracted by WinRAR, files are written outside the intended directory, enabling **persistence and execution**.
-
-👉🏿 Each Sigma rule maps to a **distinct stage of the attack chain**.
-
----
-
-## 🧬 MITRE ATT&CK Mapping
-
-- Initial Access: **T1566**
-- Execution: **T1204**
-- Persistence: **T1547**
-
----
-
-## ⚠️ Disclaimer
-These rules are provided **for defensive purposes only**.  
-Always test and tune before production deployment.
-
----
-
 **Author:** Adama Assiongbon  
 SOC / CTI Analyst Consultant  
 LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
