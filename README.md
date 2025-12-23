@@ -86,7 +86,7 @@ sigma convert -t elastalert -p windows-logsources <rule.yml>
 ---
 ## 🧠 Diagramme  SOC
 
-![Diagramme SOC ](diagrams/sigma-rules_vue_globale_soc_1.png)
+![Diagramme SOC ](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
 
 ## 📌 Release v0.2.0
 - Added full pack for **CVE-2025-54100** (rules + diagrams + decision table + TheHive playbook).
