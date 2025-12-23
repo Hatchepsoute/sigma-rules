@@ -81,7 +81,7 @@ sigma convert -t elastalert -p windows-logsources <rule.yml>
 - STRICT : High (action/containment)
 
 ---
-## 🧠 Diagramme  SOC
+## 🧠 Règles Sigma du SOC : Vue d'ensemble opérationnelle
 
 ![Diagramme SOC ](diagrams/sigma_rules_vue_globale_soc_3D_FR.png)
 
