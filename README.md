@@ -111,7 +111,7 @@ scripts/validate_all_rules.sh
 
 **Adama Assiongbon**  
 SOC / CTI Analyst Consultant  
-LinkedIn: https://www.linkedin.com/in/adama-assiongbon/
+LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
 
 ---
 
