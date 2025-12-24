@@ -34,7 +34,7 @@ All detections follow a **two-layer detection model**:
   - Weak-signal detection
   - Baseline deviation monitoring
 
-### 🎯 STRICT Rules — Confirmation & Alerting
+### 🎯 STRICT Rules - Confirmation & Alerting
 - High-confidence detection
 - Focus on:
   - Malicious command-line patterns
@@ -107,7 +107,7 @@ scripts/validate_all_rules.sh
 
 ---
 
-## ✍️ Author
+### ✍️ Author
 
 **Adama Assiongbon**  
 SOC / CTI Analyst Consultant  
@@ -115,7 +115,7 @@ LinkedIn: https://www.linkedin.com/in/adama-assiongbon/
 
 ---
 
-## 📜 License & Usage
+### 📜 License & Usage
 
 This repository is intended for **defensive security operations** only.
 Use responsibly within legal and ethical boundaries.

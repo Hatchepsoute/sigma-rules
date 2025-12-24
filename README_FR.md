@@ -27,7 +27,7 @@ Il s’adresse aux **SOC**, **Blue Teams** et **ingénieurs détection** recherc
 
 Toutes les détections reposent sur un **modèle à deux niveaux** :
 
-### 🔍 Règles BROAD — Visibilité & Threat Hunting
+### 🔍 Règles BROAD - Visibilité & Threat Hunting
 - Couverture comportementale large
 - Détection précoce d’activités suspectes
 - Adaptées à :
@@ -58,7 +58,7 @@ Une détection efficace repose sur la **corrélation** :
 
 - BROAD ➜ signal comportemental
 - STRICT ➜ confirmation malveillante
-- Table décisionnelle ➜ action SOC (L1/L2)
+- Table décisionnelle ➜ action analystes SOC (N1/N2)
 - Playbook ➜ réponse automatisée
 
 Ce modèle réduit fortement les **faux positifs** tout en conservant une **visibilité précoce**.
@@ -108,7 +108,7 @@ scripts/validate_all_rules.sh
 
 ---
 
-## ✍️ Auteur
+### ✍️ Auteur
 
 **Adama Assiongbon**  
 Consultant SOC / CTI  
@@ -116,7 +116,7 @@ LinkedIn : https://www.linkedin.com/in/adama-assiongbon/
 
 ---
 
-## 📜 Licence & Usage
+### 📜 Licence & Usage
 
 Ce dépôt est destiné exclusivement à des **opérations de sécurité défensive**.
 À utiliser dans un cadre légal et éthique.
