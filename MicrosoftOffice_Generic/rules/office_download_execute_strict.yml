@@ -1,0 +1,73 @@
+title: Microsoft Office spawns LOLBIN with download/execute or obfuscation patterns (STRICT)
+id: a6f0558c-14a3-44e0-88f9-605044bb3ecc
+status: experimental
+description: >
+  High-confidence detection for Microsoft Office spawning LOLBINs or script engines with command-line patterns consistent with download-and-execute, remote payload retrieval, or obfuscated execution (e.g., PowerShell -enc, IEX, FromBase64String).
+references:
+  - https://attack.mitre.org/techniques/T1105/
+  - https://attack.mitre.org/techniques/T1059/001/
+author: |-
+  Adama Assiongbon (SOC/CTI Analyst Consultant)
+  LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2025-12-23
+tags:
+  - attack.t1204.002
+  - attack.t1059.001
+  - attack.t1105
+  - attack.t1218
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_office_parent:
+    ParentImage|endswith:
+      - '\WINWORD.EXE'
+      - '\EXCEL.EXE'
+      - '\POWERPNT.EXE'
+      - '\OUTLOOK.EXE'
+      - '\MSACCESS.EXE'
+      - '\VISIO.EXE'
+      - '\ONENOTE.EXE'
+  selection_child:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\cmd.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\regsvr32.exe'
+      - '\bitsadmin.exe'
+      - '\certutil.exe'
+  selection_download_transfer:
+    CommandLine|contains:
+      - 'http://'
+      - 'https://'
+      - 'Invoke-WebRequest'
+      - 'Invoke-RestMethod'
+      - ' iwr '
+      - ' irm '
+      - 'curl '
+      - 'wget '
+      - 'Start-BitsTransfer'
+      - 'bitsadmin'
+      - 'certutil'
+      - ' -urlcache'
+      - ' -split'
+      - ' /transfer'
+  selection_obfuscation_or_exec:
+    CommandLine|contains:
+      - ' -enc'
+      - ' -e '
+      - 'EncodedCommand'
+      - 'FromBase64String'
+      - ' IEX'
+      - 'Invoke-Expression'
+      - 'DownloadString'
+      - 'DownloadFile'
+  condition: selection_office_parent and selection_child and (selection_download_transfer or selection_obfuscation_or_exec)
+falsepositives:
+  - Approved IT automation launched from Office templates (must be backed by ticket + signed scripts)
+  - Red-team / purple-team exercises
+level: high

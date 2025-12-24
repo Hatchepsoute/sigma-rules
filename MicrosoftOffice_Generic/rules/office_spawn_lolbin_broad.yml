@@ -1,0 +1,49 @@
+title: Microsoft Office spawns LOLBIN or script engine (BROAD)
+id: f94eb6ef-dccf-481b-92c8-8a6c844b8355
+status: experimental
+description: >
+  Broad detection for Microsoft Office applications spawning common LOLBINs or script engines.
+  Use for triage and hunting. This behavior is frequently observed in Office-based exploitation
+  chains (malicious documents, external content execution), including multiple Office CVEs.
+references:
+  - https://attack.mitre.org/techniques/T1204/002/
+author: |-
+  Adama Assiongbon (SOC/CTI Analyst Consultant)
+  LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2025-12-23
+tags:
+  - attack.t1204.002
+  - attack.t1059
+  - attack.t1059.001
+  - attack.t1218
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_office_parent:
+    ParentImage|endswith:
+      - '\WINWORD.EXE'
+      - '\EXCEL.EXE'
+      - '\POWERPNT.EXE'
+      - '\OUTLOOK.EXE'
+      - '\MSACCESS.EXE'
+      - '\VISIO.EXE'
+      - '\ONENOTE.EXE'
+  selection_lolbin_or_script_child:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\cmd.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\regsvr32.exe'
+      - '\msiexec.exe'
+      - '\bitsadmin.exe'
+      - '\certutil.exe'
+  condition: selection_office_parent and selection_lolbin_or_script_child
+falsepositives:
+  - Legitimate Office add-ins or automation that launches scripts/tools (validate with IT change tickets)
+  - Enterprise templates/macros invoking PowerShell for approved tasks
+level: medium

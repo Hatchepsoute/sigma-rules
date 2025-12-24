@@ -1,6 +1,3 @@
-# 🛡️ sigma-rules - SOC Detection Packs (Sigma + Response)
-
-### Sigma Rules for CVE Detection & SOC / Blue Team Operations
 
 <!-- Badges (edit the links if you rename the repo/branch) -->
 ![Sigma](https://img.shields.io/badge/Sigma-rules-blue)
@@ -8,88 +5,117 @@
 ![SOAR](https://img.shields.io/badge/SOAR-playbooks-important)
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-informational)
+# 🛡️ Sigma Detection Framework for SOC Operations
 
-A curated repository of **SOC-ready detection packs** for high-impact vulnerabilities (Patch Tuesday, vendor advisories),
-built around **Sigma rules**, **attack-flow diagrams**, **SOC analyst L1/L2 decision tables**, and **SOAR playbooks**.
+![SOC Framework](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
 
-🇫🇷 Version française: [README_FR.md](README_FR.md)
+## 🎯 Purpose
 
----
+This repository provides a **structured, SOC-oriented detection framework** based on **Sigma rules**, enriched with:
+- Detection logic (BROAD & STRICT),
+- SOC decision tables (L1/L2),
+- SOAR playbooks (TheHive, Shuffle),
+- Attack diagrams and workflows,
+- Real-world CVE-driven detection strategies.
 
-## 🎯 What you get (per pack)
-- ✅ Sigma rules (**BROAD** + **STRICT** when applicable)
-- 🧭 Attack-flow diagrams (SVG + PNG)
-- 📋 SOC analyst L1/L2 decision tables (Markdown + PDF when relevant)
-- 🐝 SOAR-ready playbooks (TheHive YAML templates)
-- 📘 Pack READMEs (EN default + FR)
-
----
-
-## 📦 Available Packs
-
-| Pack | Focus | Artifacts |
-|---|---|---|
-| **CVE-2025-54100 – Windows Userland RCE** | PowerShell/IWR + child execution patterns | Rules + Diagrams + Decision Table + TheHive Playbook |
-| **CVE-2025-62221 – Windows Kernel EoP** | User→SYSTEM anomaly + post‑EoP execution | Rules + Diagrams + Decision Table + TheHive Playbook |
-| **CVE-2025-50165 – Windows Graphics** | Document/renderer exploitation patterns | Rules + Diagrams + Playbook |
-| **CVE-2025-6218 – WinRAR** | Archive exploitation + post‑execution | Rules + Diagrams + Playbook |
-
-> Repository structure is pack-first (one folder per CVE pack).
+It is designed for **Security Operations Centers (SOC)**, **Blue Teams**, and **Detection Engineers** seeking actionable, production-ready detections.
 
 ---
 
-## 🗂️ Repository Structure
+## 🧠 Detection Strategy Overview (SOC Doctrine)
 
-```text
-sigma-rules/
-├── CVE-2025-54100_WindowsUserland/
-├── CVE-2025-62221_WindowsKernel/
-├── CVE-2025-50165_WindowsGraphics/
-├── CVE-2025-6218_WinRAR/
-├── diagrams/                  # Global diagrams (overview, reusable visuals)
-├── INSTALLATION.md            # Sigma tooling / install guidance
-├── CHANGELOG.md               # Release history
-├── README.md                  # EN (default)
-└── README_FR.md               # FR
+All detections follow a **two-layer detection model**:
+
+### 🔍 BROAD Rules — Visibility & Hunting
+- Wide behavioral coverage
+- Early-stage detection of suspicious activity
+- Designed for:
+  - Threat hunting
+  - Weak-signal detection
+  - Baseline deviation monitoring
+
+### 🎯 STRICT Rules — Confirmation & Alerting
+- High-confidence detection
+- Focus on:
+  - Malicious command-line patterns
+  - LOLBins abuse
+  - Exploit-like execution chains
+- Designed for:
+  - SOC alerting
+  - Incident response
+  - Automated SOAR workflows
+
+➡️ **SOC Best Practice**  
+BROAD rules should trigger **contextual investigation**.  
+STRICT rules confirm malicious intent and justify **incident escalation**.
+
+---
+
+## 🔗 Correlation Logic
+
+Effective detection relies on **correlation**, not single alerts:
+
+- BROAD ➜ behavioral signal
+- STRICT ➜ malicious confirmation
+- Decision Table ➜ SOC action (L1/L2)
+- Playbook ➜ response automation
+
+This layered model significantly reduces **false positives** while preserving **early visibility**.
+
+---
+
+## 🧩 Repository Structure
+
+Each CVE or detection topic follows a consistent structure:
+
+```
+CVE-XXXX-YYYY/
+├── rules/              # Sigma BROAD & STRICT rules
+├── diagrams/           # Attack flows & SOC views
+├── decision-table/     # L1/L2 SOC decision logic
+├── playbook/           # SOAR & TheHive playbooks
+├── README.md           # Technical & SOC guidance
 ```
 
 ---
 
-## 🚀 Quickstart
+## ⚙️ Sigma Compatibility & Validation
 
-### 1) Validate a rule
+All rules are:
+- Validated using `sigma check`
+- Convertible across multiple SIEMs:
+  - OpenSearch / ELK
+  - Splunk
+  - Elastic (Lucene, EQL, ElastAlert)
+  - NetWitness
+  - SentinelOne (where applicable)
+
+A validation script is provided:
 ```bash
-sigma check <rule.yml>
+scripts/validate_all_rules.sh
 ```
-
-### 2) Convert to a backend (example: ElastAlert)
-```bash
-sigma convert -t elastalert -p windows-logsources <rule.yml>
-```
-
-> For OpenSearch Lucene, you may need a processing pipeline:
-> `sigma list pipelines opensearch_lucene`
 
 ---
 
-## 🧩 Conventions
+## 🧠 Target Audience
 
-### Naming
-- Packs: `CVE-YYYY-NNNNN_Context/`
-- Rules: behavior-based names (not only CVE), with `_broad` / `_strict` where relevant.
-- Docs: `README.md` (EN default) + `README_FR.md`
-
-### Severity
-- BROAD: Medium (triage/hunting)
-- STRICT: High (actioning/containment)
+- SOC Analysts (L1 / L2 / L3)
+- Blue Team Engineers
+- Detection Engineers
+- Threat Hunters
+- Security Consultants
 
 ---
-## 🧠 SOC Sigma Rules: Operational Overview
 
-![Diagram SOC ](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
+## ✍️ Author
 
-## 📌 Release v0.2.0
-- Added full pack for **CVE-2025-54100** (rules + diagrams + decision table + TheHive playbook).
-See: [CHANGELOG.md](CHANGELOG.md)
+**Adama Assiongbon**  
+SOC / CTI Analyst Consultant  
+LinkedIn: https://www.linkedin.com/in/adama-assiongbon/
 
+---
 
+## 📜 License & Usage
+
+This repository is intended for **defensive security operations** only.
+Use responsibly within legal and ethical boundaries.
