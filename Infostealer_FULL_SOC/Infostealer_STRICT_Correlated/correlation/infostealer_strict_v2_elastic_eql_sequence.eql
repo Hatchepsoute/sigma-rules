@@ -1,0 +1,26 @@
+\
+/*
+Elastic EQL Correlation – Infostealer STRICT v2
+Sequence within 10 minutes (maxspan=10m) on same host/user:
+  1) suspicious execution
+  2) credential-store access
+  3) public egress
+Adapt fields to your schema.
+*/
+
+sequence by host.name, user.name with maxspan=10m
+  [process where process.name in ("powershell.exe","pwsh.exe","cmd.exe","rundll32.exe","mshta.exe","wscript.exe","cscript.exe","regsvr32.exe")
+            and process.executable : ("*\\Users\\*","*\\AppData\\*","*\\Temp\\*","*\\Downloads\\*")
+            and process.command_line : ("*FromBase64String*","*IEX*","*Invoke-Expression*","*-enc*","*EncodedCommand*","*http://*","*https://*") ]
+  [file where not process.name in ("chrome.exe","msedge.exe","firefox.exe")
+        and file.path : (
+          "*\\AppData\\Local\\Google\\Chrome\\User Data\\*\\Login Data",
+          "*\\AppData\\Local\\Google\\Chrome\\User Data\\*\\Cookies",
+          "*\\AppData\\Local\\Microsoft\\Edge\\User Data\\*\\Login Data",
+          "*\\AppData\\Local\\Microsoft\\Edge\\User Data\\*\\Cookies",
+          "*\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*\\key4.db",
+          "*\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*\\logins.json"
+        ) ]
+  [network where process.name in ("powershell.exe","pwsh.exe","rundll32.exe","mshta.exe","wscript.exe","cscript.exe","regsvr32.exe")
+          and network.direction == "egress"
+          and not cidrmatch(destination.ip, "10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","127.0.0.0/8") ]

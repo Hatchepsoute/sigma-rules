@@ -1,0 +1,14 @@
+name: Confirmed Infostealer Activity – STRICT v2 (Correlated)
+description: >
+  Handles infostealer incidents confirmed through step-based correlation
+  of execution, credential access, and exfiltration.
+severity: Critical
+trigger:
+  correlation: true
+  window: 10m
+tasks:
+  - title: Validate correlation timeline
+  - title: Isolate affected endpoint
+  - title: Reset user credentials
+  - title: Assess data exfiltration
+  - title: Escalate to Incident Response

@@ -1,0 +1,46 @@
+title: Infostealer Execution From User-Writable Path With Suspicious LOLBin (STRICT v2 - Step 1)
+id: 26090645-90c0-40ee-9aa9-5d0037b33ae7
+status: experimental
+description: >
+  Step 1 of correlated infostealer detection: suspicious LOLBin/loader execution from user-writable paths. Use this rule as the first stage for correlation with credential-store access and external egress. FR(Étape 1 de la détection corrélée d’infostealer : exécution suspecte de LOLBins ou de loaders depuis des répertoires accessibles en écriture par l’utilisateur. Cette règle constitue la première étape de corrélation avec des accès aux stockages d’identifiants (credential stores) et des communications sortantes externes.)
+references:
+  - https://www.dexpose.io/deep-dive-into-arkanix-stealer-and-its-infrastructure/
+  - https://attack.mitre.org/techniques/T1059/
+author: "Adama ASSIONGBON SOC & CTI Analyst Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/"
+date: 2026-01-06
+tags:
+  - attack.execution
+  - attack.t1059
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_user_writable:
+    Image|contains:
+      - '\\Users\\'
+      - '\\AppData\\'
+      - '\\Temp\\'
+      - '\\Downloads\\'
+  selection_lolbins:
+    Image|endswith:
+      - '\\powershell.exe'
+      - '\\pwsh.exe'
+      - '\\cmd.exe'
+      - '\\rundll32.exe'
+      - '\\mshta.exe'
+      - '\\wscript.exe'
+      - '\\cscript.exe'
+      - '\\regsvr32.exe'
+  selection_suspicious_cli:
+    CommandLine|contains:
+      - 'FromBase64String'
+      - 'IEX'
+      - 'Invoke-Expression'
+      - '-enc'
+      - '-EncodedCommand'
+      - 'http://'
+      - 'https://'
+  condition: selection_user_writable and selection_lolbins and selection_suspicious_cli
+falsepositives:
+  - Rare IT scripts executed from user profile (validate signer, ticket, parent process)
+level: high

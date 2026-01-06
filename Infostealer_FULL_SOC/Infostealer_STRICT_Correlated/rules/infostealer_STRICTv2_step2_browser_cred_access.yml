@@ -1,0 +1,48 @@
+title: Non-Browser Process Accessing Browser Credential Stores (STRICT v2 - Step 2)
+id: 12caf5be-99d5-432d-b049-ba9263962835
+status: experimental
+description: >
+  Step 2 of correlated infostealer detection: a non-browser process accessing browser credential stores. Correlate this alert with Step 1 (suspicious execution) and
+  Step 3 (public egress) to confirm infostealer activity.
+  /
+  Étape 2 de la détection corrélée d’infostealer : accès aux stockages d’identifiants des navigateurs par un processus non lié au navigateur. À corréler avec l’Étape 1 (exécution suspecte) et l’Étape 3 (communication sortante vers Internet) afin de confirmer une activité infostealer.
+
+references:
+  - https://www.dexpose.io/deep-dive-into-arkanix-stealer-and-its-infrastructure/
+  - https://attack.mitre.org/techniques/T1555/
+author: "Adama ASSIONGBON SOC & CTI Analyst Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/"
+date: 2026-01-06
+tags:
+  - attack.t1555
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection_chromium_paths:
+    TargetFilename|contains:
+      - '\\AppData\\Local\\Google\\Chrome\\User Data\\'
+      - '\\AppData\\Local\\Microsoft\\Edge\\User Data\\'
+  selection_chromium_files:
+    TargetFilename|endswith:
+      - '\\Login Data'
+      - '\\Cookies'
+      - '\\Web Data'
+      - '\\Local State'
+  selection_firefox_paths:
+    TargetFilename|contains:
+      - '\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\'
+  selection_firefox_files:
+    TargetFilename|endswith:
+      - '\\key4.db'
+      - '\\logins.json'
+      - '\\cookies.sqlite'
+  filter_known_browsers:
+    Image|endswith:
+      - '\\chrome.exe'
+      - '\\msedge.exe'
+      - '\\firefox.exe'
+  condition: (((selection_chromium_paths and selection_chromium_files) or (selection_firefox_paths and selection_firefox_files))) and not filter_known_browsers
+falsepositives:
+  - Password managers and enterprise browser security tools
+  - Forensic/backup agents (should be signed and ticketed)
+level: critical

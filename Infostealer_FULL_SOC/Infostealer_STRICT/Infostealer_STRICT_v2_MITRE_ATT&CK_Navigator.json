@@ -1,0 +1,67 @@
+{
+  "name": "Infostealer STRICT v2 \u2013 SOC Detection Coverage",
+  "version": "4.5",
+  "domain": "enterprise-attack",
+  "description": "MITRE ATT&CK Navigator layer mapping detection coverage for Infostealer STRICT v1/v2 correlated SOC framework.",
+  "filters": {
+    "platforms": [
+      "Windows"
+    ]
+  },
+  "sorting": 0,
+  "layout": {
+    "layout": "side",
+    "showName": true,
+    "showID": true
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1059",
+      "tactic": "execution",
+      "score": 3,
+      "comment": "Suspicious LOLBin execution from user-writable paths (Step 1)"
+    },
+    {
+      "techniqueID": "T1555",
+      "tactic": "credential-access",
+      "score": 3,
+      "comment": "Browser credential store access via DPAPI (Step 2)"
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 3,
+      "comment": "Credential exfiltration over HTTP/HTTPS (Step 3)"
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 2,
+      "comment": "Potential C2 channel used for exfiltration"
+    }
+  ],
+  "legendItems": [
+    {
+      "label": "High-confidence detection",
+      "color": "#ff4d4d"
+    },
+    {
+      "label": "Medium coverage / contextual",
+      "color": "#ffa500"
+    }
+  ],
+  "metadata": [
+    {
+      "name": "Author",
+      "value": "Adama ASSIONGBON \u2013 SOC & CTI Analyst Consultant"
+    },
+    {
+      "name": "Use case",
+      "value": "Infostealer detection \u2013 STRICT correlated"
+    },
+    {
+      "name": "SOC maturity",
+      "value": "Production-ready"
+    }
+  ]
+}

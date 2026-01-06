@@ -109,7 +109,7 @@ sigma convert -t sentinel_one_pq -p sysmon rule.yml
 ### Elastic Security (EQL)
 
 ```bash
-sigma convert -t eql -p ecs_windows rule.yml
+sigma convert -t eql -p sysmon rule.yml
 ```
 
 ### Splunk

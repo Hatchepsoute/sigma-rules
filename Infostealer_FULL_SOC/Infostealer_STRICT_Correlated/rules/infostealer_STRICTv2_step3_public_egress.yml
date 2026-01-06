@@ -1,0 +1,57 @@
+title: Suspicious Public Network Egress From LOLBins (STRICT v2 - Step 3)
+id: 9ddb6120-1dd5-4bc4-9a3e-bebe5a1afc52
+status: experimental
+description: >
+  Step 3 of correlated infostealer detection: public egress from common LOLBins/loaders. Correlate with Step 1 (execution) and Step 2 (credential-store access) within a short time window (<=10 minutes).
+description: >
+  Step 3 of correlated infostealer detection: public egress from common LOLBins or loaders. Correlate with Step 1 (execution) and Step 2 (credential-store access) within a short time window (<=10 minutes).
+  /
+  Étape 3 de la détection corrélée d’infostealer : communication sortante vers Internet depuis des LOLBins ou des loaders couramment abusés. À corréler avec l’Étape 1 (exécution) et l’Étape 2 (accès aux stockages d’identifiants) dans une fenêtre   temporelle courte (<=10 minutes).
+
+references:
+  - https://www.dexpose.io/deep-dive-into-arkanix-stealer-and-its-infrastructure/
+  - https://attack.mitre.org/techniques/T1071/001/
+  - https://attack.mitre.org/techniques/T1041/
+author: "Adama ASSIONGBON SOC & CTI Analyst Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/"
+date: 2026-01-06
+tags:
+  - attack.t1071.001
+  - attack.t1041
+logsource:
+  product: windows
+  category: network_connection
+detection:
+  selection_lolbins:
+    Image|endswith:
+      - '\\powershell.exe'
+      - '\\pwsh.exe'
+      - '\\rundll32.exe'
+      - '\\mshta.exe'
+      - '\\wscript.exe'
+      - '\\cscript.exe'
+      - '\\regsvr32.exe'
+  filter_private_ranges:
+    DestinationIp|startswith:
+      - '10.'
+      - '192.168.'
+      - '127.'
+      - '172.16.'
+      - '172.17.'
+      - '172.18.'
+      - '172.19.'
+      - '172.20.'
+      - '172.21.'
+      - '172.22.'
+      - '172.23.'
+      - '172.24.'
+      - '172.25.'
+      - '172.26.'
+      - '172.27.'
+      - '172.28.'
+      - '172.29.'
+      - '172.30.'
+      - '172.31.'
+  condition: selection_lolbins and not filter_private_ranges
+falsepositives:
+  - Legitimate automation reaching public endpoints (validate dest, signer, ticket)
+level: high

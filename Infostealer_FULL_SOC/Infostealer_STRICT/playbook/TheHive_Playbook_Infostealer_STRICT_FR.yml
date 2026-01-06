@@ -1,0 +1,14 @@
+name: Activité Infostealer Confirmée – Accès Identifiants & Exfiltration
+description: >
+  Playbook de gestion des incidents infostealer confirmés détectés via
+  une corrélation multi-étapes (exécution, accès identifiants, exfiltration).
+severity: Critique
+trigger:
+  type: sigma
+  rule: infostealer_STRICT_credential_access_and_exfiltration
+tasks:
+  - title: Isoler le poste affecté
+  - title: Réinitialiser les identifiants utilisateurs
+  - title: Identifier les données exfiltrées
+  - title: Rechercher un mouvement latéral
+  - title: Escalader vers l’équipe IR

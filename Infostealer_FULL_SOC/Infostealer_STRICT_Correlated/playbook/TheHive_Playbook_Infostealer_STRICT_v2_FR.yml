@@ -1,0 +1,14 @@
+name: Activité Infostealer Confirmée – STRICT v2 (Corrélée)
+description: >
+  Gestion des incidents infostealer confirmés via une corrélation
+  par étapes (exécution, identifiants, exfiltration).
+severity: Critique
+trigger:
+  correlation: true
+  window: 10m
+tasks:
+  - title: Valider la chronologie de corrélation
+  - title: Isoler le poste compromis
+  - title: Réinitialiser les identifiants
+  - title: Évaluer l’exfiltration des données
+  - title: Escalader vers l’équipe IR

@@ -1,0 +1,14 @@
+name: Confirmed Infostealer Activity – Credential Access & Exfiltration
+description: >
+  Playbook for handling confirmed infostealer incidents detected through
+  multi-stage correlation of execution, credential access, and exfiltration.
+severity: Critical
+trigger:
+  type: sigma
+  rule: infostealer_STRICT_credential_access_and_exfiltration
+tasks:
+  - title: Isolate affected host
+  - title: Invalidate all user credentials
+  - title: Identify exfiltrated data scope
+  - title: Hunt for lateral movement
+  - title: Escalate to Incident Response
