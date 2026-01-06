@@ -1,87 +1,50 @@
 # 📘 Dépôt Sigma Rules – Automatisation SOC & CTI (FR)
 
-# 🛠️ Scripts d’Automatisation Sigma - Guide SOC (FR)
-
-Ce dépôt fournit **deux scripts Bash** pour les équipes SOC / CTI afin de **valider** et **convertir des règles Sigma** vers plusieurs SIEM.
-
-Les scripts sont conçus pour être exécutés depuis le répertoire `scripts/`.
+Ce dépôt fournit des **règles Sigma de niveau entreprise** ainsi que des **scripts d’automatisation** destinés aux équipes SOC et CTI.
+L’objectif est d’industrialiser la **validation**, la **conversion** et le **déploiement** des règles de détection multi‑SIEM.
 
 ---
 
-## 📄 Présentation
+## 🛠️ Scripts d’automatisation Sigma
 
-### 1️⃣ `validate_all_rules.sh` - Contrôle Qualité
+Deux scripts Bash sont fournis et doivent être exécutés depuis le répertoire `scripts/`.
 
-- Vérification syntaxique et logique des règles Sigma
-- Détection des erreurs et issues de tagging
-- Utilisable comme barrière CI
+### 1️⃣ `validate_all_rules.sh` – Barrière de Qualité Sigma
 
----
+**Objectif**
+- Valider l’ensemble des règles Sigma
+- Détecter :
+  - erreurs de syntaxe
+  - conditions invalides
+  - problèmes de tags (MITRE ATT&CK, tags personnalisés)
 
-### 2️⃣ `convert_all_rules.sh` - Conversion Multi‑SIEM
-
-- Conversion des règles vers plusieurs SIEM
-- Génération de requêtes prêtes à l’emploi
-
-**Sortie**
-```
-scripts/conversions/<SIEM>/{raw,one-line}
-```
-
----
-
-## ▶️ Exécution
-
-```bash
-cd scripts
-chmod +x validate_all_rules.sh convert_all_rules.sh
-./validate_all_rules.sh
-./convert_all_rules.sh
-```
-
----
-
-## 💻 Environnements supportés
-
-- Linux (recommandé)
-- macOS (partiel)
-- Windows via WSL
-
-**Prérequis**
-- Bash 4+
-- Python 3.9+
-- sigma-cli
-
-
-
----
-
-# 🛠️ Scripts d’Automatisation Sigma – Guide SOC (FR)
-
-Ce dépôt fournit **deux scripts Bash** pour les équipes SOC / CTI afin de **valider** et **convertir des règles Sigma** vers plusieurs SIEM.
-
-Les scripts sont conçus pour être exécutés depuis le répertoire `scripts/`.
-
----
-
-## 📄 Présentation
-
-### 1️⃣ `validate_all_rules.sh` – Contrôle Qualité
-
-- Vérification syntaxique et logique des règles Sigma
-- Détection des erreurs et issues de tagging
-- Utilisable comme barrière CI
+**Fonctionnement**
+- Parcours récursif de `**/rules/*.yml`
+- Exécution de `sigma check`
+- Retourne un **code d’erreur bloquant** en cas d’issues
+- Conçu comme **gate CI/CD**
 
 ---
 
 ### 2️⃣ `convert_all_rules.sh` – Conversion Multi‑SIEM
 
-- Conversion des règles vers plusieurs SIEM
-- Génération de requêtes prêtes à l’emploi
+**Objectif**
+- Convertir les règles Sigma validées vers des requêtes spécifiques SIEM
+- Fournir des règles prêtes à être déployées par les analystes SOC
 
-**Sortie**
-```
-scripts/conversions/<SIEM>/{raw,one-line}
+**SIEM supportés**
+- OpenSearch / Lucene
+- Splunk
+- Elastic / ElastAlert (legacy)
+- Elastic EQL
+- RSA NetWitness
+- Microsoft Sentinel (KQL)
+
+**Structure de sortie**
+```text
+scripts/conversions/<SIEM>/
+├── raw/
+└── one-line/
 ```
 
 ---
@@ -97,52 +60,56 @@ chmod +x validate_all_rules.sh convert_all_rules.sh
 
 ---
 
-## 💻 Environnements supportés
+## 📂 Différence entre `raw/` et `one-line/`
 
-- Linux (recommandé)
-- macOS (partiel)
-- Windows via WSL
-
-**Prérequis**
-- Bash 4+
-- Python 3.9+
-- sigma-cli
-
----
-
-
-## 📂 Différence entre les répertoires `raw/` et `one-line/`
-
-Lors de l’exécution de `convert_all_rules.sh`, deux répertoires peuvent être générés pour chaque cible SIEM :
-
-### 🔹 `raw/` – Sortie Sigma native (par défaut)
-- Sortie exacte produite par `sigma convert`
-- Respecte le format d’origine
-- Souvent déjà **sur une seule ligne**, selon le backend
+### `raw/` – Sortie Sigma native (par défaut)
+- Sortie exacte de `sigma convert`
+- Format conservé
+- Souvent déjà sur une seule ligne selon le backend
 - Recommandé pour :
   - Splunk
   - Microsoft Sentinel (KQL)
   - Elastic EQL
   - RSA NetWitness
 
-### 🔹 `one-line/` - Variante de sécurité sur une seule ligne
-- Tous les retours à la ligne sont remplacés par des espaces
-- Destiné aux moteurs qui **n’acceptent qu’une requête mono-ligne**
+### `one-line/` – Variante mono‑ligne de sécurité
+- Tous les retours à la ligne sont supprimés
+- Nécessaire pour les moteurs exigeant une requête sur une seule ligne
 - Cas typiques :
   - OpenSearch / Elasticsearch `query_string`
   - Lucene strict
   - SIEM ou parseurs legacy
 
-### ℹ️ Point important
-Pour de nombreux backends Sigma (Splunk, KQL, Lucene), la sortie `raw/` est **déjà sur une seule ligne**.  
-Il est donc normal que les fichiers `raw/` et `one-line/` soient **identiques** dans ces cas.
+**Note**
+Il est normal que `raw/` et `one-line/` soient identiques pour certains backends.
 
-Le répertoire `one-line/` est conservé par **choix défensif**, afin d’anticiper :
-- des backends générant du multi-ligne
-- des contraintes SIEM plus strictes
-- des évolutions futures de Sigma
+**Règle SOC**
+- SIEM multi‑ligne → `raw/`
+- SIEM mono‑ligne → `one-line/`
 
-**Règle simple pour les analystes SOC :**
-- SIEM compatible multi-ligne → utiliser `raw/`
-- SIEM exigeant une seule ligne → utiliser `one-line/`
+---
 
+## 💻 Environnements supportés
+
+- Linux - **recommandé**
+- macOS (tests limités)
+- Windows via **WSL uniquement**
+
+**Prérequis**
+- Bash 4+
+- Python 3.9+
+- `sigma-cli`
+
+Installation :
+```bash
+pip install sigma-cli
+```
+
+---
+
+## 🧠 Bonnes pratiques SOC
+
+- Toujours valider avant conversion
+- Ne jamais déployer de règles avec des issues Sigma
+- Utiliser `validate_all_rules.sh` comme barrière CI (Continuous Integration/Intégration Continue)
+- Considérer les conversions comme des **artefacts de production**
