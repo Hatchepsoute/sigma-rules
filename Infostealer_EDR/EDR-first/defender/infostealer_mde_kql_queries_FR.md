@@ -1,4 +1,4 @@
-# Microsoft Defender for Endpoint (MDE) – Détection des Infostealers (Approche EDR-first)
+# Microsoft Defender for Endpoint (MDE) - Détection des Infostealers (Approche EDR-first)
 
 Ce document présente des requêtes **KQL** destinées à Microsoft Defender for Endpoint (MDE) afin de détecter des **comportements typiques d’infostealers** sur les endpoints Windows.  
 L’approche est **EDR-first**, orientée détection comportementale et corrélation.
