@@ -1,1 +1,0 @@
-EventID:3 AND ((Image:(*\\powershell.exe OR *\\pwsh.exe OR *\\rundll32.exe OR *\\mshta.exe OR *\\wscript.exe OR *\\cscript.exe)) AND (NOT (DestinationIp:(10.* OR 172.16.* OR 172.17.* OR 172.18.* OR 172.19.* OR 172.20.* OR 172.21.* OR 172.22.* OR 172.23.* OR 172.24.* OR 172.25.* OR 172.26.* OR 172.27.* OR 172.28.* OR 172.29.* OR 172.30.* OR 172.31.* OR 192.168.* OR 127.*))))

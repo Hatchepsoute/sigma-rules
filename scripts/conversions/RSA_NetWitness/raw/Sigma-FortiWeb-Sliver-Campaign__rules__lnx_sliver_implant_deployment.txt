@@ -1,1 +1,0 @@
-(TargetFilename ends '/.root/system-updater','/app/web/system-updater','/.root/cups-lpd') || (TargetFilename contains '/bin/.root/','/var/tmp/.','/dev/shm/.')

@@ -1,1 +1,0 @@
-any where Image:"*/cups-lpd" and (CommandLine like~ ("*-p 515*", "* -1*", "* -w*"))

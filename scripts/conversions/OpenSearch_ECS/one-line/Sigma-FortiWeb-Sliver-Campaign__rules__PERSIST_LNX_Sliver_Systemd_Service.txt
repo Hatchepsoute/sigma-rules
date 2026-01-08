@@ -1,1 +1,0 @@
-TargetFilename:*.service AND (FileContent:*Description\=Updater\ Service* AND FileContent:*ExecStart\=* AND FileContent:*Restart\=on\-failure*)

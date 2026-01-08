@@ -1,1 +1,0 @@
-EventID = 1 && ((Image contains '\Users\','\AppData\','\Temp\','\Downloads\') && (Image ends '\powershell.exe','\pwsh.exe','\cmd.exe','\wscript.exe','\cscript.exe','\rundll32.exe','\mshta.exe','\regsvr32.exe'))

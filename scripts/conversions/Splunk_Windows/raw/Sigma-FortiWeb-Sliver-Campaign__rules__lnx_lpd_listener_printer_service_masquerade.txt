@@ -1,1 +1,0 @@
-DestinationPort=515 NOT (ProcessName IN ("*cupsd*", "*lpd*"))

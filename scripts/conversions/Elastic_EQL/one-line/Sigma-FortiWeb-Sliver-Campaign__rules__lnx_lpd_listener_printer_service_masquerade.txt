@@ -1,1 +1,0 @@
-any where DestinationPort:515 and (not (ProcessName like~ ("*cupsd*", "*lpd*")))

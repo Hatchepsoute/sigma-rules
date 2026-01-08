@@ -1,1 +1,0 @@
-Image IN ("*\\Users\\*", "*\\AppData\\*", "*\\Temp\\*", "*\\Downloads\\*") Image IN ("*\\powershell.exe", "*\\pwsh.exe", "*\\cmd.exe", "*\\rundll32.exe", "*\\mshta.exe", "*\\wscript.exe", "*\\cscript.exe", "*\\regsvr32.exe") CommandLine IN ("*FromBase64String*", "*IEX*", "*Invoke-Expression*", "*-enc*", "*-EncodedCommand*", "*http://*", "*https://*")

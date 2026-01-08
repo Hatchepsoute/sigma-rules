@@ -1,1 +1,0 @@
-CommandLine contains "frpc" or CommandLine contains ".toml" or CommandLine contains ".ini"

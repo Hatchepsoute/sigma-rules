@@ -1,1 +1,0 @@
-EventID = 11 && ((((TargetFilename contains '\AppData\Local\Google\Chrome\User Data\','\AppData\Local\Microsoft\Edge\User Data\') && (TargetFilename ends '\Login Data','\Cookies')) || (TargetFilename contains '\AppData\Roaming\Mozilla\Firefox\Profiles\' && (TargetFilename ends '\key4.db','\logins.json'))) && (NOT (Image ends '\chrome.exe','\msedge.exe','\firefox.exe')))

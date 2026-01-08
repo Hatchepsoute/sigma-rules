@@ -1,1 +1,0 @@
-any where (TargetFilename like~ ("*/.root/system-updater", "*/app/web/system-updater", "*/.root/cups-lpd")) or (TargetFilename like~ ("*/bin/.root/*", "*/var/tmp/.*", "*/dev/shm/.*"))

@@ -1,1 +1,0 @@
-ParentImage IN ("*\\WINWORD.EXE", "*\\EXCEL.EXE", "*\\POWERPNT.EXE", "*\\OUTLOOK.EXE", "*\\MSACCESS.EXE", "*\\VISIO.EXE", "*\\ONENOTE.EXE") Image IN ("*\\powershell.exe", "*\\pwsh.exe", "*\\cmd.exe", "*\\mshta.exe", "*\\rundll32.exe", "*\\wscript.exe", "*\\cscript.exe", "*\\regsvr32.exe", "*\\msiexec.exe", "*\\bitsadmin.exe", "*\\certutil.exe")

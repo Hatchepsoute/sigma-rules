@@ -1,1 +1,0 @@
-(TargetFilename:(*\/.root\/system\-updater OR *\/app\/web\/system\-updater OR *\/.root\/cups\-lpd)) OR (TargetFilename:(*\/bin\/.root\/* OR *\/var\/tmp\/.* OR *\/dev\/shm\/.*))

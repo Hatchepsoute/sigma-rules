@@ -1,1 +1,0 @@
-TargetFilename="*.service" FileContent="*Description=Updater Service*" FileContent="*ExecStart=*" FileContent="*Restart=on-failure*"

@@ -1,1 +1,0 @@
-Image="*/cups-lpd" CommandLine IN ("*-p 515*", "* -1*", "* -w*")

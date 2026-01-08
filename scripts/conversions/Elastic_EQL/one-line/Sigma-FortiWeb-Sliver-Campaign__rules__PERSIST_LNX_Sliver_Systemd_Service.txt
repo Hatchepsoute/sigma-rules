@@ -1,1 +1,0 @@
-any where TargetFilename:"*.service" and (FileContent:"*Description=Updater Service*" and FileContent:"*ExecStart=*" and FileContent:"*Restart=on-failure*")

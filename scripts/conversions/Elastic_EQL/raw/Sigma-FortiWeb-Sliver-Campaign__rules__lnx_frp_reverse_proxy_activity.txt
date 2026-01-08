@@ -1,1 +1,0 @@
-any where CommandLine like~ ("*frpc*", "*.toml*", "*.ini*")
