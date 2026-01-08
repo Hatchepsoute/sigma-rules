@@ -1,0 +1,14 @@
+description: "Detects creation of a binary named system-updater or execution in hidden/suspicious
+  directories. / (D\xE9tection de la cr\xE9ation du binaire system-updater ou ex\xE9cution
+  dans des r\xE9pertoires cach\xE9s ou suspects)."
+filter:
+- query:
+    query_string:
+      query: (TargetFilename:(*\/.root\/system\-updater OR *\/app\/web\/system\-updater
+        OR *\/.root\/cups\-lpd)) OR (TargetFilename:(*\/bin\/.root\/* OR *\/var\/tmp\/.*
+        OR *\/dev\/shm\/.*))
+index: '*'
+name: Possible Sliver Implant Deployment on FortiWeb or Linux Host
+priority: 4
+type: any
+

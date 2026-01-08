@@ -1,0 +1,20 @@
+description: "Step 3 of correlated infostealer detection: public egress from common
+  LOLBins or loaders. Correlate with Step 1 (execution) and Step 2 (credential-store
+  access) within a short time window (<=10 minutes). / \xC9tape 3 de la d\xE9tection
+  corr\xE9l\xE9e d\u2019infostealer : communication sortante vers Internet depuis
+  des LOLBins ou des loaders couramment abus\xE9s. \xC0 corr\xE9ler avec l\u2019\xC9tape
+  1 (ex\xE9cution) et l\u2019\xC9tape 2 (acc\xE8s aux stockages d\u2019identifiants)
+  dans une fen\xEAtre   temporelle courte (<=10 minutes).\n"
+filter:
+- query:
+    query_string:
+      query: (Image:(*\\powershell.exe OR *\\pwsh.exe OR *\\rundll32.exe OR *\\mshta.exe
+        OR *\\wscript.exe OR *\\cscript.exe OR *\\regsvr32.exe)) AND (NOT (DestinationIp:(10.*
+        OR 192.168.* OR 127.* OR 172.16.* OR 172.17.* OR 172.18.* OR 172.19.* OR 172.20.*
+        OR 172.21.* OR 172.22.* OR 172.23.* OR 172.24.* OR 172.25.* OR 172.26.* OR
+        172.27.* OR 172.28.* OR 172.29.* OR 172.30.* OR 172.31.*)))
+index: '*'
+name: Suspicious Public Network Egress From LOLBins (STRICT v2 - Step 3)
+priority: 3
+type: any
+

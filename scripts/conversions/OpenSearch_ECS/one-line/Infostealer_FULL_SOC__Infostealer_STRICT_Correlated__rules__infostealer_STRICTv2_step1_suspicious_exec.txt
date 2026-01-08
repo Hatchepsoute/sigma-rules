@@ -1,0 +1,1 @@
+EventID:1 AND ((Image:(*\\Users\\* OR *\\AppData\\* OR *\\Temp\\* OR *\\Downloads\\*)) AND (Image:(*\\powershell.exe OR *\\pwsh.exe OR *\\cmd.exe OR *\\rundll32.exe OR *\\mshta.exe OR *\\wscript.exe OR *\\cscript.exe OR *\\regsvr32.exe)) AND (CommandLine:(*FromBase64String* OR *IEX* OR *Invoke\-Expression* OR *\-enc* OR *\-EncodedCommand* OR *http\:\/\/* OR *https\:\/\/*)))

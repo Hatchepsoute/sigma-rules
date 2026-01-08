@@ -1,0 +1,21 @@
+title: Fast Reverse Proxy (FRP) Execution and Configuration
+id: 7d12a3b4-e9c8-4f51-b8d2-3a1b4c5d6e7f
+status: experimental
+description: Detects FRP client execution typically used for remote access tunneling (Détecte l'exécution du client FRP utilisé pour le tunneling d'accès à distance).
+author: Adama ASSIONGBON SOC & CTI Analyst Consultant
+date: 2026/01/08
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection:
+        CommandLine|contains:
+            - 'frpc'
+            - '.toml'
+            - '.ini'
+    condition: selection
+falsepositives:
+    - Authorized remote maintenance tools (Outils de maintenance à distance autorisés).
+level: medium
+tags:
+    - attack.t1572

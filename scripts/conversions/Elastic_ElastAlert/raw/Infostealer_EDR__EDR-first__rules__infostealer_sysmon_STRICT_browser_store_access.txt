@@ -1,0 +1,23 @@
+description: "High-confidence infostealer detection by observing suspicious processes
+  accessing browser credential stores (Chrome/Edge Login Data and Cookies, Firefox
+  key4.db and logins.json). Recommend correlating with Sysmon network connections
+  (EventID 3) for external egress confirmation. / D\xE9tection \xE0 haute confiance
+  d\u2019un infostealer par l\u2019observation de processus suspects acc\xE9dant aux
+  stockages d\u2019identifiants des navigateurs (Chrome/Edge : Login Data et Cookies
+  ; Firefox : key4.db et logins.json). Il est recommand\xE9 de corr\xE9ler cette alerte
+  avec les \xE9v\xE9nements de connexions r\xE9seau Sysmon (EventID 3) afin de confirmer
+  une communication sortante externe.\n"
+filter:
+- query:
+    query_string:
+      query: Channel:Microsoft\-Windows\-Sysmon\/Operational AND ((((TargetFilename:(*\\AppData\\Local\\Google\\Chrome\\User\
+        Data\\* OR *\\AppData\\Local\\Microsoft\\Edge\\User\ Data\\*)) AND (TargetFilename:(*\\Login\
+        Data OR *\\Cookies))) OR (TargetFilename:*\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*
+        AND (TargetFilename:(*\\key4.db OR *\\logins.json)))) AND (NOT (Image:(*\\chrome.exe
+        OR *\\msedge.exe OR *\\firefox.exe))))
+index: '*'
+name: Suspected Infostealer Credential Harvesting - Browser Stores Access (Sysmon
+  - STRICT)
+priority: 3
+type: any
+

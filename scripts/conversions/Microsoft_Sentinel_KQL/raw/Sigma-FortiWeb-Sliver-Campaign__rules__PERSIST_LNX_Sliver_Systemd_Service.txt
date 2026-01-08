@@ -1,0 +1,1 @@
+TargetFilename endswith ".service" and (FileContent contains "Description=Updater Service" and FileContent contains "ExecStart=" and FileContent contains "Restart=on-failure")

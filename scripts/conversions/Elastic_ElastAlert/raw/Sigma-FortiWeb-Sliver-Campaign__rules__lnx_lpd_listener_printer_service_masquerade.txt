@@ -1,0 +1,18 @@
+description: "Detects a process listening on TCP port 515 (LPD) that is not a legitimate
+  CUPS printing service. In the FortiWeb Sliver campaign, attackers deployed a SOCKS
+  proxy (microsocks) renamed as 'cups-lpd' to masquerade as a printer  daemon and
+  expose remote access tunnels. (D\xE9tecte un processus \xE0 l\u2019\xE9coute sur
+  le port TCP 515 (LPD) qui ne correspond pas \xE0 un service d\u2019impression CUPS
+  l\xE9gitime. Dans la campagne Sliver ciblant FortiWeb, les attaquants ont d\xE9ploy\xE9
+  un proxy SOCKS (microsocks), renomm\xE9 en \xAB cups-lpd \xBB, afin de se faire
+  passer pour un d\xE9mon d\u2019impression et d\u2019exposer des tunnels d\u2019acc\xE8s
+  \xE0 distance)\n"
+filter:
+- query:
+    query_string:
+      query: DestinationPort:515 AND (NOT (ProcessName:(*cupsd* OR *lpd*)))
+index: '*'
+name: Suspicious Network Listener on TCP 515 (LPD Masquerade - Non CUPS)
+priority: 3
+type: any
+

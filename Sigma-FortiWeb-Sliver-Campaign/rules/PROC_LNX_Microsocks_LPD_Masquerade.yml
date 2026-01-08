@@ -1,0 +1,27 @@
+title: Execution of Masqueraded SOCKS5 Proxy (microsocks as cups-lpd)
+id: c3e7f5a8-1b2d-4f9c-88a0-9d1e2f3a4b5c
+status: experimental
+description: Detects execution of a binary named cups-lpd with SOCKS5 proxy arguments. (Détecte l'exécution d'un binaire nommé cups-lpd avec des arguments de proxy SOCKS5).
+author: Adama ASSIONGBON SOC & CTI Analyst Consultant
+date: 2026/01/08
+logsource:
+  category: process_creation
+  product: linux
+detection:
+  selection_image:
+    Image|endswith: '/cups-lpd'
+
+  selection_args_515:
+    CommandLine|contains: '-p 515'  # Port LPD détourné
+  selection_args_1:
+    CommandLine|contains: ' -1'     # Flag spécifique microsocks
+  selection_args_w:
+    CommandLine|contains: ' -w'     # Flag spécifique microsocks
+
+  condition: selection_image and 1 of selection_args_*
+falsepositives:
+  - Rare legacy printing systems (Anciens systèmes d'impression très rares).
+level: high
+tags:
+  - attack.t1090
+

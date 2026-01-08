@@ -1,0 +1,20 @@
+description: "Support rule to detect public network egress from common LOLBins using
+  Sysmon network connection events (EventID 3). Correlate with infostealer STRICT
+  alerts for confirmation. / R\xE8gle de support visant \xE0 d\xE9tecter des communications
+  r\xE9seau sortantes vers Internet depuis des LOLBins couramment abus\xE9s, \xE0
+  partir des \xE9v\xE9nements de connexions r\xE9seau Sysmon (EventID 3). \xC0 corr\xE9ler
+  avec des alertes infostealer STRICT afin de confirmer l\u2019activit\xE9 malveillante.\n"
+filter:
+- query:
+    query_string:
+      query: Channel:Microsoft\-Windows\-Sysmon\/Operational AND ((Image:(*\\powershell.exe
+        OR *\\pwsh.exe OR *\\rundll32.exe OR *\\mshta.exe OR *\\wscript.exe OR *\\cscript.exe))
+        AND (NOT (DestinationIp:(10.* OR 172.16.* OR 172.17.* OR 172.18.* OR 172.19.*
+        OR 172.20.* OR 172.21.* OR 172.22.* OR 172.23.* OR 172.24.* OR 172.25.* OR
+        172.26.* OR 172.27.* OR 172.28.* OR 172.29.* OR 172.30.* OR 172.31.* OR 192.168.*
+        OR 127.*))))
+index: '*'
+name: Suspicious Public Egress From LOLBins (Sysmon - SUPPORT)
+priority: 2
+type: any
+

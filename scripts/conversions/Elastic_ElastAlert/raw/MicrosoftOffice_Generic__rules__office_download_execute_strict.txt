@@ -1,0 +1,24 @@
+description: 'High-confidence detection for Microsoft Office spawning LOLBINs or script
+  engines with command-line patterns consistent with download-and-execute, remote
+  payload retrieval, or obfuscated execution (e.g., PowerShell -enc, IEX, FromBase64String).
+
+  '
+filter:
+- query:
+    query_string:
+      query: (ParentImage:(*\\WINWORD.EXE OR *\\EXCEL.EXE OR *\\POWERPNT.EXE OR *\\OUTLOOK.EXE
+        OR *\\MSACCESS.EXE OR *\\VISIO.EXE OR *\\ONENOTE.EXE)) AND (Image:(*\\powershell.exe
+        OR *\\pwsh.exe OR *\\cmd.exe OR *\\mshta.exe OR *\\rundll32.exe OR *\\wscript.exe
+        OR *\\cscript.exe OR *\\regsvr32.exe OR *\\bitsadmin.exe OR *\\certutil.exe))
+        AND ((CommandLine:(*http\:\/\/* OR *https\:\/\/* OR *Invoke\-WebRequest* OR
+        *Invoke\-RestMethod* OR *\ iwr\ * OR *\ irm\ * OR *curl\ * OR *wget\ * OR
+        *Start\-BitsTransfer* OR *bitsadmin* OR *certutil* OR *\ \-urlcache* OR *\
+        \-split* OR *\ \/transfer*)) OR (CommandLine:(*\ \-enc* OR *\ \-e\ * OR *EncodedCommand*
+        OR *FromBase64String* OR *\ IEX* OR *Invoke\-Expression* OR *DownloadString*
+        OR *DownloadFile*)))
+index: '*'
+name: Microsoft Office spawns LOLBIN with download/execute or obfuscation patterns
+  (STRICT)
+priority: 3
+type: any
+

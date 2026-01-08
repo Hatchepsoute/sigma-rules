@@ -1,0 +1,22 @@
+description: "Step 1 of correlated infostealer detection: suspicious LOLBin/loader
+  execution from user-writable paths. Use this rule as the first stage for correlation
+  with credential-store access and external egress. FR(\xC9tape 1 de la d\xE9tection
+  corr\xE9l\xE9e d\u2019infostealer : ex\xE9cution suspecte de LOLBins ou de loaders
+  depuis des r\xE9pertoires accessibles en \xE9criture par l\u2019utilisateur. Cette
+  r\xE8gle constitue la premi\xE8re \xE9tape de corr\xE9lation avec des acc\xE8s aux
+  stockages d\u2019identifiants (credential stores) et des communications sortantes
+  externes.)\n"
+filter:
+- query:
+    query_string:
+      query: (Image:(*\\Users\\* OR *\\AppData\\* OR *\\Temp\\* OR *\\Downloads\\*))
+        AND (Image:(*\\powershell.exe OR *\\pwsh.exe OR *\\cmd.exe OR *\\rundll32.exe
+        OR *\\mshta.exe OR *\\wscript.exe OR *\\cscript.exe OR *\\regsvr32.exe)) AND
+        (CommandLine:(*FromBase64String* OR *IEX* OR *Invoke\-Expression* OR *\-enc*
+        OR *\-EncodedCommand* OR *http\:\/\/* OR *https\:\/\/*))
+index: '*'
+name: Infostealer Execution From User-Writable Path With Suspicious LOLBin (STRICT
+  v2 - Step 1)
+priority: 3
+type: any
+

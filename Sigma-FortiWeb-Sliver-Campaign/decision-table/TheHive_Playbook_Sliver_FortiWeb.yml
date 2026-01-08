@@ -1,0 +1,67 @@
+
+# TheHive Playbook - Sliver / FortiWeb / Proxy Masquerade
+# Author: Adama ASSIONGBON SOC & CTI Analyst Consultant
+# Date: 2026-01-08
+
+playbook:
+  name: Sliver_FortiWeb_Detection_and_Response
+  description: >
+    Playbook for handling Sliver C2 infections on Linux or FortiWeb appliances,
+    including systemd persistence, proxy masquerading (microsocks/cups-lpd),
+    FRP tunneling and LPD listener abuse.
+  severity_mapping:
+    R1: HIGH
+    R2: CRITICAL
+    R3: HIGH
+    R4: MEDIUM
+    R5: CRITICAL
+
+  steps:
+    - step: triage
+      actions:
+        - check_rule_id
+        - validate_host_type
+        - confirm_log_source
+
+    - step: enrichment
+      actions:
+        - collect_process_list
+        - collect_systemd_services
+        - collect_network_listeners
+        - collect_outbound_connections
+
+    - step: decision
+      logic:
+        - if: "R1 and R2"
+          then: CONFIRMED_COMPROMISE
+        - if: "R3 and R5"
+          then: ACTIVE_C2
+        - if: "R1 and R5"
+          then: APPLIANCE_COMPROMISED
+        - if: "R4 and R5"
+          then: REMOTE_ACCESS_ESTABLISHED
+        - else: INVESTIGATION_REQUIRED
+
+    - step: containment
+      actions:
+        - isolate_host
+        - block_outbound_c2
+        - disable_suspicious_services
+
+    - step: eradication
+      actions:
+        - remove_malicious_binaries
+        - delete_persistence_mechanisms
+        - rotate_credentials
+
+    - step: recovery
+      actions:
+        - patch_fortiweb
+        - validate_clean_state
+        - reenable_network_access
+
+    - step: lessons_learned
+      actions:
+        - update_detection_rules
+        - threat_intel_feedback
+        - report_to_stakeholders

@@ -9,113 +9,59 @@
 
 ![SOC Framework](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
 
-## 🎯 Purpose
+# Sigma Rules - SOC Detection Engineering Framework
 
-This repository provides a **structured, SOC-oriented detection framework** based on **Sigma rules**, enriched with:
-- Detection logic (BROAD & STRICT),
-- SOC decision tables (L1/L2),
-- SOAR playbooks (TheHive, Shuffle),
-- Attack diagrams and workflows,
-- Real-world CVE-driven detection strategies.
+This repository provides a **production-oriented SOC Detection Engineering framework**
+based on Sigma rules, CTI-driven analysis, and real-world attack campaigns.
 
-It is designed for **Security Operations Centers (SOC)**, **Blue Teams**, and **Detection Engineers** seeking actionable, production-ready detections.
+## Detection Philosophy
 
----
+This project does not rely solely on static indicators such as hashes, filenames, or IPs.
+Detection logic follows a layered approach:
 
-## 🧠 Detection Strategy Overview (SOC Doctrine)
+- **BROAD rules** for visibility and threat hunting
+- **STRICT rules** for confirmation and alerting
+- **Behavioral detections** resilient to payload renaming
+- **Network invariants** for edge appliances without EDR
+- **Correlation logic** to confirm incidents
 
-All detections follow a **two-layer detection model**:
+Detection engineering should not break when attackers rename files.
 
-### 🔍 BROAD Rules — Visibility & Hunting
-- Wide behavioral coverage
-- Early-stage detection of suspicious activity
-- Designed for:
-  - Threat hunting
-  - Weak-signal detection
-  - Baseline deviation monitoring
+## Campaign-Based Detection Packs
 
-### 🎯 STRICT Rules - Confirmation & Alerting
-- High-confidence detection
-- Focus on:
-  - Malicious command-line patterns
-  - LOLBins abuse
-  - Exploit-like execution chains
-- Designed for:
-  - SOC alerting
-  - Incident response
-  - Automated SOAR workflows
+Beyond CVE-centric detections, this repository includes **campaign-oriented detection packs**
+based on real-world threat actor activity.
 
-➡️ **SOC Best Practice**  
-BROAD rules should trigger **contextual investigation**.  
-STRICT rules confirm malicious intent and justify **incident escalation**.
+These packs include:
+- Full attack lifecycle coverage
+- Detection of renamed or evolving payloads (v2/v3)
+- Network and behavioral invariants
+- SOC-ready decision tables and response playbooks
 
----
+Examples:
+- FortiWeb exploitation with Sliver C2 and proxy masquerading (campaign-based detection pack)
+- CVE-focused detection packs designed for SOC anticipation and post-disclosure exploitation monitoring, including:
+  - Windows Kernel / Graphics / Userland vulnerabilities (Patch Tuesday)
+  - Microsoft Office vulnerabilities
+  - WinRAR vulnerabilities
+  - Azure Monitor Agent vulnerabilities
+  - Microsoft Copilot vulnerabilities
 
-## 🔗 Correlation Logic
+CVE packs are designed to help SOC teams anticipate post-disclosure exploitation
+(weaponization) using BROAD and STRICT rules, combined with SOC-ready artifacts
+(decision tables, playbooks, diagrams).
 
-Effective detection relies on **correlation**, not single alerts:
+## SOC & SOAR Integration
 
-- BROAD ➜ behavioral signal
-- STRICT ➜ malicious confirmation
-- Decision Table ➜ SOC action (L1/L2)
-- Playbook ➜ response automation
+Rules are designed for production SOC environments and can be integrated with:
+- SIEM platforms (Elastic, OpenSearch, Splunk, Sentinel, QRadar)
+- SOAR platforms such as **TheHive**, Cortex, Shuffle
 
-This layered model significantly reduces **false positives** while preserving **early visibility**.
+## Repository Structure
 
----
+Each detection pack follows a consistent structure:
+- Sigma rules
+- Decision tables
+- Playbooks
+- Diagrams
 
-## 🧩 Repository Structure
-
-Each CVE or detection topic follows a consistent structure:
-
-```
-CVE-XXXX-YYYY/
-├── rules/              # Sigma BROAD & STRICT rules
-├── diagrams/           # Attack flows & SOC views
-├── decision-table/     # L1/L2 SOC decision logic
-├── playbook/           # SOAR & TheHive playbooks
-├── README.md           # Technical & SOC guidance
-```
-
----
-
-## ⚙️ Sigma Compatibility & Validation
-
-All rules are:
-- Validated using `sigma check`
-- Convertible across multiple SIEMs:
-  - OpenSearch / ELK
-  - Splunk
-  - Elastic (Lucene, EQL, ElastAlert)
-  - NetWitness
-  - SentinelOne (where applicable)
-
-A validation script is provided:
-```bash
-scripts/validate_all_rules.sh
-```
-
----
-
-## 🧠 Target Audience
-
-- SOC Analysts (L1 / L2 / L3)
-- Blue Team Engineers
-- Detection Engineers
-- Threat Hunters
-- Security Consultants
-
----
-
-### ✍️ Author
-
-**Adama Assiongbon**  
-SOC / CTI Analyst Consultant  
-LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
-
----
-
-### 📜 License & Usage
-
-This repository is intended for **defensive security operations** only.
-Use responsibly within legal and ethical boundaries.

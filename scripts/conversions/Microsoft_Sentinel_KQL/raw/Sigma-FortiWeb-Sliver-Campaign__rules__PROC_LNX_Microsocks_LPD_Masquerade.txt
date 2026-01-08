@@ -1,0 +1,1 @@
+Image endswith "/cups-lpd" and (CommandLine contains "-p 515" or CommandLine contains " -1" or CommandLine contains " -w")

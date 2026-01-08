@@ -1,0 +1,28 @@
+title: Possible Sliver Implant Deployment on FortiWeb or Linux Host
+id: 5b8c3a2d-7f1e-4e32-b1d9-64f9c8a1e3f2
+status: experimental
+description: Detects creation of a binary named system-updater or execution in hidden/suspicious directories. / (Détection de la création du binaire system-updater ou exécution dans des répertoires cachés ou suspects).
+author: Adama ASSIONGBON SOC & CTI Analyst Consultant
+date: 2026/01/08
+references:
+    - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection_specific:
+        TargetFilename|endswith:
+            - '/.root/system-updater'
+            - '/app/web/system-updater'
+            - '/.root/cups-lpd'
+    selection_generic:
+        TargetFilename|contains:
+            - '/bin/.root/'
+            - '/var/tmp/.'
+            - '/dev/shm/.'
+    condition: 1 of selection_*
+falsepositives:
+    - Legitimate system update processes (Processus de mise à jour légitimes).
+level: critical
+tags:
+    - attack.persistence

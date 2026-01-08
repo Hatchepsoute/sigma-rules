@@ -10,114 +10,59 @@
 
 ![SOC Framework](diagrams/sigma_rules_vue_globale_soc_3D_FR.png)
 
-## 🎯 Objectif
+# Sigma Rules – Framework de Detection Engineering SOC
 
-Ce dépôt fournit un **framework de détection orienté SOC**, basé sur des **règles Sigma**, enrichi par :
-- Des règles de détection (BROAD & STRICT),
-- Des tables décisionnelles des analystes SOC (N1/N2),
-- Des playbooks SOAR (TheHive, Shuffle),
-- Des diagrammes d’attaque et workflows,
-- Des stratégies de détection réalistes basées sur des CVE.
+Ce dépôt fournit un **framework de Detection Engineering SOC orienté production**
+basé sur des règles Sigma, une approche CTI, et des campagnes réelles observées sur le terrain.
 
-Il s’adresse aux **SOC**, **Blue Teams** et **ingénieurs détection** recherchant des détections exploitables en production.
+## Philosophie de détection
 
----
+Ce projet ne repose pas uniquement sur des indicateurs statiques (hashs, noms de fichiers, IP).
+La logique de détection suit une approche multicouche :
 
-## 🧠 Stratégie de Détection (Doctrine SOC)
+- **Règles BROAD** pour la visibilité et le threat hunting
+- **Règles STRICT** pour la confirmation et l’alerte
+- **Détections comportementales** résistantes au renommage
+- **Invariants réseau** pour les appliances sans EDR
+- **Logique de corrélation** pour confirmer les incidents
 
-Toutes les détections reposent sur un **modèle à deux niveaux** :
+La détection ne doit pas casser lorsque l’attaquant renomme ses fichiers.
 
-### 🔍 Règles BROAD - Visibilité & Threat Hunting
-- Couverture comportementale large
-- Détection précoce d’activités suspectes
-- Adaptées à :
-  - La chasse aux menaces
-  - La détection de signaux faibles
-  - L’analyse des écarts de comportement
+## Détection orientée campagne
 
-### 🎯 Règles STRICT — Confirmation & Alerte
-- Détection à forte confiance
-- Axée sur :
-  - Les lignes de commande malveillantes
-  - L’abus de LOLBins
-  - Les chaînes d’exploitation
-- Adaptées à :
-  - L’alerte SOC
-  - La réponse à incident
-  - L’automatisation SOAR
+Au-delà des détections centrées sur les CVE, ce dépôt inclut des **packs de détection orientés campagne**
+basés sur des attaques réelles observées sur le terrain.
 
-➡️ **Bonne pratique SOC**  
-Les règles BROAD déclenchent l’analyse.  
-Les règles STRICT confirment la compromission et justifient l’escalade.
+Ces packs couvrent :
+- L’ensemble du cycle d’attaque
+- Les payloads renommés ou évolutifs (v2/v3)
+- Les invariants réseau et comportementaux
+- Des tables de décision et playbooks exploitables par un SOC
 
----
+Exemples :
+- Exploitation FortiWeb avec Sliver C2 et masquage de proxy (pack de détection orienté campagne)
+- Packs de détection orientés vulnérabilités (CVE), conçus pour l’anticipation SOC et le suivi de l’exploitation post-publication, notamment :
+  - Vulnérabilités Windows Kernel / Graphics / Userland (Patch Tuesday)
+  - Vulnérabilités Microsoft Office
+  - Vulnérabilités WinRAR
+  - Vulnérabilités Azure Monitor Agent
+  - Vulnérabilités Microsoft Copilot
 
-## 🔗 Logique de Corrélation
+Les packs CVE visent à anticiper la phase de weaponization après publication des vulnérabilités,
+à l’aide de règles BROAD et STRICT, combinées à des artefacts SOC
+(tables de décision, playbooks, diagrammes).
 
-Une détection efficace repose sur la **corrélation** :
+## Intégration SOC & SOAR
 
-- BROAD ➜ signal comportemental
-- STRICT ➜ confirmation malveillante
-- Table décisionnelle ➜ action analystes SOC (N1/N2)
-- Playbook ➜ réponse automatisée
+Les règles sont conçues pour des SOC de production et peuvent être intégrées avec :
+- Des SIEM (Elastic, OpenSearch, Splunk, Sentinel, QRadar)
+- Des plateformes SOAR comme **TheHive**, Cortex, Shuffle
 
-Ce modèle réduit fortement les **faux positifs** tout en conservant une **visibilité précoce**.
+## Structure du dépôt
 
----
-
-## 🧩 Structure du Dépôt
-
-Chaque CVE ou thématique suit une structure standardisée :
-
-```
-CVE-XXXX-YYYY/
-├── rules/              # Règles Sigma BROAD & STRICT
-├── diagrams/           # Diagrammes d’attaque & vue SOC
-├── decision-table/     # Décision SOC L1/L2
-├── playbook/           # Playbooks SOAR / TheHive
-├── README.md           # Guide technique & SOC
-```
-
----
-
-## ⚙️ Compatibilité & Validation Sigma
-
-Toutes les règles sont :
-- Validées via `sigma check`
-- Convertibles vers plusieurs SIEM :
-  - OpenSearch / ELK
-  - Splunk
-  - Elastic (Lucene, EQL, ElastAlert)
-  - NetWitness
-  - SentinelOne (si applicable)
-
-Un script de validation est fourni :
-```bash
-scripts/validate_all_rules.sh
-```
-
----
-
-## 🧠 Public Cible
-
-- Analystes SOC (N1 / N2 / N3)
-- Blue Team
-- Ingénieurs détection
-- Threat Hunters
-- Consultants sécurité
-
----
-
-### ✍️ Auteur
-
-**Adama Assiongbon**  
-Consultant SOC / CTI  
-LinkedIn : https://www.linkedin.com/in/adama-assiongbon-9029893a/
-
----
-
-### 📜 Licence & Usage
-
-Ce dépôt est destiné exclusivement à des **opérations de sécurité défensive**.
-À utiliser dans un cadre légal et éthique.
+Chaque pack de détection suit une structure cohérente :
+- Règles Sigma
+- Tables de décision
+- Playbooks
+- Diagrammes
 

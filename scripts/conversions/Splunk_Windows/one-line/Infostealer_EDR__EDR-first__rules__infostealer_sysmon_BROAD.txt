@@ -1,0 +1,1 @@
+source="WinEventLog:Microsoft-Windows-Sysmon/Operational" Image IN ("*\\Users\\*", "*\\AppData\\*", "*\\Temp\\*", "*\\Downloads\\*") Image IN ("*\\powershell.exe", "*\\pwsh.exe", "*\\cmd.exe", "*\\wscript.exe", "*\\cscript.exe", "*\\rundll32.exe", "*\\mshta.exe", "*\\regsvr32.exe")

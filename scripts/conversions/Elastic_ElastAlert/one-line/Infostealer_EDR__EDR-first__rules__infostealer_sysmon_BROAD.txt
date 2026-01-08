@@ -1,0 +1,19 @@
+description: "Early-warning rule to detect infostealer-like execution patterns on
+  endpoints: process execution from user-writable locations (AppData, Temp, Downloads)
+  involving common loaders or LOLBins. / R\xE8gle d\u2019alerte pr\xE9coce visant
+  \xE0 d\xE9tecter des sch\xE9mas d\u2019ex\xE9cution de type infostealer sur les
+  endpoints : ex\xE9cution de processus depuis des emplacements accessibles en \xE9criture
+  par l\u2019utilisateur (AppData, Temp, Downloads) impliquant des loaders ou des
+  LOLBins couramment abus\xE9s.\n"
+filter:
+- query:
+    query_string:
+      query: Channel:Microsoft\-Windows\-Sysmon\/Operational AND ((Image:(*\\Users\\*
+        OR *\\AppData\\* OR *\\Temp\\* OR *\\Downloads\\*)) AND (Image:(*\\powershell.exe
+        OR *\\pwsh.exe OR *\\cmd.exe OR *\\wscript.exe OR *\\cscript.exe OR *\\rundll32.exe
+        OR *\\mshta.exe OR *\\regsvr32.exe)))
+index: '*'
+name: Infostealer-Like Execution From User-Writable Paths (Sysmon - BROAD)
+priority: 2
+type: any
+

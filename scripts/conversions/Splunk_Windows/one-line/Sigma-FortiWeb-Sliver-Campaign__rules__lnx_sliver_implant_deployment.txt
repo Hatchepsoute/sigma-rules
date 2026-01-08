@@ -1,0 +1,1 @@
+TargetFilename IN ("*/.root/system-updater", "*/app/web/system-updater", "*/.root/cups-lpd") OR TargetFilename IN ("*/bin/.root/*", "*/var/tmp/.*", "*/dev/shm/.*")

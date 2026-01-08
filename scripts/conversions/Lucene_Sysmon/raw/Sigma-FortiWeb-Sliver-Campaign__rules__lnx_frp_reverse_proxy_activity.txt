@@ -1,0 +1,1 @@
+CommandLine:(*frpc* OR *.toml* OR *.ini*)

@@ -1,0 +1,1 @@
+(TargetFilename endswith "/.root/system-updater" or TargetFilename endswith "/app/web/system-updater" or TargetFilename endswith "/.root/cups-lpd") or (TargetFilename contains "/bin/.root/" or TargetFilename contains "/var/tmp/." or TargetFilename contains "/dev/shm/.")

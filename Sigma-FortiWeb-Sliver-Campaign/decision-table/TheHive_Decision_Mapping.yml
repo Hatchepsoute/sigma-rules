@@ -1,0 +1,17 @@
+
+rules:
+  R1:
+    severity: HIGH
+    case_template: Suspicious Sliver Implant
+  R2:
+    severity: CRITICAL
+    case_template: Sliver Persistence Confirmed
+  R3:
+    severity: HIGH
+    case_template: Active SOCKS Proxy
+  R4:
+    severity: MEDIUM
+    case_template: Reverse Proxy Tunnel
+  R5:
+    severity: CRITICAL
+    case_template: Masqueraded C2 Listener

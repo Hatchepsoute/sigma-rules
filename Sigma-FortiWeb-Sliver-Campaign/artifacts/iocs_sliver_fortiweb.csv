@@ -1,0 +1,23 @@
+type,value,description
+hash,4086057b9a0f9898c07318e093814ae9cfdaaf6ad71a45b2d0d4cd75e57f9354,Sliver Implant DECENT_WATERBED
+hash,964473ffbd593fc52a779b1d699c79cc66b459cf842c2e6221703e2e6a2322c0,Sliver Implant ESTIMATED_FOOT
+hash,172a9ee9601ef0eb6fbd2676742edfb201c10369712dbf721e5d105aa1320a32,Sliver Implant DAMAGED_COPYRIGHT
+hash,3c24f30f2ca89d408d42293cab8fbb81cb9c2b0801074ef40f0a79770dac5956,Sliver Implant ELEGANT_GO-KART
+hash,2897ee24de4cca2a4c6a085cf6fdccb6a89c6c23978529d81b4f4e6db46b0b96,Sliver Implant ARTIFICIAL_SUPPORT
+hash,dafc7517669e931de858464966af995c44c2e7c6bdf684d53c54d6503cd48a38,Proxy microsocks binary cups-lpd
+domain,ns1.ubunutpackages[.]store,Sliver C2 Domain
+domain,ns1.bafairforce[.]army,Sliver C2 Domain (Bangladesh decoy)
+domain,testing.caai[.]in,Sliver C2 Domain
+ip,195.20.17[.]253,Sliver C2 Server IP
+ip,193.233.201[.]12,Sliver C2 Server IP
+ip,45.150.108[.]43,Sliver C2 Server IP (Historic)
+ip,80.78.18[.]142,Sliver C2 Server IP (Historic)
+ip,192.81.210[.]81,Sliver C2 Server IP (Historic)
+ip,45.143.167[.]7,Sliver C2 Open Directory
+ip,45.83.181[.]160,FRP Proxy Server
+path,/bin/.root/system-updater,Sliver Binary Path (FortiWeb)
+path,/app/web/system-updater,Sliver Binary Path (Linux Host)
+path,/bin/.root/cups-lpd,Microsocks Binary Path
+path,/etc/systemd/system/updater.service,Persistence Service Path
+port,515,SOCKS5 Proxy Port (Masqueraded as LPD)
+port,8003,FRP Server Port

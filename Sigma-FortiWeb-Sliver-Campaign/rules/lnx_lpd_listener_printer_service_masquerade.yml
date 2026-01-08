@@ -1,0 +1,27 @@
+title: Suspicious Network Listener on TCP 515 (LPD Masquerade - Non CUPS)
+id: 8f3c2e91-7b6a-4e77-9cfa-2a1e9d4cbe12
+status: experimental
+description: |
+  Detects a process listening on TCP port 515 (LPD) that is not a legitimate CUPS printing service. In the FortiWeb Sliver campaign, attackers deployed a SOCKS proxy (microsocks) renamed as 'cups-lpd' to masquerade as a printer  daemon and expose remote access tunnels. (Détecte un processus à l’écoute sur le port TCP 515 (LPD) qui ne correspond pas à un service d’impression CUPS légitime. Dans la campagne Sliver ciblant FortiWeb, les attaquants ont déployé un proxy SOCKS (microsocks), renommé en « cups-lpd », afin de se faire passer pour un démon d’impression et d’exposer des tunnels d’accès à distance)
+author: Adama ASSIONGBON SOC & CTI Analyst Consultant
+date: 2026/01/08
+references:
+  - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
+tags:
+  - attack.t1090
+logsource:
+  category: network_listen
+  product: linux
+detection:
+  selection_port:
+    DestinationPort: 515
+  filter_legitimate:
+    ProcessName|contains:
+      - 'cupsd'
+      - 'lpd'
+  condition: selection_port and not filter_legitimate
+falsepositives:
+  - Legacy printing servers exposing LPD without CUPS (rare).
+  - Custom embedded systems explicitly running LPD services.
+level: high
+
