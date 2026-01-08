@@ -33,7 +33,7 @@ These rules focus on **Behavioral Indicators** (CLI arguments, network ports, an
     * Run `./scripts/validate_all_rules.sh` for syntax and quality checks.
     * Run `./scripts/convert_all_rules.sh` to generate queries for Splunk, Sentinel, Elastic, etc.
 * **Option B: Online Validation (Quick Test)**
-    * You can manually verify rules via [**Uncoder.io**](https://uncoder.io/) or [**Sigma Live Configurator**](https://sigmaconfig.io/).
+    * You can manually verify rules via [**Uncoder.io**](https://uncoder.io/).
 
 ### 2. Integrating IoCs
 * Import `artifacts/iocs.csv` into your SIEM Watchlists for automated correlation.

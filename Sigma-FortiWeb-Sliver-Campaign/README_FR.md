@@ -24,8 +24,6 @@ Cinq règles spécialisées couvrent le cycle de vie de l'attaque :
 Ces règles anticipent les évolutions de l'attaque (**Payloads V2**) en privilégiant les **comportements** (arguments CLI et ports réseau) plutôt que les noms de fichiers statiques ou les hashs. La surveillance du port 515 et des chemins cachés garantit la détection même si l'attaquant change ses outils.
 
 ## ⚖️ Aide à la Décision et Réponse (IR)
-
-## ⚖️ Aide à la Décision et Réponse (IR)
 * **Table de Décision** : Située dans `/decision-table/`, elle guide le triage rapide.
 * **TheHive Playbook** : Utilisez `TheHive_Playbook_Sliver_FortiWeb.yml` pour automatiser vos investigations.
 
@@ -36,7 +34,7 @@ Ces règles anticipent les évolutions de l'attaque (**Payloads V2**) en privil�
     * Exécutez `./scripts/validate_all_rules.sh` pour valider la qualité.
     * Exécutez `./scripts/convert_all_rules.sh` pour générer les requêtes SIEM (Splunk, Sentinel, etc.).
 * **Option B : Validation en Ligne (Test Rapide)**
-    * Utilisez [**Uncoder.io**](https://uncoder.io/) ou [**Sigma Live Configurator**](https://sigmaconfig.io/) pour une conversion rapide par copier-coller.
+    * Utilisez [**Uncoder.io**](https://uncoder.io/) pour une conversion rapide par copier-coller.
 
 ### 2. Intégration des IoCs
 * Importez `artifacts/iocs.csv` dans vos tables de correspondance (Lookups) SIEM.
