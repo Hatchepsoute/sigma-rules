@@ -1,0 +1,5 @@
+severity: CRITICAL
+steps:
+- Isolate host
+- Acquire memory
+- Reimage system

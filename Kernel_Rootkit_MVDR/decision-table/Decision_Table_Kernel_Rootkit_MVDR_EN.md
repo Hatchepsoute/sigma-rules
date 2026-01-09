@@ -1,0 +1,28 @@
+
+# SOC Decision Table – Kernel_Rootkit_MVDR (EN)
+
+## Purpose
+Guide SOC analysts in decision-making when Kernel_Rootkit_MVDR rules trigger.
+
+## Rules
+- R1: Kernel driver load (visibility)
+- R2: Kernel driver service creation (persistence)
+- R3: Kernel rootkit correlation (confirmation)
+
+## Decision Table
+
+| R1 | R2 | R3 | Risk Level | SOC Decision | Immediate Action |
+|----|----|----|------------|--------------|------------------|
+| ❌ | ❌ | ❌ | None | Ignore | None |
+| ✅ | ❌ | ❌ | Low | Monitor | Check context |
+| ❌ | ✅ | ❌ | High | Investigate | Identify service |
+| ✅ | ✅ | ❌ | Very High | Potential incident | Escalate to Tier 2 |
+| ❌ | ❌ | ✅ | Critical | Confirmed incident | Immediate IR |
+| ✅ | ❌ | ✅ | Critical | Confirmed incident | Immediate IR |
+| ❌ | ✅ | ✅ | Critical | Confirmed incident | Immediate IR |
+| ✅ | ✅ | ✅ | Critical | Confirmed incident | Immediate IR |
+
+## Interpretation
+- R1 only: weak signal
+- R2 only: strong suspicion
+- R3: OS trust is broken

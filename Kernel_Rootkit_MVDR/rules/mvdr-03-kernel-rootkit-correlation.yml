@@ -1,0 +1,19 @@
+title: Kernel Rootkit High-Confidence Correlation
+id: 7998e5ca-ed58-11f0-b925-83f625c1804d
+status: stable
+description: >
+  High-confidence detection of kernel-mode rootkits by correlating kernel driver load and kernel service creation. (« Détection à haut niveau de confiance des rootkits en mode noyau par corrélation entre le chargement d'un pilote de noyau et la création d'un service système associé. »)
+author: Adama ASSIONGBON | SOC & CTI Analyst Consultant.
+logsource:
+  product: windows
+detection:
+  driver_load:
+    EventID: 6
+  kernel_service:
+    EventID: 7045
+    ServiceType: kernel driver
+  condition: driver_load and kernel_service
+level: critical
+tags:
+  - attack.persistence
+  - attack.t1014
