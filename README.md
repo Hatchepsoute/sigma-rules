@@ -23,7 +23,8 @@ Detection logic follows a layered approach:
 - **STRICT rules** for confirmation and alerting
 - **Behavioral detections** resilient to payload renaming
 - **Network invariants** for edge appliances without EDR
-- **Correlation logic** to confirm incidents
+- **Corre lation logic** to confirm incidents
+- Individual CVE detection packs are documented in their respective directories, including Sigma rules, decision tables, and SOC playbooks.
 
 Detection engineering should not break when attackers rename files.
 
@@ -37,6 +38,7 @@ These packs include:
 - Detection of renamed or evolving payloads (v2/v3)
 - Network and behavioral invariants
 - SOC-ready decision tables and response playbooks
+
 
 Examples:
 - FortiWeb exploitation with Sliver C2 and proxy masquerading (campaign-based detection pack)

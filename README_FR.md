@@ -25,6 +25,7 @@ La logique de détection suit une approche multicouche :
 - **Détections comportementales** résistantes au renommage
 - **Invariants réseau** pour les appliances sans EDR
 - **Logique de corrélation** pour confirmer les incidents
+- Chaque pack de détection CVE est documenté dans son propre répertoire, incluant les règles Sigma, tables de décision et playbooks SOC.
 
 La détection ne doit pas casser lorsque l’attaquant renomme ses fichiers.
 

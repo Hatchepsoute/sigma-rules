@@ -7,6 +7,9 @@ Detailed changes for individual detection packs are documented in each pack’s 
 Versioning follows **Semantic Versioning (MAJOR.MINOR.PATCH)**.
 
 ---
+## [v1.0.1] – 2026-01-11
+- Added CVE-2025-37164 HPE OneView detection pack (see pack-level documentation)
+
 
 ## [v1.0.0] – 2026-01-09
 ### Added
