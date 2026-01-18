@@ -107,6 +107,32 @@ pip install sigma-cli
 ```
 
 ---
+## 🧪 Portable & Cross-Platform Validation (Recommended for Contributors)
+
+In addition to the legacy CI scripts, this repository provides
+portable validation scripts for local usage on different platforms:
+
+### Linux / macOS
+- `scripts/Linux_MacOS/validate_all_rules_portable.sh`
+- Documentation:
+  - `scripts/Linux_MacOS/README.md`
+  - `scripts/Linux_MacOS/README_FR.md`
+
+### Windows
+- `scripts/windows/validate_all_rules.ps1`
+- Documentation:
+  - `scripts/windows/README.md`
+  - `scripts/windows/README_FR.md`
+
+These scripts automatically:
+- detect the Git repository root
+- install missing prerequisites (user space)
+- validate all `**/rules/*.yml(yaml)` files
+
+They are recommended for:
+- local development
+- contributors
+- non-CI environments
 
 ## 🧠 SOC Best Practices
 
