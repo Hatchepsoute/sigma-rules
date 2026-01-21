@@ -95,4 +95,4 @@ The flow is intentionally **tool-agnostic**, suitable for Wazuh, Splunk, Elastic
 ---
 
 🛡️ **Maintained as part of the `sigma-rules` project**
-![SOC Framework](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
+![SOC Framework](sigma_rules_global_soc_workflow_3D_EN.png)

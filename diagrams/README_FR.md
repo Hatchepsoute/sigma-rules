@@ -95,4 +95,4 @@ Ce flux est volontairement générique afin d’être **agnostique de l’outil*
 - Standardisation des workflows SOC
 
 ---
-![SOC Framework](diagrams/sigma_rules_global_soc_workflow_3D_FR.png)
+![SOC Framework](sigma_rules_global_soc_workflow_3D_FR.png)
