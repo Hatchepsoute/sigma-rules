@@ -1,0 +1,65 @@
+title: Windows Successful Privilege Escalation to SYSTEM (CVE-2026-20822) - STRICT
+id: 2f4d9c88-6bcb-4a9e-9d53-3a8d1a8e2002
+status: experimental
+description: >
+  Detects high-confidence privilege escalation behavior where a user-context parent process spawns a SYSTEM or high-integrity child process. This pattern is commonly  associated with successful exploitation of Windows EoP vulnerabilities such as
+  CVE-2026-20822.
+  
+  FR=> Détecte les comportements d'élévation de privilèges à haut niveau de confiance, dans lesquels un processus parent s'exécutant dans le contexte utilisateur génère un processus enfant avec les privilèges SYSTEM ou un niveau d'intégrité élevé. Ce schéma est couramment associé à l'exploitation réussie de vulnérabilités d'élévation de privilèges (EoP) sous Windows, telles que la CVE-2026-20822.
+  
+author: Adama ASSIONGBON SOC & CTI Analyst Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-01-22
+references:
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-20822
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-20822
+tags:
+  - attack.privilege-escalation
+  - attack.t1068
+  - cve.2026-20822
+logsource:
+  product: windows
+  category: process_creation
+
+detection:
+  suspicious_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\rundll32.exe'
+      - '\schtasks.exe'
+      - '\sc.exe'
+      - '\reg.exe'
+
+  suspicious_parent:
+    ParentImage|endswith:
+      - '\explorer.exe'
+      - '\winword.exe'
+      - '\excel.exe'
+      - '\powerpnt.exe'
+      - '\acrord32.exe'
+      - '\chrome.exe'
+      - '\msedge.exe'
+      - '\firefox.exe'
+
+  elevated_context:
+    User|contains:
+      - 'NT AUTHORITY\SYSTEM'
+    IntegrityLevel:
+      - 'High'
+      - 'System'
+
+  filter_legitimate:
+    ParentImage|endswith:
+      - '\services.exe'
+      - '\svchost.exe'
+      - '\wmiprvse.exe'
+      - '\msiexec.exe'
+
+  condition: suspicious_child and suspicious_parent and elevated_context and not filter_legitimate
+
+falsepositives:
+  - Legitimate EDR or IR tooling
+  - Authorized IT administrative operations
+level: high
+

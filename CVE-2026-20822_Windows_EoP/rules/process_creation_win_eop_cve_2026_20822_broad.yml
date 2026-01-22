@@ -1,0 +1,54 @@
+title: Windows Suspicious Privilege Escalation Behavior (CVE-2026-20822) - BROAD
+id: 6a3f1e12-9d41-4c9f-b6e1-0b8a2c2b1001
+status: experimental
+description: >
+  Detects suspicious process creation patterns where common user-land applications  spawn administrative or scripting binaries. This behavior may indicate early-stage local privilege escalation activity, including potential exploitation of CVE-2026-20822.
+  
+  FR=> Détecte les schémas suspects de création de processus dans lesquels des applications utilisateur courantes génèrent des binaires d'administration ou de script. Ce comportement peut indiquer une activité d'élévation de privilèges locaux en phase initiale, incluant l'exploitation potentielle de la CVE-2026-20822.
+author: Adama ASSIONGBON SOC & CTI Analyst Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-01-22
+references:
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-20822
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-20822
+tags:
+  - attack.privilege-escalation
+  - attack.t1068
+  - cve.2026-20822
+logsource:
+  product: windows
+  category: process_creation
+
+detection:
+  suspicious_children:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\rundll32.exe'
+      - '\mshta.exe'
+      - '\regsvr32.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\schtasks.exe'
+      - '\sc.exe'
+
+  suspicious_parents:
+    ParentImage|endswith:
+      - '\explorer.exe'
+      - '\winword.exe'
+      - '\excel.exe'
+      - '\powerpnt.exe'
+      - '\outlook.exe'
+      - '\acrord32.exe'
+      - '\chrome.exe'
+      - '\msedge.exe'
+      - '\firefox.exe'
+
+  condition: suspicious_children and suspicious_parents
+
+falsepositives:
+  - Legitimate administrative actions by power users
+  - IT scripts launched interactively
+  - Endpoint management or EDR activity
+level: medium
+
