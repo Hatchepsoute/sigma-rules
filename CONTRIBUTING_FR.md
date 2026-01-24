@@ -76,14 +76,6 @@ Les tables et playbooks doivent guider clairement l’analyste SOC :
 
 ---
 
-## 🌍 Langue
-
-- L’anglais est obligatoire
-- La version française est fortement recommandée
-- Les documents EN / FR doivent être liés entre eux
-
----
-
 ## 🔍 Processus de revue
 
 1. Fork du dépôt

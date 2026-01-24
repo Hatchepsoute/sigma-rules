@@ -77,14 +77,6 @@ Decision tables and playbooks should clearly guide SOC analysts:
 
 ---
 
-## 🌍 Language
-
-- English is mandatory
-- French versions are strongly encouraged
-- Cross-link EN / FR documentation
-
----
-
 ## 🔍 Review Process
 
 1. Fork the repository
