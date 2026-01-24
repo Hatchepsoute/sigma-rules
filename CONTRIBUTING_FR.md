@@ -41,7 +41,7 @@ Les règles ne doivent pas reposer uniquement sur des indicateurs statiques.
 ## 📁 Structure du dépôt
 
 Chaque pack de détection doit respecter la structure suivante :
-
+```text
 Pack_Name/
 ├── rules/
 │   ├── BROAD/
@@ -52,7 +52,7 @@ Pack_Name/
 ├── diagrams/
 ├── README.md
 └── README_FR.md
-
+```
 ---
 
 ## 🧪 Exigences sur les règles Sigma

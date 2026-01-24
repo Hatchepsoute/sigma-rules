@@ -42,7 +42,7 @@ Rules must not rely solely on static indicators.
 ## 📁 Repository Structure
 
 Each detection pack should follow this structure:
-
+```text
 Pack_Name/
 ├── rules/
 │   ├── BROAD/
@@ -53,7 +53,7 @@ Pack_Name/
 ├── diagrams/
 ├── README.md
 └── README_FR.md
-
+```
 ---
 
 ## 🧪 Sigma Rule Requirements
