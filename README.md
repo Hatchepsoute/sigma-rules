@@ -1,69 +1,89 @@
-
-<!-- Badges (edit the links if you rename the repo/branch) -->
+<!-- Badges -->
 ![Sigma](https://img.shields.io/badge/Sigma-rules-blue)
 ![SOC](https://img.shields.io/badge/SOC-ready-success)
 ![SOAR](https://img.shields.io/badge/SOAR-playbooks-important)
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
-![License](https://img.shields.io/badge/License-MIT-informational)
+![License](https://img.shields.io/badge/License-Apache%202.0-informational)
+
+👉🏾**French version available here:** [README_FR.md](README_FR.md)
+
 # 🛡️ Sigma Detection Framework for SOC Operations
 
 ![SOC Framework](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
 
-# Sigma Rules - SOC Detection Engineering Framework
+## Sigma Rules – SOC Detection Engineering Framework
 
-This repository provides a **production-oriented SOC Detection Engineering framework**
-based on Sigma rules, CTI-driven analysis, and real-world attack campaigns.
+This repository provides a **production-oriented SOC Detection Engineering framework** based on Sigma rules, CTI-driven analysis, and real-world attack campaigns.
+
+---
 
 ## Detection Philosophy
 
-This project does not rely solely on static indicators such as hashes, filenames, or IPs.
-Detection logic follows a layered approach:
+This project does not rely solely on static indicators such as hashes, filenames, or IP addresses.
+Detection logic follows a layered and resilient approach:
 
 - **BROAD rules** for visibility and threat hunting
-- **STRICT rules** for confirmation and alerting
+- **STRICT rules** for confirmation and high-confidence alerting
 - **Behavioral detections** resilient to payload renaming
-- **Network invariants** for edge appliances without EDR
-- **Corre lation logic** to confirm incidents
-- Individual CVE detection packs are documented in their respective directories, including Sigma rules, decision tables, and SOC playbooks.
+- **Network invariants** for edge devices and appliances without EDR
+- **Correlation logic** to confirm and contextualize incidents
 
-Detection engineering should not break when attackers rename files.
+Each CVE detection pack is documented in its own directory and includes Sigma rules, decision tables, and SOC playbooks.
+
+> Detection engineering should not break when attackers rename files.
+
+---
 
 ## Campaign-Based Detection Packs
 
-Beyond CVE-centric detections, this repository includes **campaign-oriented detection packs**
-based on real-world threat actor activity.
+Beyond CVE-centric detections, this repository includes **campaign-oriented detection packs** based on real-world threat actor activity.
 
-These packs include:
+These packs provide:
 - Full attack lifecycle coverage
-- Detection of renamed or evolving payloads (v2/v3)
+- Detection of renamed or evolving payloads (v2 / v3)
 - Network and behavioral invariants
 - SOC-ready decision tables and response playbooks
 
-
-Examples:
-- FortiWeb exploitation with Sliver C2 and proxy masquerading (campaign-based detection pack)
-- CVE-focused detection packs designed for SOC anticipation and post-disclosure exploitation monitoring, including:
+### Examples
+- FortiWeb exploitation with Sliver C2 and proxy masquerading (campaign-based pack)
+- CVE-focused detection packs designed for SOC anticipation and post-disclosure exploitation monitoring:
   - Windows Kernel / Graphics / Userland vulnerabilities (Patch Tuesday)
   - Microsoft Office vulnerabilities
   - WinRAR vulnerabilities
   - Azure Monitor Agent vulnerabilities
   - Microsoft Copilot vulnerabilities
 
-CVE packs are designed to help SOC teams anticipate post-disclosure exploitation
-(weaponization) using BROAD and STRICT rules, combined with SOC-ready artifacts
+CVE packs help SOC teams anticipate **weaponization phases**
+using BROAD and STRICT rules combined with SOC-ready artifacts
 (decision tables, playbooks, diagrams).
+
+---
 
 ## SOC & SOAR Integration
 
 Rules are designed for production SOC environments and can be integrated with:
 - SIEM platforms (Elastic, OpenSearch, Splunk, Sentinel, QRadar)
-- SOAR platforms such as **TheHive**, Cortex, Shuffle
+- SOAR platforms such as **TheHive**, Cortex, and Shuffle
+
+---
 
 ## Repository Structure
 
-Each detection pack follows a consistent structure:
+Each detection pack follows a consistent and reusable structure:
 - Sigma rules
 - Decision tables
 - Playbooks
 - Diagrams
+
+---
+
+## License
+
+This project is licensed under the **Apache License, Version 2.0**.
+- License text (official): https://www.apache.org/licenses/LICENSE-2.0
+- Repository copy: [LICENSE](LICENSE)
+
+You are free to use, modify, and distribute these Sigma rules, including for commercial purposes, provided that proper attribution is given.
+
+
 
