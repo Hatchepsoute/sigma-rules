@@ -1,0 +1,31 @@
+title: Fortinet SAML Authentication Attempt on Admin Endpoint (CVE-2025-59718)
+id: dca5e1f0-f978-11f0-abd7-070e6822532f
+status: experimental
+description: >
+  Detects HTTP POST requests to Fortinet SAML admin endpoint which may indicate exploitation attempts of CVE-2025-59718 (FortiCloud SSO authentication bypass).
+references:
+  - https://github.com/rix4uni/cvemapping/blob/main/2025/CVE-2025-59718/CVE-2025-59718.py
+  - https://www.cve.org/CVERecord?id=CVE-2025-59718
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-59718
+  - https://github.com/exfil0/CVE-2025-59718-PoC/tree/main
+  - https://github.com/Ashwesker/Ashwesker-CVE-2025-59718
+  - https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2025-59718
+author: 'Adama ASSIONGBON SOC/CTI Analyst | https://www.linkedin.com/in/adama-assiongbon-9029893a'
+date: 2026/01/22
+modified: 2026/01/24
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - cve.2025-59718
+logsource:
+  category: webserver
+detection:
+  selection_method:
+    cs-method: POST
+  selection_uri:
+    cs-uri|contains: "/remote/saml/login"
+  condition: selection_method and selection_uri
+falsepositives:
+  - Legitimate FortiCloud SSO authentication
+level: medium
+
