@@ -6,6 +6,27 @@ Detailed changes for individual detection packs are documented in each pack’s 
 
 Versioning follows **Semantic Versioning (MAJOR.MINOR.PATCH)**.
 
+## v1.0.3 – 2026-01-27
+- Initial release
+- STRICT rule for CVE-2026-24061 exploitation
+- BROAD hunting rule for Telnet post-exploitation
+- SOC decision table (EN/FR)
+- Generic IR playbooks (EN/FR)
+---
+## [v1.0.2] – 2026-01-25
+### Added
+- **New Detection Pack**: `CVE-2025-59718_Fortigate_bypass`
+  - Multi-layer detection for Fortinet FortiCloud SAML SSO bypass vulnerability (CVE-2025-59718)
+  - Includes the following structured artefacts:
+    - `rules/`: 3 Sigma rules (BROAD & STRICT variants + admin/config event fusion)
+    - `correlation/`: 5-minute correlation logic (EN/FR)
+    - `decision-table/`: L1/L2 analyst decision tables (EN/FR)
+    - `diagrams/`: visual flow from attack to detection
+    - `playbook/`: SOAR + TheHive playbooks (EN/FR)
+    - `README.md` / `README_FR.md`: analyst-facing documentation
+
+> Detection logic covers: web-level exploit attempt, admin role injection via SAMLResponse, and post-auth configuration export.
+
 ---
 ## [v1.0.1] – 2026-01-11
 - Added CVE-2025-37164 HPE OneView detection pack (see pack-level documentation)
