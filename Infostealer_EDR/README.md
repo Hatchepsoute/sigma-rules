@@ -13,10 +13,9 @@ Together, they enable SOC teams to move from suspicion to confirmed infostealer 
 ## Rule Roles
 
 ### Rule 1 – BROAD (Execution – Early Warning)
-Detects execution of common loaders or LOLBins (PowerShell, cmd, mshta, rundll32, etc.)
-from user-writable directories such as AppData, Temp, Downloads and Users.
+Detects execution of common loaders or LOLBins (PowerShell, cmd, mshta, rundll32, etc.) from user-writable directories such as AppData, Temp, Downloads and Users.
 
-SOC usage:
+**SOC usage:**
 - Weak signal when isolated
 - Ideal for hunting and context building
 - Used as Step 1 in correlation
@@ -40,7 +39,7 @@ MITRE ATT&CK: T1555
 Detects public (Internet-facing) network connections initiated by common LOLBins,
 excluding private IP ranges.
 
-SOC usage:
+**SOC usage:**
 - Indicates potential data exfiltration or C2 communication
 - Used to confirm malicious activity when correlated
 

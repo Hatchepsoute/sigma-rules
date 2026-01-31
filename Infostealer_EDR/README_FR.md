@@ -13,11 +13,9 @@ Ensemble, elles permettent de passer de la suspicion à une compromission confir
 ## Rôle des règles
 
 ### Règle 1 - BROAD (Exécution – Alerte précoce)
-Détecte l’exécution de loaders ou LOLBins (PowerShell, cmd, mshta, rundll32, etc.)
-depuis des répertoires accessibles en écriture par l’utilisateur
-(AppData, Temp, Downloads, Users).
+Détecte l’exécution de loaders ou LOLBins (PowerShell, cmd, mshta, rundll32, etc.) depuis des répertoires accessibles en écriture par l’utilisateur (AppData, Temp, Downloads, Users).
 
-Lecture SOC :
+**Lecture SOC :**
 - Signal faible pris isolément
 - Utile pour la chasse et la mise en contexte
 - Étape 1 de la corrélation
@@ -31,15 +29,14 @@ Détecte des processus non-navigateur accédant aux stockages d’identifiants :
 
 Ce comportement est un indicateur fort de compromission.
 
-Lecture SOC :
+**Lecture SOC :**
 - Détection à haute confiance
 - Critique lorsqu’elle est corrélée
 
 MITRE ATT&CK : T1555
 
 ### Règle 3 - SUPPORT (Sortie réseau)
-Détecte des connexions réseau sortantes vers Internet initiées par des LOLBins,
-en excluant les plages d’adresses privées.
+Détecte des connexions réseau sortantes vers Internet initiées par des LOLBins, en excluant les plages d’adresses privées.
 
 Lecture SOC :
 - Indique une exfiltration ou une communication C2 possible
