@@ -85,5 +85,9 @@ This project is licensed under the **Apache License, Version 2.0**.
 
 You are free to use, modify, and distribute these Sigma rules, including for commercial purposes, provided that proper attribution is given.
 
+---
+
+**Author :** Adama ASSIONGBON – SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
 
