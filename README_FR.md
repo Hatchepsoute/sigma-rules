@@ -87,5 +87,9 @@ Ce projet est distribué sous licence **Apache 2.0**.
 - Copie dans le dépôt : [LICENSE](LICENSE)
 
 Les règles Sigma peuvent être utilisées, modifiées et redistribuées, y compris dans un cadre commercial (SOC, MSSP, éditeurs SIEM), sous réserve de mentionner l’auteur.
+---
+**Auteur :** Adama ASSIONGBON – SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+
 
 
