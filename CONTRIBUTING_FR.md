@@ -1,10 +1,8 @@
-👉🏾 **English version available here:** [CONTRIBUTING.md](CONTRIBUTING.md)
-
+👉🏾 English version available here: [CONTRIBUTING.md](CONTRIBUTING.md)
 # Contribuer au projet sigma-rules
 
 Merci pour votre intérêt à contribuer à ce projet 🙌  
 Ce dépôt vise à fournir du **contenu Sigma prêt pour des SOC de production** à destination des équipes SOC, MSSP et Detection Engineers.
-
 Toute contribution est la bienvenue, sous réserve du respect des règles ci-dessous.
 
 ---
