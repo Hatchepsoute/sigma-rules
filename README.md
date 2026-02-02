@@ -5,7 +5,7 @@
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
 ![License](https://img.shields.io/badge/License-Apache%202.0-informational)
 
-👉🏾**French version available here:** [README_FR.md](README_FR.md)
+👉🏾 **French version available here:** [README_FR.md](README_FR.md)
 
 # 🛡️ Sigma Detection Framework for SOC Operations
 
@@ -13,14 +13,20 @@
 
 ## Sigma Rules – SOC Detection Engineering Framework
 
-This repository provides a **production-oriented SOC Detection Engineering framework** based on Sigma rules, CTI-driven analysis, and real-world attack campaigns.
+This repository provides a **production-oriented SOC Detection Engineering framework** based on **Sigma rules**, **CTI-driven analysis**, and **real-world attack campaigns**.
+
+
+This framework is designed to help SOC teams:
+- Detect exploitation attempts **early**
+- Reduce false positives
+- Maintain detection coverage even as attacker tooling evolves
 
 ---
 
 ## Detection Philosophy
 
-This project does not rely solely on static indicators such as hashes, filenames, or IP addresses.
-Detection logic follows a layered and resilient approach:
+This project avoids static IoCs (hashes, filenames, IPs) and instead relies on behavior-based detection using attack patterns and invariants, validated in real SOC environments.
+Detection logic follows a **layered, SOC-tested, and resilient approach**:
 
 - **BROAD rules** for visibility and threat hunting
 - **STRICT rules** for confirmation and high-confidence alerting
@@ -36,9 +42,12 @@ Each CVE detection pack is documented in its own directory and includes Sigma ru
 
 ## Campaign-Based Detection Packs
 
-Beyond CVE-centric detections, this repository includes **campaign-oriented detection packs** based on real-world threat actor activity.
+Beyond CVE-centric detections, this repository includes
+**campaign-oriented detection packs** based on real-world threat actor activity.
 
-These packs provide:
+These packs are built from **incident analysis and CTI research**, not theoretical attack models.
+
+They provide:
 - Full attack lifecycle coverage
 - Detection of renamed or evolving payloads (v2 / v3)
 - Network and behavioral invariants
@@ -61,7 +70,7 @@ using BROAD and STRICT rules combined with SOC-ready artifacts
 
 ## SOC & SOAR Integration
 
-Rules are designed for production SOC environments and can be integrated with:
+Rules are designed for **production SOC environments** and can be integrated with:
 - SIEM platforms (Elastic, OpenSearch, Splunk, Sentinel, QRadar)
 - SOAR platforms such as **TheHive**, Cortex, and Shuffle
 
@@ -69,7 +78,7 @@ Rules are designed for production SOC environments and can be integrated with:
 
 ## Repository Structure
 
-Each detection pack follows a consistent and reusable structure:
+Each detection pack follows a **consistent and reusable structure**:
 - Sigma rules
 - Decision tables
 - Playbooks
@@ -77,17 +86,36 @@ Each detection pack follows a consistent and reusable structure:
 
 ---
 
+## How to use this repository
+
+- Browse CVE or campaign folders
+- Start with **BROAD rules** for visibility and hunting
+- Escalate to **STRICT rules** for confirmation
+- Use decision tables and playbooks for SOC response and triage
+
+---
+
+## Who is this repo for?
+
+SOC analysts • Detection engineers • Blue teams • MSSP
+
+---
+
 ## License
 
 This project is licensed under the **Apache License, Version 2.0**.
-- License text (official): https://www.apache.org/licenses/LICENSE-2.0
+- Official license text: https://www.apache.org/licenses/LICENSE-2.0
 - Repository copy: [LICENSE](LICENSE)
 
 You are free to use, modify, and distribute these Sigma rules, including for commercial purposes, provided that proper attribution is given.
 
 ---
 
-**Author :** Adama ASSIONGBON – SOC & CTI Consultant  
-[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+⭐ If you use these rules in production or labs, please star the repo  
+🔁 Feedback & contributions are welcome
 
+---
+
+**Author:** Adama ASSIONGBON – SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
