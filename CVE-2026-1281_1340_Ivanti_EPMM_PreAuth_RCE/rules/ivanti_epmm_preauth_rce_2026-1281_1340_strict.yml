@@ -1,0 +1,48 @@
+title: Ivanti EPMM CVE-2026-1281/1340 - High-Confidence Pre-Auth RCE Attempt
+id: 8d4f7a12-3c5b-4e22-9a8c-1f23e5b67d89
+status: experimental
+description: |
+  High-confidence detection of exploitation attempts against Ivanti Endpoint Manager Mobile (EPMM)   pre-auth RCE vulnerabilities (CVE-2026-1281, CVE-2026-1340), based on abuse of Bash arithmetic   expansion via vulnerable FOB endpoints.
+  
+  Détection à haute confiance des tentatives d’exploitation des vulnérabilités RCE pré-authentification d’Ivanti Endpoint Manager Mobile (EPMM) (CVE-2026-1281, CVE-2026-1340), reposant sur l’abus de l’expansion arithmétique Bash via des endpoints FOB vulnérables.
+references:
+  - https://forums.ivanti.com/s/article/Security-Advisory-Ivanti-Endpoint-Manager-Mobile-EPMM-CVE-2026-1281-CVE-2026-1340
+  - https://labs.watchtowr.com/someone-knows-bash-far-too-well-and-we-love-it-ivanti-epmm-pre-auth-rces-cve-2026-1281-cve-2026-1340/
+  - https://hadrian.io/de/blog/ivanti-epmm-zero-days-when-bash-arithmetic-expansion-becomes-your-worst-enemy
+  - https://www.cisa.gov/known-exploited-vulnerabilities/catalog/kev-catalog-entry-1761642
+author: Adama ASSIONGBON SOC/CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-02-04
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.execution
+  - attack.t1059.004
+  - cve.2026-1281
+  - cve.2026-1340
+logsource:
+  category: webserver
+detection:
+  target_endpoint:
+    url.path|contains:
+      - "/mifs/c/appstore/fob/"
+      - "/mifs/c/aftstore/fob/"
+
+  bash_injection:
+    url.query|re: '(h|st|et|kid)=[^&]*(\$\(|\$\(\(|`[a-zA-Z0-9_]+`)'
+
+  error_response:
+    http.response.status_code:
+      - 404
+      - 500
+
+  condition: target_endpoint and bash_injection and error_response
+fields:
+  - url.path
+  - url.query
+  - source.ip
+  - user_agent.original
+  - http.response.status_code
+falsepositives:
+  - Very unlikely. Investigate immediately.
+level: critical
+
