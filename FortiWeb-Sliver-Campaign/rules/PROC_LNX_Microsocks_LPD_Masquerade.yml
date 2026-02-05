@@ -2,7 +2,7 @@ title: Execution of Masqueraded SOCKS5 Proxy (microsocks as cups-lpd)
 id: c3e7f5a8-1b2d-4f9c-88a0-9d1e2f3a4b5c
 status: experimental
 description: Detects execution of a binary named cups-lpd with SOCKS5 proxy arguments. (Détecte l'exécution d'un binaire nommé cups-lpd avec des arguments de proxy SOCKS5).
-author: Adama ASSIONGBON SOC & CTI Analyst Consultant
+author: Adama ASSIONGBON SOC & CTI Analyst Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026/01/08
 logsource:
   category: process_creation

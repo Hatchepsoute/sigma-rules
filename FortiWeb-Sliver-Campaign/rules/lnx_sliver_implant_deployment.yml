@@ -2,7 +2,7 @@ title: Possible Sliver Implant Deployment on FortiWeb or Linux Host
 id: 5b8c3a2d-7f1e-4e32-b1d9-64f9c8a1e3f2
 status: experimental
 description: Detects creation of a binary named system-updater or execution in hidden/suspicious directories. / (Détection de la création du binaire system-updater ou exécution dans des répertoires cachés ou suspects).
-author: Adama ASSIONGBON SOC & CTI Analyst Consultant
+author: Adama ASSIONGBON SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026/01/08
 references:
     - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/

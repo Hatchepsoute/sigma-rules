@@ -1,0 +1,29 @@
+
+# TheHive Decision Mapping – Sliver / FRP / LPD
+# Author: Adama ASSIONGBON
+# Date: 2026-01-08
+
+R1:
+  severity: HIGH
+  phase: post-exploitation
+  case_template: Suspicious Sliver Implant
+
+R2:
+  severity: CRITICAL
+  phase: persistence
+  case_template: Sliver Persistence Confirmed
+
+R3:
+  severity: HIGH
+  phase: command-and-control
+  case_template: Active SOCKS Proxy
+
+R4:
+  severity: MEDIUM
+  phase: tunneling
+  case_template: Reverse Proxy Tunnel
+
+R5:
+  severity: CRITICAL
+  phase: command-and-control
+  case_template: Masqueraded C2 Listener
