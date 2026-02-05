@@ -1,8 +1,10 @@
 ![Threat Intelligence](https://img.shields.io/badge/Focus-CTI%20%26%20SOC-blue)
 ![Sigma](https://img.shields.io/badge/Format-SIGMA-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
+![Fortinet](https://img.shields.io/badge/Fortinet-FortiOS-red)
 
 # 📂 Index des Règles de Détection (Sigma)
+[👉🏾 English version available here: ](./README.md)
 
 Ce répertoire contient la logique de détection cœur pour la campagne **Sliver C2 ciblant FortiWeb**. Ces règles sont au format **Sigma**, permettant un déploiement sur n'importe quel SIEM (Splunk, Sentinel, ELK, etc.).
 
@@ -10,11 +12,11 @@ Ce répertoire contient la logique de détection cœur pour la campagne **Sliver
 
 | Nom du Fichier | Focus de Détection | Gravité |
 | :--- | :--- | :--- |
-| `lnx_sliver_implant_deployment.yml` | Dépôt du binaire initial dans des répertoires cachés (`/.root/`). | Critique |
-| `PERSIST_LNX_Sliver_Systemd_Service.yml` | Création de persistance via un service système factice. | Élevée |
-| `PROC_LNX_Microsocks_LPD_Masquerade.yml` | Masquage de processus (Microsocks lancé en tant que `cups-lpd`). | Élevée |
-| `lnx_frp_reverse_proxy_activity.yml` | Utilisation de FRP pour le tunneling et l'accès distant. | Moyenne |
-| `lnx_lpd_listener_printer_service_masquerade.yml` | Écoute réseau non autorisée sur le port TCP 515 (LPD). | Élevée |
+| [lnx_sliver_implant_deployment.yml](./lnx_sliver_implant_deployment.yml) | Dépôt du binaire initial dans des répertoires cachés (`/.root/`). | Critique |
+| [PERSIST_LNX_Sliver_Systemd_Service.yml](./PERSIST_LNX_Sliver_Systemd_Service.yml) | Création de persistance via un service système factice. | Élevée |
+| [PROC_LNX_Microsocks_LPD_Masquerade.yml](./PROC_LNX_Microsocks_LPD_Masquerade.yml)| Masquage de processus (Microsocks lancé en tant que `cups-lpd`). | Élevée |
+| [lnx_frp_reverse_proxy_activity.yml ](./lnx_frp_reverse_proxy_activity.yml) | Utilisation de FRP pour le tunneling et l'accès distant. | Moyenne |
+| [lnx_lpd_listener_printer_service_masquerade.yml](./lnx_lpd_listener_printer_service_masquerade.yml) | Écoute réseau non autorisée sur le port TCP 515 (LPD). | Élevée |
 
 ## 🔍 Détails Techniques
 
@@ -35,3 +37,7 @@ Toutes les règles de ce dossier ont été validées avec `sigma-cli`.
 
 ## 🛡️ Résilience (Payloads V2)
 Ces règles sont conçues pour être **comportementales**. En ciblant les arguments de commande, les ports réseau et les chemins d'exécution plutôt que de simples hashs, elles restent efficaces même si l'attaquant modifie ses outils ou renomme ses fichiers.
+
+## ✍🏿 Auteur
+[Adama ASSIONGBON – Consultant SOC & CTI](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+

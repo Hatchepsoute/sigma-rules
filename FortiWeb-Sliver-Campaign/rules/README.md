@@ -1,7 +1,10 @@
 ![Threat Intelligence](https://img.shields.io/badge/Focus-CTI%20%26%20SOC-blue)
 ![Sigma](https://img.shields.io/badge/Format-SIGMA-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
+![Fortinet](https://img.shields.io/badge/Fortinet-FortiOS-red)
+
 # 📂 Sigma Detection Rules Index
+[👉🏾 French version available here: ](./README_FR.md)
 
 This directory contains the core detection logic for the **FortiWeb Sliver C2 Campaign**. Rules are provided in **Sigma** format for SIEM-agnostic deployment.
 
@@ -34,3 +37,7 @@ All rules in this folder have passed syntax and quality checks via `sigma-cli`.
 
 ## 🛡️ Anti-Evasion (V2 Payloads)
 These rules focus on **Behavioral Indicators** (CLI arguments, network ports, and restricted system paths) to ensure detection even if attackers rename their binaries or modify their campaign infrastructure in the future.
+
+## ✍🏿 Author
+[Adama ASSIONGBON – Consultant SOC & CTI](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+

@@ -1,8 +1,9 @@
-# 🛡️ Détection de la Campagne Sliver C2 sur FortiWeb
-
 ![Sigma](https://img.shields.io/badge/Format-SIGMA-orange)
 ![Validation](https://img.shields.io/badge/Sigma_Check-Passed-green)
 ![Incident Response](https://img.shields.io/badge/IR-Playbook_TheHive-red)
+![Fortinet](https://img.shields.io/badge/Fortinet-FortiOS-red)
+# 🛡️ Détection de la Campagne Sliver C2 sur FortiWeb
+[👉🏾 English version available here: ](./README.md)
 
 ## 📝 Présentation
 Ce dépôt fournit un arsenal complet (règles Sigma, IoCs et Playbooks) conçu pour contrer les attaques sophistiquées ciblant les appliances **FortiWeb**. Il permet d'industrialiser la détection du framework **Sliver C2** et des techniques de masquage réseau.
@@ -57,3 +58,8 @@ Ces règles anticipent les évolutions de l'attaque (**Payloads V2**) en privil�
 │    └── Sliver_KillChain_Detection.png
 ├── README_FR.md
 └── README.md 
+```
+
+## ✍🏿 Auteur
+[Adama ASSIONGBON – Consultant SOC & CTI](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+
