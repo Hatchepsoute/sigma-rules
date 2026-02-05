@@ -4,8 +4,10 @@
 ![SOAR](https://img.shields.io/badge/SOAR-playbooks-important)
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
 ![License](https://img.shields.io/badge/License-Apache%202.0-informational)
+![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
+![Microsoft Security](https://img.shields.io/badge/Microsoft-Security-blue)
 
-👉🏾 **French version available here:** [README_FR.md](README_FR.md)
+[👉🏾 **French version available here:** ](README_FR.md)
 
 # 🛡️ Sigma Detection Framework for SOC Operations
 
