@@ -1,7 +1,7 @@
 ![Threat Intelligence](https://img.shields.io/badge/Focus-CTI%20%26%20SOC-blue)
 ![Sigma](https://img.shields.io/badge/Format-SIGMA-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Fortinet](https://img.shields.io/badge/Fortinet-FortiOS-red)
+![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
 
 # 📂 Index des Règles de Détection (Sigma)
 [👉🏾 English version available here: ](./README.md)

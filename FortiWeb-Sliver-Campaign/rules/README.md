@@ -1,7 +1,7 @@
 ![Threat Intelligence](https://img.shields.io/badge/Focus-CTI%20%26%20SOC-blue)
 ![Sigma](https://img.shields.io/badge/Format-SIGMA-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Fortinet](https://img.shields.io/badge/Fortinet-FortiOS-red)
+![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
 
 # 📂 Sigma Detection Rules Index
 [👉🏾 French version available here: ](./README_FR.md)
@@ -12,11 +12,11 @@ This directory contains the core detection logic for the **FortiWeb Sliver C2 Ca
 
 | File Name | Detection Focus | Severity |
 | :--- | :--- | :--- |
-| `lnx_sliver_implant_deployment.yml` | Initial binary drop in hidden paths (`/.root/`, `/app/web/`). | Critical |
-| `PERSIST_LNX_Sliver_Systemd_Service.yml` | Persistence via "Updater Service" systemd creation. | High |
-| `PROC_LNX_Microsocks_LPD_Masquerade.yml` | Process masquerading (Microsocks running as `cups-lpd`). | High |
-| `lnx_frp_reverse_proxy_activity.yml` | FRP client execution for remote access tunneling. | Medium |
-| `lnx_lpd_listener_printer_service_masquerade.yml` | Unauthorized network listeners on TCP port 515. | High |
+| [lnx_sliver_implant_deployment.yml](./lnx_sliver_implant_deployment.yml)  | Initial binary drop in hidden paths (`/.root/`, `/app/web/`). | Critical |
+| [PERSIST_LNX_Sliver_Systemd_Service.yml](./PERSIST_LNX_Sliver_Systemd_Service.yml)  | Persistence via "Updater Service" systemd creation. | High |
+| [PROC_LNX_Microsocks_LPD_Masquerade.yml](./PROC_LNX_Microsocks_LPD_Masquerade.yml) | Process masquerading (Microsocks running as `cups-lpd`). | High |
+|  [lnx_frp_reverse_proxy_activity.yml ](./lnx_frp_reverse_proxy_activity.yml)  | FRP client execution for remote access tunneling. | Medium |
+| [lnx_lpd_listener_printer_service_masquerade.yml](./lnx_lpd_listener_printer_service_masquerade.yml) | Unauthorized network listeners on TCP port 515. | High |
 
 ## 🔍 Technical Deep Dive
 

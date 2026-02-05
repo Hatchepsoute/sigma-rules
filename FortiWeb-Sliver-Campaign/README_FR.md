@@ -1,7 +1,8 @@
 ![Sigma](https://img.shields.io/badge/Format-SIGMA-orange)
 ![Validation](https://img.shields.io/badge/Sigma_Check-Passed-green)
 ![Incident Response](https://img.shields.io/badge/IR-Playbook_TheHive-red)
-![Fortinet](https://img.shields.io/badge/Fortinet-FortiOS-red)
+![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
+
 # 🛡️ Détection de la Campagne Sliver C2 sur FortiWeb
 [👉🏾 English version available here: ](./README.md)
 
@@ -16,11 +17,11 @@ Ce dépôt fournit un arsenal complet (règles Sigma, IoCs et Playbooks) conçu 
 
 ## 🔍 Analyse Technique des Règles (Résumé)
 Cinq règles spécialisées couvrent le cycle de vie de l'attaque :
-1.  **Déploiement de l'implant** (`lnx_sliver_implant_deployment.yml`) : Surveillance des répertoires suspects (`/.root/`, `/app/web/`).
-2.  **Persistance Systemd** (`PERSIST_LNX_Sliver_Systemd_Service.yml`) : Détection du service malveillant "Updater Service".
-3.  **Masquage de Proxy** (`PROC_LNX_Microsocks_LPD_Masquerade.yml`) : Identification des arguments `microsocks` camouflés en `cups-lpd`.
-4.  **Tunneling FRP** (`lnx_frp_reverse_proxy_activity.yml`) : Surveillance de l'activité du client `frpc` et ses fichiers de conf.
-5.  **Écoute Réseau Suspecte** (`lnx_lpd_listener_printer_service_masquerade.yml`) : Détection de listeners non-CUPS sur le **port TCP 515**.
+1.  **Déploiement de l'implant** ([lnx_sliver_implant_deployment.yml](./rules/lnx_sliver_implant_deployment.yml)) : Surveillance des répertoires suspects (`/.root/`, `/app/web/`).
+2.  **Persistance Systemd** ([PERSIST_LNX_Sliver_Systemd_Service.yml](./rules/PERSIST_LNX_Sliver_Systemd_Service.yml) ) : Détection du service malveillant "Updater Service".
+3.  **Masquage de Proxy** ( [PROC_LNX_Microsocks_LPD_Masquerade.yml](./rules/PROC_LNX_Microsocks_LPD_Masquerade.yml)) : Identification des arguments `microsocks` camouflés en `cups-lpd`.
+4.  **Tunneling FRP** ( [lnx_frp_reverse_proxy_activity.yml ](./rules/lnx_frp_reverse_proxy_activity.yml) ) : Surveillance de l'activité du client `frpc` et ses fichiers de conf.
+5.  **Écoute Réseau Suspecte** ([lnx_lpd_listener_printer_service_masquerade.yml](./rules/lnx_lpd_listener_printer_service_masquerade.yml)) : Détection de listeners non-CUPS sur le **port TCP 515**.
 ## 🛡️ Résilience et Anticipation
 Ces règles anticipent les évolutions de l'attaque (**Payloads V2**) en privilégiant les **comportements** (arguments CLI et ports réseau) plutôt que les noms de fichiers statiques ou les hashs. La surveillance du port 515 et des chemins cachés garantit la détection même si l'attaquant change ses outils.
 
