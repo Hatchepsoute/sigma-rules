@@ -9,7 +9,7 @@
 
 # 🛡️ Framework de Détection Sigma pour les Opérations SOC
 
-[👉🏾 **Version anglaise disponible ici :**](README.md)
+[👉🏾 **Version anglaise disponible ici**](README.md)
 
 ![SOC Framework](diagrams/sigma_rules_vue_globale_soc_3D_FR.png)
 

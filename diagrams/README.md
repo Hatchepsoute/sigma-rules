@@ -5,9 +5,11 @@
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-informational)
 
- **French version favailable here:** [README_FR.md](README_FR.md)
 
 # SOC Detection to Response - Operational Flow Diagram
+
+ [**French version favailable here **](README_FR.md)
+ 
 ### 📌 Description
 
 This diagram illustrates the **end-to-end SOC detection and response lifecycle**, from threat and CVE context to post-incident feedback and continuous improvement.

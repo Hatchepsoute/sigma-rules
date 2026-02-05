@@ -10,7 +10,7 @@
 
 # 🛡️ Sigma Detection Framework for SOC Operations
 
-[👉🏾 **French version available here:** ](README_FR.md)
+[👉🏾 **French version available here** ](README_FR.md)
 
 ![SOC Framework](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
 
