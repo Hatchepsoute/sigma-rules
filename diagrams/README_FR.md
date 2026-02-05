@@ -4,10 +4,11 @@
 ![SOAR](https://img.shields.io/badge/SOAR-playbooks-important)
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-informational)
- **English version available here:** [README.md](README.md)
+ 
 
 # SOC Detection to Response - Operational Flow Diagram
 
+ [👉🏾 **English version available here**](README.md)
 ---
 
 ### 📌 Description
@@ -82,7 +83,7 @@ Ce flux est volontairement générique afin d’être **agnostique de l’outil*
     - Mise à jour des règles
     - Renforcement de la posture de sécurité
 
-👉 La boucle de retour illustre l’**amélioration continue du SOC**.
+👉🏾 La boucle de retour illustre l’**amélioration continue du SOC**.
 
 ---
 

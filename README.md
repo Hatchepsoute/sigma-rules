@@ -7,9 +7,10 @@
 ![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
 ![Microsoft Security](https://img.shields.io/badge/Microsoft-Security-blue)
 
-[👉🏾 **French version available here:** ](README_FR.md)
 
 # 🛡️ Sigma Detection Framework for SOC Operations
+
+[👉🏾 **French version available here:** ](README_FR.md)
 
 ![SOC Framework](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
 
