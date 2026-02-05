@@ -8,7 +8,7 @@
 
 # SOC Detection to Response - Operational Flow Diagram
 
- [**French version favailable here **](README_FR.md)
+ [👉🏾  **French version favailable here**](README_FR.md)
  
 ### 📌 Description
 
