@@ -1,9 +1,10 @@
 
-# Decision Table SOC – Kernel_Rootkit_MVDR (FR)
+# Decision Table SOC – Kernel_Rootkit_MVDR 
 
+ [👉🏾  **English version favailable here**](README.md)
+ 
 ## Objectif
-Guider les analystes SOC dans la prise de décision lorsque des règles du pack
-Kernel_Rootkit_MVDR se déclenchent.
+Guider les analystes SOC dans la prise de décision lorsque des règles du pack Kernel_Rootkit_MVDR se déclenchent.
 
 ## Règles
 - R1 : Kernel driver load (visibilité)
@@ -27,3 +28,7 @@ Kernel_Rootkit_MVDR se déclenchent.
 - R1 seule : signal faible
 - R2 seule : suspicion forte
 - R3 : confiance OS rompue
+
+✍🏿 **Auteur :** Adama ASSIONGBON – SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+

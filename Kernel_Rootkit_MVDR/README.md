@@ -1,6 +1,8 @@
 
 # Kernel Rootkit MVDR – Scenario-Based Explanation
 
+ [👉🏾  **French version favailable here**](README_FR.md)
+
 ## 1. Attack Scenario (Attacker Perspective)
 
 This detection pack addresses kernel-mode rootkit attacks on Windows systems.
@@ -14,6 +16,7 @@ Typical attack flow:
 
 Once the driver is loaded, operating system trust is broken.
 
+[mvdr-01-kernel-driver-load.yml](./rules/mvdr-01-kernel-driver-load.yml)
 ---
 
 ## 2. Detection Logic (SOC Perspective)
@@ -25,6 +28,8 @@ Detects kernel driver loading.
 - False positives: legitimate drivers (updates, hardware)
 - True positives: unexpected driver load outside change window
 Usage: signal / hunting
+
+[mvdr-02-kernel-service.yml](./rules/mvdr-02-kernel-service.yml)
 
 ### Rule mvdr-02-kernel-service
 Detects kernel driver persistence via service creation.
@@ -38,6 +43,7 @@ Correlates execution + persistence.
 - True positives: confirmed kernel rootkit
 Usage: critical incident
 
+[mvdr-03-kernel-rootkit-correlation.yml](./rules/mvdr-03-kernel-rootkit-correlation.yml)
 ---
 
 ## 3. Pentest & Purple Team Scenarios
@@ -58,3 +64,10 @@ Blue Team validates detection and response
 
 A kernel alert is a major incident.
 The operating system can no longer be trusted.
+
+[Why MVDR – Minimum Viable Detection Rules](./README_Why_MVDR.md)
+
+✍🏿 **Auteur :** Adama ASSIONGBON – SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+
+

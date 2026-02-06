@@ -1,6 +1,8 @@
 
 # Why MVDR – Minimum Viable Detection Rules
 
+ [👉🏾  **French version favailable here**](./README_Pourquoi_MVDR.md)
+
 ## Executive Summary
 
 MVDR (Minimum Viable Detection Rules) is a security detection approach focused on detecting real and critical threats with the minimum number of effective rules. The goal is not to increase alert volume, but to increase decision quality.

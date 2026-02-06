@@ -1,6 +1,8 @@
 
-# SOC Decision Table – Kernel_Rootkit_MVDR (EN)
+# SOC Decision Table – Kernel_Rootkit_MVDR
 
+ [👉🏾  **French version favailable here**](README_FR.md)
+ 
 ## Purpose
 Guide SOC analysts in decision-making when Kernel_Rootkit_MVDR rules trigger.
 
@@ -26,3 +28,7 @@ Guide SOC analysts in decision-making when Kernel_Rootkit_MVDR rules trigger.
 - R1 only: weak signal
 - R2 only: strong suspicion
 - R3: OS trust is broken
+
+✍🏿 **Author :** Adama ASSIONGBON – SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+
