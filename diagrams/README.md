@@ -82,7 +82,7 @@ The flow is intentionally **tool-agnostic**, suitable for Wazuh, Splunk, Elastic
     - Rule updates
     - Security hardening
 
-👉 The feedback loop highlights **continuous SOC improvement**.
+👉🏾 The feedback loop highlights **continuous SOC improvement**.
 
 ---
 
