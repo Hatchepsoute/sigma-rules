@@ -1,7 +1,7 @@
 
 # Decision Table SOC – Kernel_Rootkit_MVDR 
 
- [👉🏾  **English version favailable here**](README.md)
+ [👉🏾  **English version available here**](README.md)
  
 ## Objectif
 Guider les analystes SOC dans la prise de décision lorsque des règles du pack Kernel_Rootkit_MVDR se déclenchent.

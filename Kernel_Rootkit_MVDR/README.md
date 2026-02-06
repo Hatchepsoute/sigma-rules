@@ -1,7 +1,7 @@
 
 # Kernel Rootkit MVDR – Scenario-Based Explanation
 
- [👉🏾  **French version favailable here**](README_FR.md)
+ [👉🏾  **French version available here**](README_FR.md)
 
 ## 1. Attack Scenario (Attacker Perspective)
 

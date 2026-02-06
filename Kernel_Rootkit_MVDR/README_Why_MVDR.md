@@ -1,7 +1,7 @@
 
 # Why MVDR – Minimum Viable Detection Rules
 
- [👉🏾  **French version favailable here**](./README_Pourquoi_MVDR.md)
+ [👉🏾  **French version available here**](./README_Pourquoi_MVDR.md)
 
 ## Executive Summary
 
