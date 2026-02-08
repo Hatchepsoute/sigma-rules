@@ -1,0 +1,51 @@
+title: Defense Evasion - Termination of Security / EDR Processes
+id: 5d6b7a2c-3f2e-4b91-9a7e-8f9c1b2a7d11
+status: experimental
+description: |
+  Detects the termination of known security, EDR, or anti-malware processes.  This behavior is commonly observed during defense evasion phases of  ransomware and post-exploitation activity.
+references:
+  - https://attack.mitre.org/techniques/T1562/001/
+author: Adama ASSIONGBON - SOC & CTI Consultant
+date: 2026-02-07
+logsource:
+  product: windows
+  category: process_termination
+  service: sysmon
+detection:
+  selection_event:
+    EventID: 5
+
+  selection_security_process:
+    TargetImage|endswith:
+      - '\MsMpEng.exe'
+      - '\SenseIR.exe'
+      - '\SenseCE.exe'
+      - '\CSFalconService.exe'
+      - '\SophosHealth.exe'
+      - '\SophosFS.exe'
+      - '\SophosFileScanner.exe'
+      - '\ccSvcHst.exe'
+      - '\SmcGui.exe'
+      - '\ekrn.exe'
+      - '\aswEngSrv.exe'
+      - '\AvastUI.exe'
+      - '\hmpalert.exe'
+      - '\CyveraService.exe'
+
+  filter_legit_system_activity:
+    Image|endswith:
+      - '\services.exe'
+      - '\svchost.exe'
+      - '\MsMpEng.exe'
+    User|contains:
+      - 'NT AUTHORITY'
+
+  condition: selection_event and selection_security_process and not filter_legit_system_activity
+falsepositives:
+  - Legitimate EDR self-protection or update actions
+  - Administrator intentionally stopping security services during maintenance
+level: high
+tags:
+  - attack.defense-evasion
+  - attack.t1562.001
+
