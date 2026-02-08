@@ -1,0 +1,85 @@
+title: Defense Evasion - High Confidence Security Tool Disable via Command Line (Strict)
+id: 7f1a3c2e-0c9f-4e3a-9f45-1c4b2a9d6e3f
+status: experimental
+description: |
+  High-confidence detection of attempts to disable or stop security/EDR/AV tooling via explicit command-line patterns (e.g., taskkill /F /IM <security_process>, sc stop <security_service>, PowerShell Defender tampering). Designed to reduce false positives by requiring strong intent + explicit target indicators.
+references:
+  - https://attack.mitre.org/techniques/T1562/001/
+author: Adama ASSIONGBON - SOC & CTI Consultant  | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-02-08
+logsource:
+  category: process_creation
+  product: windows
+
+detection:
+  selection_taskkill_im:
+    Image|endswith: '\taskkill.exe'
+    CommandLine|contains|all:
+      - '/F'
+      - '/IM'
+    CommandLine|contains:
+      - 'MsMpEng.exe'
+      - 'SenseIR.exe'
+      - 'SenseCE.exe'
+      - 'CSFalconService.exe'
+      - 'cb.exe'
+      - 'RepUx.exe'
+      - 'SentinelAgent.exe'
+      - 'Sysmon.exe'
+
+  selection_sc_stop_service:
+    Image|endswith: '\sc.exe'
+    CommandLine|contains|all:
+      - 'stop'
+    CommandLine|contains:
+      - 'WinDefend'
+      - 'WdNisSvc'
+      - 'Sense'
+      - 'SecurityHealthService'
+
+  selection_net_stop_service:
+    Image|endswith: '\net.exe'
+    CommandLine|contains|all:
+      - 'stop'
+    CommandLine|contains:
+      - 'WinDefend'
+      - 'WdNisSvc'
+      - 'Sense'
+      - 'SecurityHealthService'
+
+  selection_powershell_defender_tamper:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+    CommandLine|contains:
+      - 'Set-MpPreference'
+      - 'DisableRealtimeMonitoring'
+      - 'Add-MpPreference'
+      - 'ExclusionPath'
+      - 'ExclusionProcess'
+      - 'ExclusionExtension'
+
+  selection_wmic_delete_security_process:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains|all:
+      - 'process'
+      - 'where'
+      - 'delete'
+    CommandLine|contains:
+      - 'MsMpEng.exe'
+      - 'SenseIR.exe'
+      - 'SenseCE.exe'
+      - 'CSFalconService.exe'
+
+  condition: selection_taskkill_im or selection_sc_stop_service or selection_net_stop_service or selection_powershell_defender_tamper or selection_wmic_delete_security_process
+
+falsepositives:
+  - Rare: Security team or administrators intentionally disabling Microsoft Defender features during maintenance or troubleshooting
+  - Endpoint hardening / imaging scripts that explicitly set Defender exclusions (should be allowlisted)
+  - Incident response actions where defenders intentionally stop EDR/AV components for containment (documented change window)
+level: critical
+tags:
+  - attack.defense-evasion
+  - attack.t1562
+  - attack.t1562.001
+
