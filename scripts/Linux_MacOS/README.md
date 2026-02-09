@@ -2,8 +2,8 @@
 
 This document explains how to **validate all Sigma rules** in the repository on **Linux and macOS** using the portable Bash script.
 
-👉 **Version française disponible**: [README_FR.md](README_FR.md)  
-👉 **Windows version**: `scripts/Windows/README.md`
+👉🏾 [**Version française disponible**](README_FR.md)  
+👉🏾 [**Windows version**](./scripts/Windows/README.md) 
 
 ---
 
@@ -98,7 +98,6 @@ scripts/
 
 ## 👤 Author
 
-Adama ASSIONGBON  
-SOC & CTI Analyst
+✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
----

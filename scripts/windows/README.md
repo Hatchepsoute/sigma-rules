@@ -2,7 +2,7 @@
 
 This document explains how to **validate all Sigma rules** in the repository on **Windows** using the provided PowerShell script.
 
-👉 **Version française disponible**: [README_FR.md](README_FR.md)
+👉🏾 [**Version française disponible**](README_FR.md)
 
 ---
 
@@ -102,10 +102,7 @@ scripts/
 ```
 
 ---
+## Author
+✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
-## 👤 Author
-
-Adama ASSIONGBON  
-SOC & CTI Analyst
-
----

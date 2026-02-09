@@ -2,7 +2,7 @@
 
 Ce document explique comment **valider toutes les règles Sigma** du dépôt sous **Windows** à l’aide du script PowerShell fourni.
 
-👉 **English version available**: [README.md](README.md)
+👉🏾 [**English version available**](README.md)
 
 ---
 
@@ -103,9 +103,8 @@ scripts/
 
 ---
 
-## 👤 Auteur
+## Auteur
 
-Adama ASSIONGBON  
-Analyste SOC & CTI
+✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  
+[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
----
