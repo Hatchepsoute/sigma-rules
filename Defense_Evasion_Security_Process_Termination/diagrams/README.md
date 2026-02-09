@@ -1,33 +1,34 @@
-
+# 📊 Attack Flow Diagram (Mermaid)
+[👉🏾 **French version available here**](./README_FR.md)
 ```mermaid
 flowchart TD
   %% Defense Evasion - Security Tool Impairment (BROAD vs STRICT)
 
-  A[Telemetry Ingested<br/>Windows Process Creation + Process Termination] --> B{Suspicious Activity Detected?}
+  A[Telemetry ingested: Windows process creation and process termination] --> B{Suspicious activity detected}
 
-  %% BROAD path
-  B -->|Yes| C[BROAD (R2)<br/>Attempt to Disable Security Tools via CLI<br/>Hunting / Early Warning]
-  C --> D{Tuning / Exclusions Applied?}
-  D -->|Yes| E[Generate Medium/High Alert<br/>Investigate Host + User Context]
-  D -->|No| F[Expect More Noise<br/>Add Allowlist for Admin Scripts / Build Images]
+  %% BROAD path (R2)
+  B -->|Yes| C[BROAD (R2): Attempt to disable security tools via CLI]
+  C --> D{Tuning exclusions applied}
+  D -->|Yes| E[Alert: Medium to High. Investigate host and user context]
+  D -->|No| F[Expect noise. Add allowlist for admin scripts and build images]
 
-  %% STRICT path
-  B -->|Yes| G[STRICT (R3)<br/>High Confidence Disable Security Tools<br/>Tool + Action + Explicit Target]
-  G --> H[Generate Critical Alert<br/>Immediate Containment Recommended]
+  %% STRICT path (R3)
+  B -->|Yes| G[STRICT (R3): High confidence security tool disable]
+  G --> H[Alert: Critical. Immediate containment recommended]
 
-  %% Termination correlation
-  C --> I{R1 Triggered?<br/>Termination of Security Processes}
+  %% Correlation with termination (R1)
+  C --> I{R1 triggered: termination of security processes}
   G --> I
-  I -->|Yes| J[Correlated Detection<br/>Very High Confidence Defense Evasion]
-  I -->|No| K[Single Signal<br/>Continue Investigation / Add Context]
+  I -->|Yes| J[Correlated detection: very high confidence defense evasion]
+  I -->|No| K[Single signal: continue investigation and enrich context]
 
   %% Response actions
-  J --> L[Response Playbook<br/>Isolate Host + Collect Triage Evidence<br/>Validate Change Window]
+  J --> L[Response playbook: isolate host, triage, validate change window]
   E --> L
   H --> L
-  K --> M[Enrichment & Pivot<br/>Check LSASS Access, Lateral Movement, Persistence]
+  K --> M[Enrichment pivot: LSASS access, lateral movement, persistence]
 
-  %% Notes
-  M --> N[Feedback Loop<br/>Tune Filters + Update Allowlist + Improve Coverage]
+  %% Feedback loop
+  M --> N[Feedback loop: tune filters, update allowlists, improve coverage]
   L --> N
 ```
