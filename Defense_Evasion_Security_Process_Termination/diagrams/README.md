@@ -1,14 +1,15 @@
-# 📊 Attack Flow Diagram (Mermaid)
+# 📊 BROAD vs STRICT – Security Tool Impairment 
 [👉🏾 **French version available here**](./README_FR.md)
 
+```mermaid
 flowchart TD
-  %% Defense Evasion - Security Tool Impairment (BROAD vs STRICT) - Styled (GitHub compatible)
+  %% Defense Evasion - Security Tool Impairment (BROAD vs STRICT) - GitHub compatible
 
   A([Telemetry ingested]):::start --> B{Suspicious activity detected}:::decision
 
-  subgraph BROAD["🟡 BROAD (R2) - Hunting / Early Warning"]
+  subgraph BROAD["BROAD (R2) - Hunting / Early Warning"]
     direction TB
-    C[BROAD: Attempt to disable security tools via CLI]:::broad
+    C[BROAD: Attempt to disable security tools via command line]:::broad
     D{Tuning exclusions applied}:::decision
     E[Alert: Medium to High\nInvestigate host and user context]:::action
     F[Expect noise\nAdd allowlist for admin scripts and build images]:::note
@@ -17,14 +18,14 @@ flowchart TD
     D -->|No| F
   end
 
-  subgraph STRICT["🔴 STRICT (R3) - High Confidence / Low FP"]
+  subgraph STRICT["STRICT (R3) - High Confidence / Low False Positives"]
     direction TB
     G[STRICT: High confidence security tool disable\nTool + action + explicit target]:::strict
     H[Alert: Critical\nImmediate containment recommended]:::critical
     G --> H
   end
 
-  subgraph CORR["🟣 Correlation (R1) - Termination Signal"]
+  subgraph CORR["Correlation (R1) - Termination Signal"]
     direction TB
     I{R1 triggered\nTermination of security processes}:::decision
     J[Correlated detection\nVery high confidence defense evasion]:::corr
@@ -33,7 +34,7 @@ flowchart TD
     I -->|No| K
   end
 
-  subgraph RESP["🔵 SOC Response & Improvement Loop"]
+  subgraph RESP["SOC Response and Improvement Loop"]
     direction TB
     L[Response playbook\nIsolate host, triage, validate change window]:::action
     M[Enrichment pivot\nLSASS access, lateral movement, persistence]:::action
@@ -61,4 +62,4 @@ flowchart TD
   classDef corr fill:#e9d5ff,stroke:#7c3aed,color:#111827,stroke-width:1px;
   classDef action fill:#dbeafe,stroke:#2563eb,color:#111827,stroke-width:1px;
   classDef note fill:#e5e7eb,stroke:#374151,color:#111827,stroke-dasharray: 4 3;
-
+```

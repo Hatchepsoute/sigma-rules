@@ -1,12 +1,13 @@
-# 📊 Attack Flow Diagram (Mermaid)
+# 📊 BROAD vs STRICT – Neutralisation des outils de sécurité
 [👉🏾**English version available here**](README.md)
 
+```mermaid
 flowchart TD
-  %% Évasion de défense - Neutralisation des outils de sécurité (BROAD vs STRICT) - Stylé (compatible GitHub)
+  %% Evasion de defense - Neutralisation des outils de securite (BROAD vs STRICT) - Compatible GitHub
 
   A([Telemetrie ingeree]):::start --> B{Activite suspecte detectee}:::decision
 
-  subgraph BROAD["🟡 BROAD (R2) - Hunting / Alerte precoce"]
+  subgraph BROAD["BROAD (R2) - Hunting / Alerte precoce"]
     direction TB
     C[BROAD: tentative de desactivation via ligne de commande]:::broad
     D{Exclusions de tuning appliquees}:::decision
@@ -17,14 +18,14 @@ flowchart TD
     D -->|Non| F
   end
 
-  subgraph STRICT["🔴 STRICT (R3) - Haute confiance / Faibles FP"]
+  subgraph STRICT["STRICT (R3) - Haute confiance / Faibles faux positifs"]
     direction TB
     G[STRICT: desactivation a haute confiance\nOutil + action + cible explicite]:::strict
     H[Alerte: critique\nConfinement immediat recommande]:::critical
     G --> H
   end
 
-  subgraph CORR["🟣 Correlation (R1) - Signal de terminaison"]
+  subgraph CORR["Correlation (R1) - Signal de terminaison"]
     direction TB
     I{R1 declenchee\nArret de processus de securite}:::decision
     J[Detection correlee\nTres forte confiance en evasion de defense]:::corr
@@ -33,7 +34,7 @@ flowchart TD
     I -->|Non| K
   end
 
-  subgraph RESP["🔵 Reponse SOC & boucle d amelioration"]
+  subgraph RESP["Reponse SOC et boucle d amelioration"]
     direction TB
     L[Playbook reponse\nIsoler l hote, triage, verifier fenetre de changement]:::action
     M[Pivot enrichissement\nLSASS, mouvement lateral, persistance]:::action
@@ -61,4 +62,4 @@ flowchart TD
   classDef corr fill:#e9d5ff,stroke:#7c3aed,color:#111827,stroke-width:1px;
   classDef action fill:#dbeafe,stroke:#2563eb,color:#111827,stroke-width:1px;
   classDef note fill:#e5e7eb,stroke:#374151,color:#111827,stroke-dasharray: 4 3;
-
+```
