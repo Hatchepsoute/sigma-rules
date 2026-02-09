@@ -1,35 +1,64 @@
 # 📊 Attack Flow Diagram (Mermaid)
 [👉🏾**English version available here**](README.md)
 
-```mermaid
 flowchart TD
-  %% Évasion de défense - Neutralisation des outils de sécurité (BROAD vs STRICT)
+  %% Évasion de défense - Neutralisation des outils de sécurité (BROAD vs STRICT) - Stylé (compatible GitHub)
 
-  A[Telemetrie ingeree: creation de processus Windows et terminaison de processus] --> B{Activite suspecte detectee}
+  A([Telemetrie ingeree]):::start --> B{Activite suspecte detectee}:::decision
 
-  %% Chemin BROAD (R2)
-  B -->|Oui| C[BROAD (R2): tentative de desactivation via ligne de commande]
-  C --> D{Exclusions de tuning appliquees}
-  D -->|Oui| E[Alerte: moyenne a elevee. Investiguer contexte hote et utilisateur]
-  D -->|Non| F[Bruit attendu. Ajouter allowlist scripts admin et images systeme]
+  subgraph BROAD["🟡 BROAD (R2) - Hunting / Alerte precoce"]
+    direction TB
+    C[BROAD: tentative de desactivation via ligne de commande]:::broad
+    D{Exclusions de tuning appliquees}:::decision
+    E[Alerte: moyenne a elevee\nInvestiguer contexte hote et utilisateur]:::action
+    F[Bruit attendu\nAjouter allowlist scripts admin et images systeme]:::note
+    C --> D
+    D -->|Oui| E
+    D -->|Non| F
+  end
 
-  %% Chemin STRICT (R3)
-  B -->|Oui| G[STRICT (R3): desactivation a haute confiance]
-  G --> H[Alerte: critique. Confinement immediat recommande]
+  subgraph STRICT["🔴 STRICT (R3) - Haute confiance / Faibles FP"]
+    direction TB
+    G[STRICT: desactivation a haute confiance\nOutil + action + cible explicite]:::strict
+    H[Alerte: critique\nConfinement immediat recommande]:::critical
+    G --> H
+  end
 
-  %% Correlation avec terminaison (R1)
-  C --> I{R1 declenchee: arret de processus de securite}
+  subgraph CORR["🟣 Correlation (R1) - Signal de terminaison"]
+    direction TB
+    I{R1 declenchee\nArret de processus de securite}:::decision
+    J[Detection correlee\nTres forte confiance en evasion de defense]:::corr
+    K[Signal isole\nPoursuivre investigation et enrichir le contexte]:::note
+    I -->|Oui| J
+    I -->|Non| K
+  end
+
+  subgraph RESP["🔵 Reponse SOC & boucle d amelioration"]
+    direction TB
+    L[Playbook reponse\nIsoler l hote, triage, verifier fenetre de changement]:::action
+    M[Pivot enrichissement\nLSASS, mouvement lateral, persistance]:::action
+    N[Boucle d amelioration\nAjuster filtres, allowlist, renforcer couverture]:::note
+    L --> N
+    M --> N
+  end
+
+  B -->|Oui| C
+  B -->|Oui| G
+
+  C --> I
   G --> I
-  I -->|Oui| J[Detection correlee: tres forte confiance en evasion de defense]
-  I -->|Non| K[Signal isole: poursuivre investigation et enrichir le contexte]
 
-  %% Actions SOC
-  J --> L[Playbook reponse: isoler l hote, triage, verifier fenetre de changement]
+  J --> L
   E --> L
   H --> L
-  K --> M[Pivot enrichissement: LSASS, mouvement lateral, persistance]
+  K --> M
 
-  %% Boucle d amelioration
-  M --> N[Boucle d amelioration: ajuster filtres, allowlist, renforcer couverture]
-  L --> N
-```
+  classDef start fill:#111827,stroke:#6b7280,color:#ffffff,stroke-width:1px;
+  classDef decision fill:#f3f4f6,stroke:#6b7280,color:#111827,stroke-width:1px;
+  classDef broad fill:#fef08a,stroke:#ca8a04,color:#111827,stroke-width:1px;
+  classDef strict fill:#fecaca,stroke:#b91c1c,color:#111827,stroke-width:1px;
+  classDef critical fill:#ef4444,stroke:#7f1d1d,color:#ffffff,stroke-width:2px;
+  classDef corr fill:#e9d5ff,stroke:#7c3aed,color:#111827,stroke-width:1px;
+  classDef action fill:#dbeafe,stroke:#2563eb,color:#111827,stroke-width:1px;
+  classDef note fill:#e5e7eb,stroke:#374151,color:#111827,stroke-dasharray: 4 3;
+
