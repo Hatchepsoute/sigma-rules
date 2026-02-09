@@ -15,8 +15,7 @@ The rules are **behavioral**, **SIEM-agnostic**, and designed for **conversion t
 ## 📂 Included Sigma Rules
 
 ### 1️⃣ Termination of Security Processes
-**File:**  
-[`proc_termination_security_processes.yml`](./rules/proc_termination_security_processes.yml)
+**File:**  [`proc_termination_security_processes.yml`](./rules/proc_termination_security_processes.yml)
 
 **Purpose:**  
 Detects the termination of known security or EDR processes.
