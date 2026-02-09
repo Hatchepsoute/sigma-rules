@@ -32,8 +32,7 @@ Correlation, investigation pivot, ransomware kill-chain analysis
 ---
 
 ### 2️⃣ Disable Security Tools via Command Line (BROAD)
-**File:**  
-[`proc_creation_disable_security_tools_broad.yml`](./rules/proc_creation_disable_security_tools_broad.yml)
+**File:**   [`proc_creation_disable_security_tools_broad.yml`](./rules/proc_creation_disable_security_tools_broad.yml)
 
 **Purpose:**  
 Broad detection of attempts to disable or manipulate security tools using command-line utilities.
@@ -49,8 +48,7 @@ Threat hunting, early warning, detection of suspicious administrative abuse
 ---
 
 ### 3️⃣ Disable Security Tools via Command Line (STRICT)
-**File:**  
-[`proc_creation_disable_security_tools_strict.yml`](./rules/proc_creation_disable_security_tools_strict.yml)
+**File:**   [`proc_creation_disable_security_tools_strict.yml`](./rules/proc_creation_disable_security_tools_strict.yml)
 
 **Purpose:**  
 High-confidence detection of explicit security tool disabling.
