@@ -16,7 +16,7 @@ The rules are **behavioral**, **SIEM-agnostic**, and designed for **conversion t
 
 ### 1️⃣ Termination of Security Processes
 **File:**  
-`proc_termination_security_processes.yml`
+[`proc_termination_security_processes.yml`](./rules/proc_termination_security_processes.yml)
 
 **Purpose:**  
 Detects the termination of known security or EDR processes.
@@ -33,7 +33,7 @@ Correlation, investigation pivot, ransomware kill-chain analysis
 
 ### 2️⃣ Disable Security Tools via Command Line (BROAD)
 **File:**  
-`proc_creation_disable_security_tools_broad.yml`
+[`proc_creation_disable_security_tools_broad.yml`](./rules/proc_creation_disable_security_tools_broad.yml)
 
 **Purpose:**  
 Broad detection of attempts to disable or manipulate security tools using command-line utilities.
@@ -50,7 +50,7 @@ Threat hunting, early warning, detection of suspicious administrative abuse
 
 ### 3️⃣ Disable Security Tools via Command Line (STRICT)
 **File:**  
-`proc_creation_disable_security_tools_strict.yml`
+[`proc_creation_disable_security_tools_strict.yml`](./rules/proc_creation_disable_security_tools_strict.yml)
 
 **Purpose:**  
 High-confidence detection of explicit security tool disabling.

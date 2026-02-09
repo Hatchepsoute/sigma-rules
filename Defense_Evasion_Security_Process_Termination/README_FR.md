@@ -16,7 +16,7 @@ Les règles sont **comportementales**, **indépendantes de tout SIEM** et conver
 
 ### 1️⃣ Arrêt de processus de sécurité
 **Fichier :**  
-`proc_termination_security_processes.yml`
+[`proc_termination_security_processes.yml`](./rules/proc_termination_security_processes.yml)
 
 **Objectif :**  
 Détecter l’arrêt de processus associés à des outils de sécurité ou EDR.
@@ -33,7 +33,7 @@ Corrélation, investigation SOC, analyse de chaîne d’attaque ransomware
 
 ### 2️⃣ Désactivation des outils de sécurité via ligne de commande (BROAD)
 **Fichier :**  
-`proc_creation_disable_security_tools_broad.yml`
+[`proc_creation_disable_security_tools_broad.yml`](./rules/proc_creation_disable_security_tools_broad.yml)
 
 **Objectif :**  
 Détection large des tentatives de désactivation d’outils de sécurité via des commandes système.
@@ -50,7 +50,7 @@ Threat hunting, détection précoce, abus administratifs suspects
 
 ### 3️⃣ Désactivation des outils de sécurité via ligne de commande (STRICT)
 **Fichier :**  
-`proc_creation_disable_security_tools_strict.yml`
+[`proc_creation_disable_security_tools_strict.yml`](./rules/proc_creation_disable_security_tools_strict.yml)
 
 **Objectif :**  
 Détection à **haute confiance** d’actions explicites de neutralisation des protections.
