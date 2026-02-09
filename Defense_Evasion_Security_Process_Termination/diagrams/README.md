@@ -1,6 +1,6 @@
 # 📊 Attack Flow Diagram (Mermaid)
 [👉🏾 **French version available here**](./README_FR.md)
-```mermaid
+
 flowchart TD
   %% Defense Evasion - Security Tool Impairment (BROAD vs STRICT)
 
@@ -31,4 +31,4 @@ flowchart TD
   %% Feedback loop
   M --> N[Feedback loop: tune filters, update allowlists, improve coverage]
   L --> N
-```
+
