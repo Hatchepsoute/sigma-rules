@@ -2,7 +2,7 @@
 
 This document explains how to **validate all Sigma rules** in the repository on **Linux and macOS** using the portable Bash script.
 
-👉🏾 [**Version française disponible**](README_FR.md)  
+👉🏾 [**French version available here**](README_FR.md)  
 👉🏾 [**Windows version**](./scripts/Windows/README.md) 
 
 ---

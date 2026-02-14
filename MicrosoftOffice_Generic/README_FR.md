@@ -1,9 +1,8 @@
 # Détection Microsoft Office → LOLBins (Règles Sigma)
-
+➡️ **[English version available here](README.md)**
 ## Statut
 - **Expérimental**
 - Destiné à la détection SOC, au triage et au threat hunting
-
 ---
 
 ## Présentation
@@ -17,7 +16,7 @@ Elles respectent la **philosophie officielle sigma-rules** :
 - Une règle **BROAD** pour la visibilité
 - Une règle **STRICT** pour la confirmation
 
-👉 Elles doivent être **déployées ensemble**.
+👉🏾 Elles doivent être **déployées ensemble**.
 
 ---
 
@@ -34,11 +33,11 @@ Les documents Microsoft Office sont très souvent utilisés comme **vecteur d’
 
 ---
 
-## Règle 1 – BROAD
+## Règle 1 - BROAD
 
 ### Nom
 **Microsoft Office lance un LOLBin ou moteur de script (BROAD)**
-
+[office_spawn_lolbin_broad.yml](./rules/office_spawn_lolbin_broad.yml)
 ### Objectif
 Détecter une **relation parent-enfant anormale** où Office lance un binaire système.
 
@@ -58,11 +57,11 @@ Détecter une **relation parent-enfant anormale** où Office lance un binaire sy
 
 ---
 
-## Règle 2 – STRICT
+## Règle 2 - STRICT
 
 ### Nom
 **Microsoft Office lance un LOLBin avec téléchargement/exécution ou obfuscation (STRICT)**
-
+[office_download_execute_strict.yml](./rules/office_download_execute_strict.yml)
 ### Objectif
 Détecter une **intention malveillante explicite**.
 
@@ -127,3 +126,7 @@ Cette corrélation :
 > - STRICT = confirmation & réponse  
 >
 > Cette combinaison assure une **détection robuste des chaînes d’attaque basées sur Microsoft Office**.
+
+---
+✍🏿  Auteur: **Adama ASSIONGBON** - SOC & CTI Consultant  
+**Contact:** [LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)

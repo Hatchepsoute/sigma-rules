@@ -3,13 +3,14 @@ id: a6f0558c-14a3-44e0-88f9-605044bb3ecc
 status: experimental
 description: >
   High-confidence detection for Microsoft Office spawning LOLBINs or script engines with command-line patterns consistent with download-and-execute, remote payload retrieval, or obfuscated execution (e.g., PowerShell -enc, IEX, FromBase64String).
+  
+  FR=> Détection à haute confiance des applications Microsoft Office lançant des LOLBINs ou des moteurs de script avec des arguments de ligne de commande caractéristiques de schémas "téléchargement et exécution" (download-and-execute), de récupération de charges utiles distantes ou d'exécution obfusquée (ex: PowerShell -enc, IEX, FromBase64String).
 references:
   - https://attack.mitre.org/techniques/T1105/
   - https://attack.mitre.org/techniques/T1059/001/
-author: |-
-  Adama Assiongbon (SOC/CTI Analyst Consultant)
-  LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama Assiongbon (SOC & CTI  Consultant) |  https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2025-12-23
+modified: 2026-02-14
 tags:
   - attack.t1204.002
   - attack.t1059.001

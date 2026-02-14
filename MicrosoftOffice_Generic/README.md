@@ -1,9 +1,8 @@
 # Microsoft Office → LOLBins Detection (Sigma Rules)
-
+➡️ **[French version available here](./README_FR.md)**
 ## Status
 - **Experimental**
 - Intended for SOC detection, triage, and threat hunting
-
 ---
 
 ## Overview
@@ -34,11 +33,11 @@ Office applications **should not normally spawn command interpreters or download
 
 ---
 
-## Rule 1 – BROAD
+## Rule 1 - BROAD
 
 ### Name
 **Microsoft Office spawns LOLBIN or script engine (BROAD)**
-
+[office_spawn_lolbin_broad.yml](./rules/office_spawn_lolbin_broad.yml)
 ### Purpose
 Detect abnormal **parent-child process relationships** where Microsoft Office launches a LOLBin or script engine.
 
@@ -58,11 +57,11 @@ Detect abnormal **parent-child process relationships** where Microsoft Office la
 
 ---
 
-## Rule 2 – STRICT
+## Rule 2 - STRICT
 
 ### Name
 **Microsoft Office spawns LOLBIN with download/execute or obfuscation patterns (STRICT)**
-
+[office_download_execute_strict.yml](./rules/office_download_execute_strict.yml)
 ### Purpose
 Detect **explicit malicious intent** following Office execution.
 
@@ -127,3 +126,6 @@ This approach:
 > - STRICT = confirmation & response  
 >
 > This pairing provides **robust detection coverage** for Microsoft Office-based attack chains.
+---
+✍🏿  Author: **Adama ASSIONGBON** - SOC & CTI Consultant  
+**Contact:** [LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)

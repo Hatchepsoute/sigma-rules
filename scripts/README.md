@@ -1,7 +1,7 @@
 # 📘 Sigma Rules Repository - SOC & CTI Automation
+👉🏾 [ **French version available here**](README_FR.md)
 
-This repository provides **enterprise-grade Sigma rules** and **automation scripts** for SOC and CTI teams.
-Its goal is to standardize **validation**, **conversion**, and **deployment** of detection rules across multiple SIEM platforms.
+This repository provides **enterprise-grade Sigma rules** and **automation scripts** for SOC and CTI teams. Its goal is to standardize **validation**, **conversion**, and **deployment** of detection rules across multiple SIEM platforms.
 
 ---
 

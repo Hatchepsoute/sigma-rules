@@ -2,15 +2,15 @@ title: Microsoft Office spawns LOLBIN or script engine (BROAD)
 id: f94eb6ef-dccf-481b-92c8-8a6c844b8355
 status: experimental
 description: >
-  Broad detection for Microsoft Office applications spawning common LOLBINs or script engines.
-  Use for triage and hunting. This behavior is frequently observed in Office-based exploitation
+  Broad detection for Microsoft Office applications spawning common LOLBINs or script engines. Use for triage and hunting. This behavior is frequently observed in Office-based exploitation
   chains (malicious documents, external content execution), including multiple Office CVEs.
+  
+  FR=> Détection large des applications Microsoft Office générant des LOLBINs communs ou des moteurs de script. À utiliser pour le triage et le hunting. Ce comportement est fréquemment observé dans les chaînes d'exploitation basées sur Office (documents malveillants, exécution de contenu externe), incluant plusieurs CVE Office.
 references:
   - https://attack.mitre.org/techniques/T1204/002/
-author: |-
-  Adama Assiongbon (SOC/CTI Analyst Consultant)
-  LinkedIn: https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama Assiongbon (SOC & CTI Consultant) | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2025-12-23
+modified: 2026-02-14
 tags:
   - attack.t1204.002
   - attack.t1059

@@ -1,10 +1,9 @@
-# 📘 Dépôt Sigma Rules – Automatisation SOC & CTI (FR)
+# 📘 Dépôt Sigma Rules – Automatisation SOC & CTI 
+👉🏾 [ **English version available here**](README.md)
 
 Ce dépôt fournit des **règles Sigma de niveau entreprise** ainsi que des **scripts d’automatisation** destinés aux équipes SOC et CTI.
 L’objectif est d’industrialiser la **validation**, la **conversion** et le **déploiement** des règles de détection multi‑SIEM.
-
 ---
-
 ## 🛠️ Scripts d’automatisation Sigma
 
 Deux scripts Bash sont fournis et doivent être exécutés depuis le répertoire `scripts/`.

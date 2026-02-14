@@ -2,7 +2,7 @@
 
 This document explains how to **validate all Sigma rules** in the repository on **Windows** using the provided PowerShell script.
 
-👉🏾 [**Version française disponible**](README_FR.md)
+👉🏾 [**French version available here**](README_FR.md)
 
 ---
 
