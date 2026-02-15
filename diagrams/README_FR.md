@@ -100,12 +100,13 @@ Ce flux est volontairement générique afin d’être **agnostique de l’outil*
 ---
 
 ---
+---
 ### 📊 Statistiques de clones (Historique complet)
-![Graphique des clones](https://raw.githubusercontent.com/Hatchepsoute/sigma-rules/github-repo-stats/Hatchepsoute/sigma-rules/plots/clones.png)
+![Graphique des clones](https://raw.githubusercontent.com/Hatchepsoute/sigma-rules/github-repo-stats/Hatchepsoute/sigma-rules/latest-report/resources/clones.png)
 
-> _Note : Ces statistiques sont archivées automatiquement chaque jour pour conserver l'historique au-delà des 14 jours par défaut de GitHub._
+> _Note : Ces statistiques sont archivées automatiquement chaque jour._
 
 ---
 ![Stars](https://img.shields.io/github/stars/Hatchepsoute/sigma-rules?style=flat-square&color=gold)
-![Views](https://img.shields.io/badge/dynamic/json?color=blue&label=Vues&query=count&url=https%3A%2F%2Fraw.githubusercontent.com%2FHatchepsoute%2Fsigma-rules%2Fgithub-repo-stats%2FHatchepsoute%2Fsigma-rules%2Fdata%2Fall.json&style=flat-square)
-![Clones](https://img.shields.io/badge/dynamic/json?color=green&label=Clones&query=clones_total&url=https%3A%2F%2Fraw.githubusercontent.com%2FHatchepsoute%2Fsigma-rules%2Fgithub-repo-stats%2FHatchepsoute%2Fsigma-rules%2Fdata%2Fall.json&style=flat-square)
+![Views](https://img.shields.io/badge/dynamic/json?color=blue&label=Vues&query=views_total&url=https%3A%2F%2Fraw.githubusercontent.com%2FHatchepsoute%2Fsigma-rules%2Fgithub-repo-stats%2FHatchepsoute%2Fsigma-rules%2Fghrs-data%2Foverall-stats.json&style=flat-square)
+![Clones](https://img.shields.io/badge/dynamic/json?color=green&label=Clones&query=clones_total&url=https%3A%2F%2Fraw.githubusercontent.com%2FHatchepsoute%2Fsigma-rules%2Fgithub-repo-stats%2FHatchepsoute%2Fsigma-rules%2Fghrs-data%2Foverall-stats.json&style=flat-square)
