@@ -1,0 +1,19 @@
+name: Sauvegarde des stats de trafic
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # S'exécute automatiquement chaque nuit à minuit
+  workflow_dispatch:      # Permet de le lancer manuellement pour tester
+
+jobs:
+  run-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v3
+
+      - name: Collecter et générer les stats
+        uses: jgehrcke/github-repo-stats@v1
+        with:
+          repository: ${{ github.repository }}
+          ghtoken: ${{ secrets.GH_TOKEN }}  # C'est ici que le secret est utilisé
