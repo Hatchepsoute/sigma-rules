@@ -2,18 +2,20 @@ name: Sauvegarde des stats de trafic
 
 on:
   schedule:
-    - cron: '0 0 * * *' # S'exécute automatiquement chaque nuit à minuit
-  workflow_dispatch:      # Permet de le lancer manuellement pour tester
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   run-stats:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # C'est cette ligne qui manque pour autoriser l'écriture
     steps:
       - name: Checkout du code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Passage à la v4 (plus récente)
 
       - name: Collecter et générer les stats
-        uses: jgehrcke/github-repo-stats@v1
+        uses: jgehrcke/github-repo-stats@v1.4.2
         with:
           repository: ${{ github.repository }}
-          ghtoken: ${{ secrets.GH_TOKEN }}  # C'est ici que le secret est utilisé
+          ghtoken: ${{ secrets.GH_TOKEN }}
