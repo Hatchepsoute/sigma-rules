@@ -100,7 +100,6 @@ Ce flux est volontairement générique afin d’être **agnostique de l’outil*
 ---
 
 ---
----
 ### 📊 Statistiques de clones (Historique complet)
 ![Graphique des clones](https://raw.githubusercontent.com/Hatchepsoute/sigma-rules/github-repo-stats/Hatchepsoute/sigma-rules/latest-report/resources/clones.png)
 
