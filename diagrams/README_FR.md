@@ -8,7 +8,7 @@
 
 # SOC Detection to Response - Operational Flow Diagram
 
- [👉🏾 **English version available here**](README.md)
+ 👉🏾  [**English version available here**](README.md)
 ---
 
 ### 📌 Description
@@ -94,18 +94,6 @@ Ce flux est volontairement générique afin d’être **agnostique de l’outil*
 - Présentation client ou management
 - Base de travail pour playbooks SOAR
 - Standardisation des workflows SOC
-
 ---
 ![SOC Framework](sigma_rules_vue_globale_soc_3D_FR.png)
----
 
----
-### 📊 Statistiques de clones (Historique complet)
-![Graphique des clones](https://raw.githubusercontent.com/Hatchepsoute/sigma-rules/github-repo-stats/Hatchepsoute/sigma-rules/latest-report/resources/clones.png)
-
-> _Note : Ces statistiques sont archivées automatiquement chaque jour._
-
----
-![Stars](https://img.shields.io/github/stars/Hatchepsoute/sigma-rules?style=flat-square&color=gold)
-![Views](https://img.shields.io/badge/dynamic/json?color=blue&label=Vues&query=views_total&url=https%3A%2F%2Fraw.githubusercontent.com%2FHatchepsoute%2Fsigma-rules%2Fgithub-repo-stats%2FHatchepsoute%2Fsigma-rules%2Fghrs-data%2Foverall-stats.json&style=flat-square)
-![Clones](https://img.shields.io/badge/dynamic/json?color=green&label=Clones&query=clones_total&url=https%3A%2F%2Fraw.githubusercontent.com%2FHatchepsoute%2Fsigma-rules%2Fgithub-repo-stats%2FHatchepsoute%2Fsigma-rules%2Fghrs-data%2Foverall-stats.json&style=flat-square)
