@@ -9,9 +9,8 @@ ID: `50f27880-01d7-42b2-9368-0939504fa162`
 
 ------------------------------------------------------------------------
 
-## 🇫🇷 Diagramme
+## Diagramme
 
-📁 Source file: `DIAGRAM_INFOSTEALER_STRICT_HIGH_CONFIDENCE_FR.mmd`
 
 ``` mermaid
 flowchart TD

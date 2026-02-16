@@ -2,7 +2,7 @@
 
 [👉🏾 French version available here: ](./README_FR.md)
 
-📁 Source file: `DIAGRAM_INFOSTEALER_STRICT_HIGH_CONFIDENCE_EN.mmd`
+This directory contains styled Mermaid diagrams for the rule:
 
 ``` mermaid
 flowchart TD
