@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/Hatchepsoute/sigma-rules/graphs/traffic,102,1
+/Hatchepsoute/sigma-rules,71,34
+/Hatchepsoute/sigma-rules/pulse,39,2
+/Hatchepsoute/sigma-rules/tree/main,28,6
+/Hatchepsoute/sigma-rules/tree/main/CVE-2025-68947_BYOVD,20,7
+/Hatchepsoute/sigma-rules/tree/main/CVE-2026-21509_Microsoft_Office_Security_Feature_Bypass,18,1
+/Hatchepsoute/sigma-rules/tree/main/CVE-2026-24858_FortiOS_FortiCloud_SSO/rules,13,9
+/Hatchepsoute/sigma-rules/tree/main/CVE-2026-23550_WordPress_ModularDS,11,5
+/Hatchepsoute/sigma-rules/blob/main/CVE-2026-21509_Microsoft_Office_Security_Feature_Bypass/rules/office_com_clsid_security_feature_bypass_cve_2026_21509.yml,9,1
+/Hatchepsoute/sigma-rules/tree/main/Defense_Evasion_Security_Process_Termination/diagrams,9,1
