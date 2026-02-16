@@ -14,7 +14,7 @@ Le pack est structuré en deux modèles complémentaires :
 
 Ce dossier contient une **règle consolidée unique** :
 
-[`infostealer_STRICT_credential_access_and_exfiltration.yml`](/Infostealer_STRICT/rules/infostealer_STRICT_credential_access_and_exfiltration.yml) 
+[`infostealer_STRICT_credential_access_and_exfiltration.yml`](./Infostealer_STRICT/rules/infostealer_STRICT_credential_access_and_exfiltration.yml) 
 
 ### 🔎 Logique de détection
 
@@ -45,9 +45,9 @@ Recommandé pour les environnements privilégiant une **règle unique à très f
 
 Ce dossier contient **trois règles modulaires** :
 
--   Step 1 --- Exécution suspecte\   [`infostealer_STRICTv2_step1_suspicious_exec.yml`](/Infostealer_STRICT_Correlated/rules/infostealer_STRICTv2_step1_suspicious_exec.yml)
--   Step 2 --- Accès aux credentials navigateur\   [`infostealer_STRICTv2_step2_browser_cred_access.yml`](/Infostealer_STRICT_Correlated/rules/infostealer_STRICTv2_step2_browser_cred_access.yml)
--   Step 3 --- Egress réseau public   [`infostealer_STRICTv2_step3_public_egress.yml`](/Infostealer_STRICT_Correlated/rules/infostealer_STRICTv2_step3_public_egress.yml)
+-   Step 1 --- Exécution suspecte\   [`infostealer_STRICTv2_step1_suspicious_exec.yml`](./Infostealer_STRICT_Correlated/rules/infostealer_STRICTv2_step1_suspicious_exec.yml)
+-   Step 2 --- Accès aux credentials navigateur\   [`infostealer_STRICTv2_step2_browser_cred_access.yml`](./Infostealer_STRICT_Correlated/rules/infostealer_STRICTv2_step2_browser_cred_access.yml)
+-   Step 3 --- Egress réseau public   [`infostealer_STRICTv2_step3_public_egress.yml`](./Infostealer_STRICT_Correlated/rules/infostealer_STRICTv2_step3_public_egress.yml)
 
 
 Ces règles sont conçues pour être corrélées via :
