@@ -5,14 +5,14 @@ description: >
   Step 3 of correlated infostealer detection: public egress from common LOLBins/loaders. Correlate with Step 1 (execution) and Step 2 (credential-store access) within a short time window (<=10 minutes).
 description: >
   Step 3 of correlated infostealer detection: public egress from common LOLBins or loaders. Correlate with Step 1 (execution) and Step 2 (credential-store access) within a short time window (<=10 minutes).
-  /
-  Étape 3 de la détection corrélée d’infostealer : communication sortante vers Internet depuis des LOLBins ou des loaders couramment abusés. À corréler avec l’Étape 1 (exécution) et l’Étape 2 (accès aux stockages d’identifiants) dans une fenêtre   temporelle courte (<=10 minutes).
+  
+   FR=> Étape 3 de la détection corrélée d’infostealer : communication sortante vers Internet depuis des LOLBins ou des loaders couramment abusés. À corréler avec l’Étape 1 (exécution) et l’Étape 2 (accès aux stockages d’identifiants) dans une fenêtre   temporelle courte (<=10 minutes).
 
 references:
   - https://www.dexpose.io/deep-dive-into-arkanix-stealer-and-its-infrastructure/
   - https://attack.mitre.org/techniques/T1071/001/
   - https://attack.mitre.org/techniques/T1041/
-author: "Adama ASSIONGBON SOC & CTI Analyst Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/"
+author: "Adama ASSIONGBON SOC & CTI  Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/"
 date: 2026-01-06
 tags:
   - attack.t1071.001

@@ -1,5 +1,7 @@
 # 🕵️‍♂️ Infostealer STRICT – Détection haute confiance d’accès aux identifiants et exfiltration
 
+ [👉🏾  **English version available here**](README.md)
+ 
 ## 📌 Vue d’ensemble
 
 Cette règle Sigma permet de **détecter avec un haut niveau de confiance une activité infostealer**, en corrélant **trois comportements critiques** observés dans les campagnes réelles :

@@ -1,7 +1,6 @@
 name: Activité Infostealer Confirmée – Accès Identifiants & Exfiltration
 description: >
-  Playbook de gestion des incidents infostealer confirmés détectés via
-  une corrélation multi-étapes (exécution, accès identifiants, exfiltration).
+  Playbook de gestion des incidents infostealer confirmés détectés via une corrélation multi-étapes (exécution, accès identifiants, exfiltration).
 severity: Critique
 trigger:
   type: sigma

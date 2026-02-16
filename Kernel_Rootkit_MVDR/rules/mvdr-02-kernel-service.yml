@@ -3,7 +3,7 @@ id: 6778f01a-ed58-11f0-a580-aff152632512
 status: stable
 description: >
   Detects creation of a Windows kernel driver service (Type=1), commonly abused by kernel-mode rootkits for persistence. (« Détecte la création d’un service de pilote de noyau Windows (Type=1), couramment utilisé de manière abusive par les rootkits en mode noyau pour assurer leur persistance. »)
-author: Adama ASSIONGBON | SOC & CTI Analyst Consultant.
+author: Adama ASSIONGBON | SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 logsource:
   product: windows
   service: system

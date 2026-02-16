@@ -2,11 +2,13 @@ title: Infostealer Execution From User-Writable Path With Suspicious LOLBin (STR
 id: 26090645-90c0-40ee-9aa9-5d0037b33ae7
 status: experimental
 description: >
-  Step 1 of correlated infostealer detection: suspicious LOLBin/loader execution from user-writable paths. Use this rule as the first stage for correlation with credential-store access and external egress. FR(Étape 1 de la détection corrélée d’infostealer : exécution suspecte de LOLBins ou de loaders depuis des répertoires accessibles en écriture par l’utilisateur. Cette règle constitue la première étape de corrélation avec des accès aux stockages d’identifiants (credential stores) et des communications sortantes externes.)
+   Step 1 of correlated infostealer detection: suspicious LOLBin/loader execution from user-writable paths. Use this rule as the first stage for correlation with credential-store access and external egress. 
+  
+   FR=> (Étape 1 de la détection corrélée d’infostealer : exécution suspecte de LOLBins ou de loaders depuis des répertoires accessibles en écriture par l’utilisateur. Cette règle constitue la première étape de corrélation avec des accès aux stockages d’identifiants (credential stores) et des communications sortantes externes.)
 references:
   - https://www.dexpose.io/deep-dive-into-arkanix-stealer-and-its-infrastructure/
   - https://attack.mitre.org/techniques/T1059/
-author: "Adama ASSIONGBON SOC & CTI Analyst Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/"
+author: Adama ASSIONGBON SOC & CTI  Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026-01-06
 tags:
   - attack.execution

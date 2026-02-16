@@ -1,4 +1,12 @@
+![Sigma](https://img.shields.io/badge/Format-SIGMA-orange)
+![Validation](https://img.shields.io/badge/Sigma_Check-Passed-green)
+![Incident Response](https://img.shields.io/badge/IR-TheHive_Playbook-red)
+![Infostealer](https://img.shields.io/badge/Infostealer-red)
+
+
 # 🕵️‍♂️ Infostealer STRICT – High-Confidence Credential Access & Exfiltration Detection
+
+[👉🏾  **French version available here**](README_FR.md)
 
 ## 📌 Overview
 
@@ -103,8 +111,7 @@ This rule is based on real-world infostealer tradecraft described here:
 
 ## 👤 Author
 
-**Adama ASSIONGBON**  
-SOC & CTI Analyst Consultant  
-🔗 https://www.linkedin.com/in/adama-assiongbon-9029893a/
+**Adama ASSIONGBON**  SOC & CTI  Consultant  
+**Contact:** 🔗[linkedin profile](https://www.linkedin.com/in/adama-assiongbon-9029893a)
 
 

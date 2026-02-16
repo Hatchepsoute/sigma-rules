@@ -3,7 +3,7 @@ id: 7e2a6a12-9c6d-4c2a-8b2f-2e8bb6b2b6a1
 status: stable
 description: >
   Detects loading of a kernel driver (.sys). Kernel driver loading is rare and should always be monitored as it may indicate rootkit activity. (« Détecte le chargement d'un pilote de noyau (.sys). Le chargement d'un pilote de noyau est rare et doit toujours être surveillé, car il peut indiquer une activité de rootkit. »)
-author: Adama ASSIONGBON | SOC & CTI Analyst Consultant
+author: Adama ASSIONGBON | SOC & CTI  Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
 logsource:

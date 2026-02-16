@@ -1,7 +1,6 @@
 name: Confirmed Infostealer Activity – Credential Access & Exfiltration
 description: >
-  Playbook for handling confirmed infostealer incidents detected through
-  multi-stage correlation of execution, credential access, and exfiltration.
+  Playbook for handling confirmed infostealer incidents detected through multi-stage correlation of execution, credential access, and exfiltration.
 severity: Critical
 trigger:
   type: sigma

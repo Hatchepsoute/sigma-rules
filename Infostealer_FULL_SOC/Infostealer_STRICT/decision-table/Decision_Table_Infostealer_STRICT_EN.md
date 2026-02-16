@@ -1,22 +1,67 @@
 # 📊 Decision Table – Confirmed Infostealer Activity (STRICT)
+ 
+ [👉🏾  **French version available here**](Decision_Table_Infostealer_STRICT_FR.md)
+ 
 
-## Detection Scope
-High-confidence, multi-stage correlated detection of infostealer activity.
+## 🎯 Rule Logic
 
-## Detection Logic
-Correlation of:
-- Suspicious LOLBin execution from user-writable paths
-- Browser credential store access
-- External network exfiltration
+The rule triggers only if the 3 conditions are simultaneously true:
 
-## Analyst Decision Matrix
+1.  **Suspicious LOLBIN execution from user-writable path**
+2.  **Browser credential data access**
+3.  **Network exfiltration indicators (HTTP / web tools)**
 
-| Observed Conditions | SOC Decision | Action |
-|-------------------|-------------|--------|
-| LOLBin execution only | Monitor | No escalation |
-| LOLBin + credential access | Suspicious | Correlate events |
-| LOLBin + credential access + exfiltration | **Confirmed Infostealer Activity** | Trigger IR playbook |
+Logical condition:
 
+    selection_exec AND selection_creds AND selection_net
+
+------------------------------------------------------------------------
+
+## 🔎 Decision Table
+
+  --------------------------------------------------------------------------------
+  Suspicious       Credential     Exfil         Trigger   SOC     Interpretation
+  Execution        Access         Indicator               Level   
+  ---------------- -------------- ------------- --------- ------- ----------------
+  ❌               ❌             ❌            No        ---     No infostealer
+                                                                  behavior
+
+  ✅               ❌             ❌            No        P3      Suspicious
+                                                                  LOLBIN only
+
+  ✅               ✅             ❌            No        P2      Credential
+                                                                  access without
+                                                                  visible exfil
+
+  ✅               ❌             ✅            No        P2      Possible
+                                                                  downloader /
+                                                                  staging
+
+  ❌               ✅             ✅            No        P2      Suspicious but
+                                                                  not via
+                                                                  user-writable
+                                                                  LOLBIN
+
+  ✅               ✅             ✅            Yes       🔴 P1   Full infostealer
+                                                                  chain (exec +
+                                                                  credential
+                                                                  theft +
+                                                                  exfiltration)
+  --------------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## 🚨 Recommended SOC Response
+
+If rule triggers (3/3 conditions):
+
+-   Immediately isolate host
+-   Collect process tree & binary hash
+-   Block IP/domain
+-   Reset browser and SSO credentials
+-   Perform lateral hunting across endpoints
+
+------------------------------------------------------------------------
 ## Severity
 Critical
 
