@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/Hatchepsoute/sigma-rules/graphs/traffic,88,1
+/Hatchepsoute/sigma-rules,73,31
+/Hatchepsoute/sigma-rules/pulse,38,2
+/Hatchepsoute/sigma-rules/tree/main,34,7
+/Hatchepsoute/sigma-rules/tree/main/CVE-2026-24858_FortiOS_FortiCloud_SSO/rules,28,12
+/Hatchepsoute/sigma-rules/tree/main/CVE-2026-24858_FortiOS_FortiCloud_SSO,21,9
+/Hatchepsoute/sigma-rules/tree/main/CVE-2025-68947_BYOVD,20,7
+/Hatchepsoute/sigma-rules/tree/main/CVE-2026-21509_Microsoft_Office_Security_Feature_Bypass,18,1
+/Hatchepsoute/sigma-rules/tree/main/CVE-2026-20947_SharePoint_RCE,13,2
+/Hatchepsoute/sigma-rules/blob/main/CVE-2026-24858_FortiOS_FortiCloud_SSO/rules/fortios_forticloud_sso_abuse_broad_cve_2026_24858.yml,11,6
