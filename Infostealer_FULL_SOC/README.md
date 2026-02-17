@@ -1,3 +1,8 @@
+![Sigma](https://img.shields.io/badge/Format-SIGMA-orange)
+![Validation](https://img.shields.io/badge/Sigma_Check-Passed-green)
+![Incident Response](https://img.shields.io/badge/IR-TheHive_Playbook-red)
+![Infostealer](https://img.shields.io/badge/Infostealer-red)
+
 # 🛡️ Infostealers_FULL_SOC --- Detection Pack
 
 👉🏾 [**French version available here**](README_FR.md)
