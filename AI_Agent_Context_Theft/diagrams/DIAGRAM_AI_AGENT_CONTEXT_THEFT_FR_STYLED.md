@@ -1,4 +1,4 @@
-# 🧠 Vol de Contexte d’Agent IA – Schéma stylé (FR)
+# 🧠 Vol de Contexte d’Agent IA 
 
 ```mermaid
 flowchart TD

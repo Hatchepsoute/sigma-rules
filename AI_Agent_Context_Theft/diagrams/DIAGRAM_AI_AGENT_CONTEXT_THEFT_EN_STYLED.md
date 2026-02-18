@@ -1,4 +1,4 @@
-# 🧠 AI Agent Context Theft – Styled Attack Flow (EN)
+# 🧠 AI Agent Context Theft – Attack Flow 
 
 ```mermaid
 flowchart TD
