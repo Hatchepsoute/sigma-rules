@@ -1,6 +1,6 @@
 # 🧠 Vol de Contexte d’Agent IA – Schéma d’attaque 
+👉🏾 [**English version available here**](README.md)
 
-👉🏾 [**French version available here**](README_FR.md)
 ```mermaid
 flowchart TD
   A["Accès initial\n(infection infostealer sur poste)"] --> B["Découverte de fichiers\nRoutine générique de file-grabbing (répertoires/extensions)"]

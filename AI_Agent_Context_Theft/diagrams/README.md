@@ -1,6 +1,6 @@
 # 🧠 AI Agent Context Theft – Attack Flow 
+👉🏾 [**French version available here**](README_FR.md)
 
-👉🏾 [**English version available here**](README.md)
 ```mermaid
 flowchart TD
   A["Initial Access\n(Infostealer infection on endpoint)"] --> B["File Discovery\nGeneric file-grabber scans for sensitive dirs/extensions"]
