@@ -4,8 +4,6 @@
 
 # 🧠 AI Agent Context Theft - Sigma Detection Pack
 
-![Release](https://img.shields.io/badge/release-v1.0.0-blue?style=flat-square)
-
 👉🏾 [**French version available here**](README_FR.md)
 
 ## Overview
@@ -43,6 +41,9 @@ If STRICT or CRITICAL triggers:
 5. Assume full impersonation risk
 
 ---
+### References
+
+- https://www.infostealers.com/article/hudson-rock-identifies-real-world-infostealer-infection-targeting-openclaw-configurations/
 
 ## ✍🏿 Author
 [Adama ASSIONGBON – SOC & CTI Consultant](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
