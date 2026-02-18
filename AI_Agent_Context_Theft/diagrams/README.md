@@ -1,3 +1,7 @@
+# 🧠 AI Agent Context Theft – Attack Flow 
+👉🏾 [**French version available here**](README_FR.md)
+
+```mermaid
 flowchart TD
   A["Initial Access\n(Infostealer infection on endpoint)"] --> B["File Discovery\nGeneric file-grabber scans for sensitive dirs/extensions"]
   B --> C{"AI agent config dir found?\ne.g., .openclaw"}
@@ -18,3 +22,5 @@ flowchart TD
   M --> O["Immediate IR actions\nIsolate host, revoke tokens, rotate keys, audit agent actions"]
   N --> O
   O --> P["Post-incident hardening\nEncrypt at rest, monitor config dirs, DLP, inventory AI agents"]
+
+```

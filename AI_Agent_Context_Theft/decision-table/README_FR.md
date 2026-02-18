@@ -6,7 +6,7 @@ Aider les analystes SOC à qualifier les alertes liées au vol d’identité et 
 
 ---
 
-## 🟡 BROAD – Accès suspect aux fichiers d’agent IA
+## 🟡 BROAD - Accès suspect aux fichiers d’agent IA
 
 | Condition | Oui | Non |
 |---------|-----|-----|

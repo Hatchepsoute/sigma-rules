@@ -1,3 +1,7 @@
+# 🧠 Vol de Contexte d’Agent IA – Schéma d’attaque 
+👉🏾 [**English version available here**](README.md)
+
+```mermaid
 flowchart TD
   A["Accès initial\n(infection infostealer sur poste)"] --> B["Découverte de fichiers\nRoutine générique de file-grabbing (répertoires/extensions)"]
   B --> C{"Répertoire agent IA détecté ?\nex: .openclaw"}
@@ -18,3 +22,5 @@ flowchart TD
   M --> O["Actions IR immédiates\nIsolation, révocation tokens, rotation clés, audit agent"]
   N --> O
   O --> P["Durcissement post-incident\nChiffrement au repos, monitoring répertoires, DLP, inventaire agents IA"]
+
+```
