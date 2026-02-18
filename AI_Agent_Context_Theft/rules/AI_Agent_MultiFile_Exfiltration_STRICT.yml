@@ -1,0 +1,42 @@
+title: Single Process Accessing Multiple Critical AI Agent Files
+id: a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d
+status: experimental
+description: >
+  Detects a single process accessing multiple critical AI agent files (authentication, cryptographic identity and memory), 
+  strongly indicating full agent compromise.
+
+  FR: Détecte un processus unique accédant à plusieurs fichiers critiques d'un agent IA, indiquant une compromission complète.
+author: Adama ASSIONGBON - SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-02-17
+references:
+  - https://www.infostealers.com/article/hudson-rock-identifies-real-world-infostealer-infection-targeting-openclaw-configurations/
+tags:
+  - attack.collection
+  - attack.credential-access
+  - attack.t1005
+  - attack.t1552
+logsource:
+  category: file_event
+  product: windows
+detection:
+  selection_directory:
+    TargetFilename|contains:
+      - '\\.openclaw\\'
+      - '\\.openc1aw\\'
+  selection_auth:
+    TargetFilename|endswith: 'openclaw.json'
+  selection_crypto:
+    TargetFilename|endswith: 'device.json'
+  selection_memory:
+    TargetFilename|endswith:
+      - 'SOUL.md'
+      - 'MEMORY.md'
+      - 'AGENTS.md'
+  filter_legitimate:
+    Image|endswith:
+      - '\\OpenClaw.exe'
+      - '\\python.exe'
+  condition: selection_directory and selection_auth and selection_crypto and selection_memory and not filter_legitimate
+falsepositives:
+  - Extremely rare
+level: critical

@@ -1,0 +1,24 @@
+# 🧠 AI Agent Context Theft – Attack Flow (EN)
+
+```mermaid
+flowchart TD
+  A[Initial Access<br/>(Infostealer infection on endpoint)] --> B[File Discovery<br/>Generic file-grabber scans for sensitive dirs/extensions]
+  B --> C{AI agent config dir found?<br/>e.g., .openclaw}
+  C -- No --> Z[Continue generic stealing<br/>(browsers, wallets, apps)]
+  C -- Yes --> D[Access AI agent files (BROAD signal)<br/>openclaw.json / SOUL.md / MEMORY.md / AGENTS.md]
+  D --> E{Which file class accessed?}
+  E -- Auth secret --> F[Token theft (STRICT)<br/>openclaw.json contains reusable gateway token]
+  E -- Crypto identity --> G[Device identity theft (CRITICAL)<br/>device.json / .pem private key material]
+  E -- Memory/context --> H[Context theft (BROAD to STRICT depending on process)<br/>SOUL.md / MEMORY.md / USER.md]
+  F --> I{Process context suspicious?<br/>Temp/AppData/Downloads OR masquerading names}
+  G --> I
+  H --> I
+  I -- No --> J[Monitor / validate legitimate activity<br/>(editors, agent runtime)]
+  I -- Yes --> K[Escalate SOC<br/>L2 (BROAD) or L3 (STRICT/CRITICAL)]
+  K --> L{Multiple critical files accessed<br/>by same process?}
+  L -- Yes --> M[Full agent takeover likely (CRITICAL)<br/>Auth + Crypto + Memory accessed]
+  L -- No --> N[Targeted theft suspected<br/>(token OR keys OR memory)]
+  M --> O[Immediate IR actions<br/>Isolate host, revoke tokens, rotate keys, audit agent actions]
+  N --> O
+  O --> P[Post-incident hardening<br/>Encrypt at rest, monitor config dirs, DLP, inventory AI agents]
+```

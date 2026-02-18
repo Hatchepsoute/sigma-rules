@@ -1,0 +1,31 @@
+title: AI Agent Cryptographic Identity Access from Unexpected Process
+id: f59de936-0c3e-11f1-97ae-9704b79e784d
+status: experimental
+description: >
+  Detects access to AI agent device identity files containing private cryptographic keys (PEM). This may indicate full agent impersonation and persistent compromise.
+
+  FR: « Détecte l'accès aux fichiers d'identité d'agents IA contenant des clés cryptographiques privées (PEM).Un tel accès par un processus non autorisé peut indiquer une usurpation complète de l'identité de l'agent et une compromission persistante du système. »
+author: Adama ASSIONGBON - SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-02-16
+modified: 2026-02-18
+tags:
+  - attack.credential-access
+  - attack.persistence
+  - attack.t1552
+  - attack.t1554
+logsource:
+  category: file_event
+  product: windows
+detection:
+  crypto_files:
+    TargetFilename|endswith:
+      - 'device.json'
+      - '.pem'
+  suspicious_process:
+    Image|contains:
+      - '\\Temp\\'
+      - '\\AppData\\'
+  condition: crypto_files and suspicious_process
+falsepositives:
+  - Security audits
+level: critical

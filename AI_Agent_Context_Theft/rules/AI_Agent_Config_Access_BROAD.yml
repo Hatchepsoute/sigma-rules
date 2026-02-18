@@ -1,0 +1,56 @@
+title: Suspicious Access to AI Agent Configuration or Memory Files
+id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
+status: experimental
+description: >
+  Detects access to local AI agent configuration or memory files (e.g. OpenClaw) by unexpected processes. These files may contain authentication tokens, cryptographic material, or sensitive contextual data.
+
+  FR: « Détecte l'accès aux fichiers de configuration ou de mémoire d'agents IA locaux (exemple OpenClaw) par des processus inattendus. Ces fichiers peuvent contenir des jetons d'authentification (tokens), des éléments cryptographiques ou des données contextuelles sensibles. »
+author: Adama ASSIONGBON - SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-02-16
+modified: 2026-02-17
+references:
+  - https://www.infostealers.com/article/hudson-rock-identifies-real-world-infostealer-infection-targeting-openclaw-configurations/
+tags:
+  - attack.collection
+  - attack.credential-access
+  - attack.t1005
+  - attack.t1552
+logsource:
+  category: file_event
+  product: windows
+detection:
+  selection_directory:
+    TargetFilename|contains:
+      - '\\.openclaw\\'
+      - '\\.openc1aw\\'
+      - '\\OpenClaw\\'
+  selection_files:
+    TargetFilename|endswith:
+      - 'openclaw.json'
+      - 'SOUL.md'
+      - 'MEMORY.md'
+      - 'AGENTS.md'
+      - 'USER.md'
+      - 'paired.json'
+      - 'pending.json'
+      - 'device-auth.json'
+  selection_process:
+    Image|endswith:
+      - '.exe'
+      - '.ps1'
+      - '.bat'
+      - '.js'
+      - '.vbs'
+      - '.cmd'
+  filter_legitimate:
+    Image|endswith:
+      - '\\OpenClaw.exe'
+      - '\\python.exe'
+      - '\\code.exe'
+      - '\\notepad.exe'
+      - '\\explorer.exe'
+  condition: selection_directory and selection_files and selection_process and not filter_legitimate
+falsepositives:
+  - Legitimate backup or audit tools
+  - User manually opening files
+level: medium

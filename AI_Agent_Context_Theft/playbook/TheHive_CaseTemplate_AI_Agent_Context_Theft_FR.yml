@@ -1,0 +1,80 @@
+caseTemplate:
+  name: "Vol de Contexte / Identité d’Agent IA"
+  displayName: "Vol de Contexte Agent IA (OpenClaw & Agents IA Locaux)"
+  severity: 3
+  tlp: 2
+  tags:
+    - Agent-IA
+    - Infostealer
+    - Vol-Identite
+    - Vol-Contexte
+    - OpenClaw
+    - CTI
+  description: |
+    Modèle de cas TheHive pour les incidents de vol d’identité et de contexte d’agents IA locaux (ex : OpenClaw). Couvre l’exfiltration de jetons, la compromission d’identités cryptographiques et le vol de mémoire persistante.
+
+  tasks:
+    - title: "Qualification initiale"
+      group: "Qualification SOC"
+      order: 1
+      description: |
+        Vérifier l’alerte, le poste et l’utilisateur impactés.
+      tasks:
+        - title: "Identifier la règle déclenchée"
+          description: "Déterminer quelle règle Sigma a déclenché l’alerte."
+        - title: "Identifier le poste et l’utilisateur"
+          description: "Collecter hostname, utilisateur et détails du poste."
+        - title: "Identifier les fichiers IA accédés"
+          description: "Vérifier openclaw.json, device.json, .pem, SOUL.md, MEMORY.md."
+
+    - title: "Confinement"
+      group: "Confinement"
+      order: 2
+      description: |
+        Empêcher toute poursuite de l’exfiltration.
+      tasks:
+        - title: "Isoler le poste"
+          description: "Isolation réseau via l’EDR."
+        - title: "Bloquer le processus malveillant"
+          description: "Bloquer le hash et tuer le processus."
+        - title: "Préserver les preuves volatiles"
+          description: "Capturer l’arbre des processus et connexions réseau."
+
+    - title: "Remédiation Identité & Secrets"
+      group: "Remédiation"
+      order: 3
+      description: |
+        Révoquer et régénérer les secrets et identités IA.
+      tasks:
+        - title: "Révoquer les jetons IA"
+          description: "Invalider les tokens d’accès de l’agent IA."
+        - title: "Régénérer l’identité cryptographique"
+          description: "Rotation des clés et certificats."
+        - title: "Invalider les services appairés"
+          description: "Révoquer les accès cloud ou API associés."
+
+    - title: "Investigation"
+      group: "Investigation"
+      order: 4
+      description: |
+        Évaluer l’ampleur de la compromission.
+      tasks:
+        - title: "Reconstitution de la chronologie"
+          description: "Analyser accès fichiers, processus et trafic réseau."
+        - title: "Vérifier l’exfiltration"
+          description: "Confirmer l’exfiltration de données sensibles."
+        - title: "Auditer les actions de l’agent IA"
+          description: "Examiner les journaux et décisions de l’agent."
+
+    - title: "Restauration & Durcissement"
+      group: "Restauration"
+      order: 5
+      description: |
+        Restaurer un état sûr et prévenir la récidive.
+      tasks:
+        - title: "Nettoyer ou réinstaller le poste"
+          description: "Réinstallation OS ou nettoyage."
+        - title: "Sécuriser le déploiement IA"
+          description: "Redéployer l’agent avec chiffrement et moindre privilège."
+        - title: "Renforcer la surveillance"
+          description: "Surveiller les répertoires de configuration IA."

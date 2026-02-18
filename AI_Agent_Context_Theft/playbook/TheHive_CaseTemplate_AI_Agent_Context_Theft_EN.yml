@@ -1,0 +1,80 @@
+caseTemplate:
+  name: "AI Agent Context Theft / Identity Compromise"
+  displayName: "AI Agent Context Theft (OpenClaw & Local AI Agents)"
+  severity: 3
+  tlp: 2
+  tags:
+    - AI-Agent
+    - Infostealer
+    - Identity-Theft
+    - Context-Theft
+    - OpenClaw
+    - CTI
+  description: |
+    This case template handles incidents involving identity and context theft of local AI agents (e.g. OpenClaw). It covers token exfiltration, cryptographic identity compromise, and persistent memory theft.
+
+  tasks:
+    - title: "Initial Triage"
+      group: "SOC Triage"
+      order: 1
+      description: |
+        Validate alert, impacted host, user and triggering Sigma rule.
+      tasks:
+        - title: "Confirm triggering detection"
+          description: "Identify which Sigma rule fired and validate alert fidelity."
+        - title: "Identify impacted host and user"
+          description: "Collect hostname, username and endpoint details."
+        - title: "Identify accessed AI agent files"
+          description: "Check access to openclaw.json, device.json, .pem, SOUL.md, MEMORY.md."
+
+    - title: "Containment"
+      group: "Containment"
+      order: 2
+      description: |
+        Prevent further access or exfiltration.
+      tasks:
+        - title: "Isolate endpoint"
+          description: "Network isolate the compromised endpoint via EDR."
+        - title: "Block malicious process"
+          description: "Block hash and kill suspicious process."
+        - title: "Preserve volatile evidence"
+          description: "Capture process tree, open handles and network connections."
+
+    - title: "Identity & Secret Remediation"
+      group: "Remediation"
+      order: 3
+      description: |
+        Revoke and rotate AI agent secrets and identities.
+      tasks:
+        - title: "Revoke AI agent tokens"
+          description: "Invalidate gateway tokens used by the AI agent."
+        - title: "Regenerate device identity"
+          description: "Rotate cryptographic keys and certificates."
+        - title: "Invalidate paired services"
+          description: "Revoke any paired cloud or API services."
+
+    - title: "Investigation"
+      group: "Investigation"
+      order: 4
+      description: |
+        Investigate scope and impact of the compromise.
+      tasks:
+        - title: "Timeline reconstruction"
+          description: "Rebuild timeline of file access, process execution and network traffic."
+        - title: "Check for exfiltration"
+          description: "Confirm whether sensitive data was exfiltrated."
+        - title: "Review AI agent activity"
+          description: "Audit AI agent logs and actions for abuse."
+
+    - title: "Recovery & Hardening"
+      group: "Recovery"
+      order: 5
+      description: |
+        Restore trusted state and prevent recurrence.
+      tasks:
+        - title: "Rebuild or clean endpoint"
+          description: "Reinstall OS or clean malware as needed."
+        - title: "Secure AI agent deployment"
+          description: "Re-deploy AI agent with encryption and least privilege."
+        - title: "Improve monitoring"
+          description: "Enable monitoring of AI agent configuration directories."
