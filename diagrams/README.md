@@ -5,7 +5,7 @@
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-informational)
 
-# Sigma-Rules – Detection Engineering Philosophy
+# Sigma-Rules – Detection engineering philosophy
 
 👉🏾 [**French version available here**](README_FR.md)
 
@@ -17,29 +17,29 @@ Unlike a simple collection of Sigma rules, this repository follows a structured 
 
 ---
 
-## Core Philosophy
+## Core philosophy
 
 The project is built on five principles:
 
 1. **Threat-Driven Engineering**  
    CVEs, real-world campaigns, exploit trends, and CTI analysis are the starting point.
 
-2. **Layered Detection Strategy**  
+2. **Layered detection strategy**  
    - **BROAD** rules for visibility and hunting  
    - **STRIC**T rules for high-confidence production alerts  
 
-3. **Operational Readiness**  
+3. **Operational readiness**  
    Decision tables, triage guidance, and response playbooks are included.
 
-4. **Automation Integration**  
-   Designed to work with SIEM and SOAR platforms (TheHive, Elastic, OpenSearch, Splunk, Sentinel).
+4. **Automation integration**  
+   Designed to work with SIEM and SOAR platforms (TheHive, Elastic, OpenSearch, Splunk, Sentinel etc).
 
-5. **Continuous Improvement**  
+5. **Continuous improvement**  
    Feedback loop for tuning, false positive reduction, and detection maturity growth.
 
 ---
 
-## Executive Framework Diagram
+## Executive framework diagram
 
 ```mermaid
 flowchart LR
@@ -70,7 +70,7 @@ class D improve;
 
 ---
 
-## Operational Value
+## Operational value
 
 - Reduced MTTD  
 - Reduced MTTR  

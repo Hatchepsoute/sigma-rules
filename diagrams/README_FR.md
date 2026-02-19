@@ -5,7 +5,7 @@
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-informational)
 
-# Sigma-Rules – Philosophie d’Ingenierie de Detection
+# Sigma-Rules – Philosophie d’ingénierie de détection
 
 👉🏾  [**English version available here**](README.md)
 
@@ -13,15 +13,15 @@
 
 Ce diagramme represente la philosophie operationnelle du projet **sigma-rules**.
 
-Ce dépôt n'est pas une simple collection de règles Sigma. Il s agit d un framework structure d'ingénierie de détection conçu pour des environnements SOC reels.
+Ce dépôt n'est pas une simple collection de règles Sigma. Il s agit d un framework structure d'ingénierie de détection conçu pour des environnements SOC réels.
 
 ---
 
-## Philosophie Fondamentale
+## Philosophie fondamentale
 
 Le projet repose sur cinq principes :
 
-1. **Ingenierie pilotee par la menace**  
+1. **Ingenierie pilotée par la menace**  
    Les CVE, campagnes réelles, tendances d'exploitation et analyses CTI sont le point de départ.
 
 2. **Strategie de détection en couches**  
@@ -39,7 +39,7 @@ Le projet repose sur cinq principes :
 
 ---
 
-## Diagramme du Framework exécutive
+## Diagramme du framework exécutive
 
 ```mermaid
 flowchart LR
@@ -70,7 +70,7 @@ class D improve;
 
 ---
 
-## Valeur Opérationnelle
+## Valeur opérationnelle
 
 - Reduction du MTTD  
 - Reduction du MTTR  

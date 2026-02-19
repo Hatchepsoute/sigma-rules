@@ -103,7 +103,11 @@ Each detection pack follows a **consistent and reusable structure**:
 SOC analysts • Detection engineers • Blue teams • MSSP
 
 ---
+## 📊 Star History
 
+[![Star History Chart](https://api.star-history.com/svg?repos=Hatchepsoute/sigma-rules&type=Date)](https://star-history.com/#Hatchepsoute/sigma-rules&Date)
+
+---
 ## License
 
 This project is licensed under the **Apache License, Version 2.0**.

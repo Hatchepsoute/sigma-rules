@@ -100,7 +100,11 @@ Chaque pack de détection suit une **structure cohérente et réutilisable** :
 Analystes SOC • Ingénieurs détection • Équipes Blue Team • MSSP
 
 ---
+## 📊 Star History
 
+[![Star History Chart](https://api.star-history.com/svg?repos=Hatchepsoute/sigma-rules&type=Date)](https://star-history.com/#Hatchepsoute/sigma-rules&Date)
+
+---
 ## Licence
 
 Ce projet est sous licence **Apache License, Version 2.0**.
