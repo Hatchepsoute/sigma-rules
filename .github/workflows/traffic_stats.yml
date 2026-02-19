@@ -21,4 +21,4 @@ jobs:
           repository: ${{ github.repository }}
           ghtoken: ${{ secrets.GH_TOKEN }}
           databranch: github-repo-stats
-	publish: true
+	skipfetch: false
