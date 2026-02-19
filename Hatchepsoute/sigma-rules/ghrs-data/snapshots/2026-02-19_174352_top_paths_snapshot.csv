@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/Hatchepsoute/sigma-rules/graphs/traffic,94,1
+/Hatchepsoute/sigma-rules,74,37
+/Hatchepsoute/sigma-rules/pulse,33,3
+/Hatchepsoute/sigma-rules/tree/main,28,6
+/Hatchepsoute/sigma-rules/tree/main/CVE-2025-68947_BYOVD,20,7
+/Hatchepsoute/sigma-rules/tree/main/CVE-2026-23550_WordPress_ModularDS,12,5
+/Hatchepsoute/sigma-rules/tree/main/AI_Agent_Context_Theft,9,2
+/Hatchepsoute/sigma-rules/tree/main/Defense_Evasion_Security_Process_Termination/diagrams,9,1
+/Hatchepsoute/sigma-rules/graphs/commit-activity,8,3
+/Hatchepsoute/sigma-rules/blob/main/README_FR.md,8,2
