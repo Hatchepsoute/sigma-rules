@@ -1,0 +1,31 @@
+flowchart LR
+    %% =========================================================
+    %% SIGMA-RULES - Vue Exécutive SOC
+    %% Menace → Détecter → Répondre
+    %% GitHub Mermaid Compatible
+    %% =========================================================
+
+    A[MENACE<br/>CVE • Ransomware • Exploits • TTPs<br/>Surface d’attaque réelle]
+
+    B[DÉTECTER<br/>Règles Sigma (BROAD + STRICT)<br/>Intégration SIEM multi-plateforme<br/>Couverture élevée + Confiance élevée]
+
+    C[RÉPONDRE<br/>Tables décisionnelles • Playbooks • TheHive<br/>Confinement • Investigation • Remédiation]
+
+    A --> B
+    B --> C
+    C --> A
+
+    %% Impact opérationnel
+    B --> D[Impact Métier<br/>MTTD ↓ • MTTR ↓<br/>Maturité de détection ↑]
+
+    %% Styling
+    classDef menace fill:#0b1220,stroke:#334155,color:#e2e8f0;
+    classDef detect fill:#0b2a1a,stroke:#10b981,color:#ecfdf5;
+    classDef respond fill:#2a0b0b,stroke:#ef4444,color:#fff1f2;
+    classDef valeur fill:#1f2937,stroke:#a3e635,color:#ecfccb;
+
+    class A menace;
+    class B detect;
+    class C respond;
+    class D valeur;
+
