@@ -5,95 +5,36 @@
 ![MITRE](https://img.shields.io/badge/MITRE-ATT%26CK-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-informational)
  
+# Sigma-Rules -- Framework Menace à Réponse
 
-# SOC Detection to Response - Operational Flow Diagram
+👉🏾  [**English version available here**](README.md)
 
- 👉🏾  [**English version available here**](README.md)
----
+**Menace → Détecter → Répondre → Améliorer**
 
-### 📌 Description
+Ce diagramme représente la philosophie opérationnelle du projet `sigma-rules` :\ un framework structuré d'ingénierie de détection conçu pour des environnements SOC réels.
 
-Ce diagramme illustre le **cycle opérationnel complet de détection et de réponse SOC**, depuis le contexte de menace (Threat Intelligence / CVE) jusqu’au retour d’expérience post-incident.
+Il relie :
 
-Il représente une **chaîne réaliste Blue Team / SOC**, intégrant :
-- SIEM
-- règles Sigma (Hunting & Production)
-- Triage SOC N1/N2
-- SOAR et gestion d’incident
-- Amélioration continue des règles et du durcissement
+-   Threat Intelligence et analyse des CVE\
+-   Développement de règles Sigma (couches BROAD + STRICT)\
+-   Intégration SIEM\
+-   Triage SOC et aide à la décision\
+-   Réponse à incident via SOAR\
+-   Amélioration continue des détections
 
-Ce flux est volontairement générique afin d’être **agnostique de l’outil** (Wazuh, Splunk, Elastic, OpenSearch, Sentinel, etc.).
+Le modèle est agnostique des outils et compatible avec les principales plateformes SIEM et SOAR.
 
----
+------------------------------------------------------------------------
 
-### 🧠 Lecture du diagramme
+### Valeur Executive
 
-1. **Contexte de la menace / CVE**  
-   Sources externes : avis de sécurité, expositions, CTI, bulletins éditeurs.
+-   Réduction du MTTD\
+-   Réduction du MTTR\
+-   Standardisation des opérations SOC\
+-   Maturité de détection renforcée\
+-   Amélioration continue de la posture de sécurité
 
-2. **Télémétrie**  
-   Collecte des logs et événements :
-   - Postes de travail
-   - Serveurs
-   - Réseau
-   - Cloud
+------------------------------------------------------------------------
 
-3. **Ingestion & normalisation SIEM**  
-   - Parsing  
-   - Enrichissement  
-   - Corrélation  
-
-4. **Règles Sigma**  
-   - **BROAD / BROADPLUS** : hunting, détection large  
-   - **STRICT** : détection production à faible bruit  
-
-5. **Alerte générée**  
-   L’alerte contient :
-   - Gravité  
-   - Contexte  
-   - Preuves techniques  
-
-6. **Triage SOC N1 / N2**  
-   - Validation  
-   - Délimitation du périmètre  
-   - Évaluation de l’impact  
-
-7. **Décision**
-   - **Faux positif** → Clôture + tuning (réduction du bruit)
-   - **Vrai positif** → Gestion d’incident
-
-8. **Gestion des incidents**  
-   - TheHive  
-   - Outils de ticketing  
-
-9. **Playbook SOAR**  
-   Actions automatisées ou semi-automatisées :
-   - Enrichissement
-   - Confinement
-   - Notification
-
-10. **Actions de remédiation**
-    - Blocage des IoCs
-    - Isolation de l’hôte
-    - Réinitialisation des identifiants
-    - Correction de la vulnérabilité
-
-11. **Post-Incident**
-    - Leçons retenues
-    - Mise à jour des règles
-    - Renforcement de la posture de sécurité
-
-👉🏾 La boucle de retour illustre l’**amélioration continue du SOC**.
-
----
-
-### 🎯 Objectifs du diagramme
-
-- Support pédagogique SOC / Blue Team
-- Documentation d’architecture SOC
-- Présentation client ou management
-- Base de travail pour playbooks SOAR
-- Standardisation des workflows SOC
----
-![SOC Framework](sigma_rules_vue_globale_soc_3D_FR.png)
-
+🛡️ Maintenu dans le cadre du projet d'ingénierie de détection **sigma-rules**
+![SOC Diagram](DIAGRAM_SIGMA_RULES_REPO_OVERVIEW.mmd)
