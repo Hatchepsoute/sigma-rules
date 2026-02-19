@@ -1,21 +1,24 @@
-name: Sauvegarde des stats de trafic
+name: Save GitHub Traffic Stats
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"   # daily (UTC)
   workflow_dispatch:
 
 jobs:
   run-stats:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # C'est cette ligne qui manque pour autoriser l'écriture
-    steps:
-      - name: Checkout du code
-        uses: actions/checkout@v4 # Passage à la v4 (plus récente)
 
-      - name: Collecter et générer les stats
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Collect and generate stats
         uses: jgehrcke/github-repo-stats@v1.4.2
         with:
           repository: ${{ github.repository }}
           ghtoken: ${{ secrets.GH_TOKEN }}
+
