@@ -5,18 +5,18 @@ flowchart LR
     %% GitHub Mermaid Compatible
     %% =========================================================
 
-    A[MENACE<br/>CVE • Ransomware • Exploits • TTPs<br/>Surface d’attaque réelle]
+    A["MENACE<br/>CVE • Ransomware • Exploits • TTPs<br/>Surface d’attaque réelle"]
 
-    B[DÉTECTER<br/>Règles Sigma (BROAD + STRICT)<br/>Intégration SIEM multi-plateforme<br/>Couverture élevée + Confiance élevée]
+    B["DÉTECTER<br/>Règles Sigma (BROAD + STRICT)<br/>Intégration SIEM multi-plateforme<br/>Couverture élevée + Confiance élevée"]
 
-    C[RÉPONDRE<br/>Tables décisionnelles • Playbooks • TheHive<br/>Confinement • Investigation • Remédiation]
+    C["RÉPONDRE<br/>Tables décisionnelles • Playbooks • TheHive<br/>Confinement • Investigation • Remédiation"]
 
     A --> B
     B --> C
     C --> A
 
     %% Impact opérationnel
-    B --> D[Impact Métier<br/>MTTD ↓ • MTTR ↓<br/>Maturité de détection ↑]
+    B --> D["Impact Métier<br/>MTTD ↓ • MTTR ↓<br/>Maturité de détection ↑"]
 
     %% Styling
     classDef menace fill:#0b1220,stroke:#334155,color:#e2e8f0;
