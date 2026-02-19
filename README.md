@@ -105,8 +105,9 @@ SOC analysts • Detection engineers • Blue teams • MSSP
 ---
 ## 📊 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Hatchepsoute/sigma-rules&type=Date)](https://star-history.com/#Hatchepsoute/sigma-rules&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Hatchepsoute/sigma-rules&type=date&legend=top-left)](https://www.star-history.com/#Hatchepsoute/sigma-rules&type=date&legend=top-left)
 
+> Star history reflects community interest and visibility.  
 ---
 ## License
 
