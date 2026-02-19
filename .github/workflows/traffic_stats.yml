@@ -8,12 +8,11 @@ on:
 jobs:
   run-stats:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Collect and generate stats
@@ -21,4 +20,5 @@ jobs:
         with:
           repository: ${{ github.repository }}
           ghtoken: ${{ secrets.GH_TOKEN }}
+          databranch: github-repo-stats
 
