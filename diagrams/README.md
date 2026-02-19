@@ -37,3 +37,5 @@ The model is tool-agnostic and compatible with modern SIEM and SOAR platforms.
 ------------------------------------------------------------------------
 
 🛡️ Maintained as part of the **sigma-rules detection engineering project**
+
+![Diagram](DIAGRAM_SIGMA_RULES_PROJECT_OVERVIEW.mmd)

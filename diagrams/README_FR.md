@@ -38,4 +38,4 @@ Le modèle est agnostique des outils et compatible avec les principales platefor
 
 🛡️ Maintenu dans le cadre du projet d'ingénierie de détection **sigma-rules**
 
-![SOC](DIAGRAM_SIGMA_RULES_PROJECT_OVERVIEW.mmd)
+![Diagramme](DIAGRAM_SIGMA_RULES_PROJECT_OVERVIEW_FR.mmd)
