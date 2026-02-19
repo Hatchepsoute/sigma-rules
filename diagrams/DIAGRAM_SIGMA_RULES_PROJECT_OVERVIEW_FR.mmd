@@ -1,56 +1,31 @@
-flowchart TB
-  %% =========================================================
-  %% SIGMA-RULES - Project Overview (Conceptual / SOC-oriented)
-  %% GitHub Mermaid compatible
-  %% =========================================================
+flowchart LR
+    %% =========================================================
+    %% SIGMA-RULES - Vue Executive SOC
+    %% Menace → Détecter → Répondre
+    %% GitHub Mermaid Compatible
+    %% =========================================================
 
-  A[Threat Landscape<br/>CVE • Campaigns • TTPs • Malware] --> B[CTI Research & Context<br/>Write-up • PoC review • Observables]
-  B --> C[Detection Engineering<br/>Hypotheses • Log sources • Fields mapping]
+    A[MENACE<br/>CVE • Ransomware • Exploits • TTPs<br/>Surface d’attaque réelle]
 
-  C --> D1[BROAD Rules<br/>Hunting / Early Warning<br/>High coverage]
-  C --> D2[STRICT Rules<br/>High confidence<br/>Low false positives]
+    B[DÉTECTER<br/>Règles Sigma (BROAD + STRICT)<br/>Intégration SIEM multi-plateforme<br/>Couverture élevée + Confiance élevée]
 
-  D1 --> E[SIEM / Pipeline Integration<br/>OpenSearch • Elastic • Sentinel • Splunk]
-  D2 --> E
+    C[RÉPONDRE<br/>Tables décisionnelles • Playbooks • TheHive<br/>Confinement • Investigation • Remédiation]
 
-  E --> F[Triage Guidance<br/>Decision Tables<br/>L1/L2 actions • escalation criteria]
-  F --> G[Response Playbooks<br/>Generic IR + TheHive templates<br/>Contain • Collect • Eradicate]
+    A --> B
+    B --> C
+    C --> A
 
-  G --> H[Validation & QA<br/>Sigma lint/validate scripts<br/>CI-ready checks]
-  H --> I[Continuous Improvement<br/>Tuning FP/FN • New variants<br/>Versioning • Changelog]
+    %% Impact opérationnel
+    B --> D[Impact Métier<br/>MTTD ↓ • MTTR ↓<br/>Maturité de détection ↑]
 
-  I --> J[Community Delivery<br/>GitHub packs • READMEs EN/FR<br/>Diagrams • Releases]
-  J --> B
-s
-  %% =========================
-  %% SOC Value Outcomes
-  %% =========================
-  E --> K[Operational Outcomes<br/>MTTD ↓ • MTTR ↓<br/>Coverage ↑ • Consistency ↑]
+    %% Styling
+    classDef menace fill:#0b1220,stroke:#334155,color:#e2e8f0;
+    classDef detect fill:#0b2a1a,stroke:#10b981,color:#ecfdf5;
+    classDef respond fill:#2a0b0b,stroke:#ef4444,color:#fff1f2;
+    classDef valeur fill:#1f2937,stroke:#a3e635,color:#ecfccb;
 
-  %% =========================
-  %% Styling
-  %% =========================
-  classDef threat fill:#0b1220,stroke:#334155,color:#e2e8f0;
-  classDef cti fill:#0f172a,stroke:#475569,color:#e2e8f0;
-  classDef eng fill:#111827,stroke:#64748b,color:#ffffff;
-  classDef broad fill:#0b2a1a,stroke:#10b981,color:#ecfdf5;
-  classDef strict fill:#2a0b0b,stroke:#ef4444,color:#fff1f2;
-  classDef ops fill:#0b1f2a,stroke:#1f2937,color:#e2e8f0;
-  classDef guide fill:#1e293b,stroke:#64748b,color:#e2e8f0;
-  classDef qa fill:#111827,stroke:#94a3b8,color:#ffffff;
-  classDef comm fill:#0f172a,stroke:#64748b,color:#e2e8f0;
-  classDef outcome fill:#1f2937,stroke:#a3e635,color:#ecfccb;
-
-  class A threat;
-  class B cti;
-  class C eng;
-  class D1 broad;
-  class D2 strict;
-  class E ops;
-  class F guide;
-  class G guide;
-  class H qa;
-  class I qa;
-  class J comm;
-  class K outcome;
+    class A menace;
+    class B detect;
+    class C respond;
+    class D valeur;
 
