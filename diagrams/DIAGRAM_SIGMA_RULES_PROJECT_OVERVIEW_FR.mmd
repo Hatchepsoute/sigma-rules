@@ -1,31 +1,34 @@
 flowchart LR
-    %% =========================================================
-    %% SIGMA-RULES - Vue Executive SOC
-    %% Menace → Détecter → Répondre
-    %% GitHub Mermaid Compatible
-    %% =========================================================
 
-    A[MENACE<br/>CVE • Ransomware • Exploits • TTPs<br/>Surface d’attaque réelle]
+A["MENACE
+CVE - Ransomware - Exploits - TTPs
+Surface d attaque reelle"]
 
-    B[DÉTECTER<br/>Règles Sigma (BROAD + STRICT)<br/>Intégration SIEM multi-plateforme<br/>Couverture élevée + Confiance élevée]
+B["DETECTER
+Regles Sigma BROAD et STRICT
+Integration SIEM multi plateforme
+Couverture elevee et confiance elevee"]
 
-    C[RÉPONDRE<br/>Tables décisionnelles • Playbooks • TheHive<br/>Confinement • Investigation • Remédiation]
+C["REPONDRE
+Tables decisionnelles - Playbooks - TheHive
+Confinement - Investigation - Remediation"]
 
-    A --> B
-    B --> C
-    C --> A
+D["Impact Metier
+MTTD en baisse
+MTTR en baisse
+Maturite de detection en hausse"]
 
-    %% Impact opérationnel
-    B --> D[Impact Métier<br/>MTTD ↓ • MTTR ↓<br/>Maturité de détection ↑]
+A --> B
+B --> C
+C --> A
+B --> D
 
-    %% Styling
-    classDef menace fill:#0b1220,stroke:#334155,color:#e2e8f0;
-    classDef detect fill:#0b2a1a,stroke:#10b981,color:#ecfdf5;
-    classDef respond fill:#2a0b0b,stroke:#ef4444,color:#fff1f2;
-    classDef valeur fill:#1f2937,stroke:#a3e635,color:#ecfccb;
+classDef menace fill:#0b1220,stroke:#334155,color:#e2e8f0;
+classDef detect fill:#0b2a1a,stroke:#10b981,color:#ecfdf5;
+classDef respond fill:#2a0b0b,stroke:#ef4444,color:#fff1f2;
+classDef valeur fill:#1f2937,stroke:#a3e635,color:#ecfccb;
 
-    class A menace;
-    class B detect;
-    class C respond;
-    class D valeur;
-
+class A menace;
+class B detect;
+class C respond;
+class D valeur;
