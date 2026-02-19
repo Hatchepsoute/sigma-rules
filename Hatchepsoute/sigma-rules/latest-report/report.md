@@ -1,5 +1,5 @@
 % Statistics for Hatchepsoute/sigma-rules
-% Generated for [Hatchepsoute/sigma-rules](https://github.com/Hatchepsoute/sigma-rules) with [jgehrcke/github-repo-stats](https://github.com/jgehrcke/github-repo-stats) at 2026-02-19 17:25 UTC.
+% Generated for [Hatchepsoute/sigma-rules](https://github.com/Hatchepsoute/sigma-rules) with [jgehrcke/github-repo-stats](https://github.com/jgehrcke/github-repo-stats) at 2026-02-19 17:43 UTC.
 
 
 ## Views
@@ -84,7 +84,7 @@ Top 15 referrers: 01: `linkedin.com`, 02: `github.com`, 03: `com.linkedin.androi
 
 <div id="chart_paths_top_n_alltime" class="full-width-chart"></div>
 
-Top 15 paths: 01: `/`, 02: `/tree/main/CVE-2026-24858_FortiOS_FortiCloud_SSO/rules`, 03: `/tree/main/CVE-2026-24858_FortiOS_FortiCloud_SSO`, 04: `/tree/main/CVE-2025-68947_BYOVD`, 05: `/tree/main`, 06: `/blob/main/CVE-2026-24858_FortiOS_FortiCloud_SSO/rules/fortios_forticloud_sso_abuse_broad_cve_2026_24858.yml`, 07: `/tree/main/CVE-2026-23550_WordPress_ModularDS`, 08: `/graphs/commit-activity`, 09: `/pulse`, 10: `/tree/main/AI_Agent_Context_Theft`, 11: `/blob/main/README_FR.md`, 12: `/graphs/contributors`, 13: `/tree/main/CVE-2026-20947_SharePoint_RCE`, 14: `/graphs/traffic`, 15: `/blob/main/CVE-2026-21509_Microsoft_Office_Security_Feature_Bypass/rules/office_com_clsid_security_feature_bypass_cve_2026_21509.yml`
+Top 15 paths: 01: `/`, 02: `/tree/main/CVE-2026-24858_FortiOS_FortiCloud_SSO/rules`, 03: `/tree/main/CVE-2026-24858_FortiOS_FortiCloud_SSO`, 04: `/tree/main/CVE-2025-68947_BYOVD`, 05: `/tree/main`, 06: `/blob/main/CVE-2026-24858_FortiOS_FortiCloud_SSO/rules/fortios_forticloud_sso_abuse_broad_cve_2026_24858.yml`, 07: `/tree/main/CVE-2026-23550_WordPress_ModularDS`, 08: `/graphs/commit-activity`, 09: `/pulse`, 10: `/tree/main/CVE-2026-20947_SharePoint_RCE`, 11: `/tree/main/AI_Agent_Context_Theft`, 12: `/graphs/contributors`, 13: `/blob/main/README_FR.md`, 14: `/tree/main/Defense_Evasion_Security_Process_Termination/diagrams`, 15: `/tree/main/CVE-2026-21509_Microsoft_Office_Security_Feature_Bypass`
 
 
 <script type="text/javascript">
