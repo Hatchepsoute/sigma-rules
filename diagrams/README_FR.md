@@ -24,22 +24,22 @@ Le projet repose sur cinq principes :
 1. **Ingenierie pilotee par la menace**  
    Les CVE, campagnes réelles, tendances d'exploitation et analyses CTI sont le point de départ.
 
-2. **Strategie de detection en couches**  
+2. **Strategie de détection en couches**  
    - Règles **BROAD** pour la visibilité et le hunting  
    - Règles **STRICT** pour des alertes production a forte confiance  
 
 3. **Prêt pour l'opérationnel**  
-   Tables décisionnelles, aident au triage et playbooks de réponse inclus.
+   Tables décisionnelles, aide au triage et playbooks de réponse inclus.
 
 4. **Intégration de l'automatisation**  
    Conçu pour fonctionner avec SIEM et SOAR (TheHive, Elastic, OpenSearch, Splunk, Sentinel etc).
 
 5. **Amélioration continue**  
-   Boucle de feedback pour le tuning, la reduction du bruit et l'augmentation de la maturité.
+   Boucle de feedback pour le tuning, la réduction du bruit et l'augmentation de la maturité.
 
 ---
 
-## Diagramme du Framework Executive
+## Diagramme du Framework exécutive
 
 ```mermaid
 flowchart LR
@@ -70,7 +70,7 @@ class D improve;
 
 ---
 
-## Valeur Operationnelle
+## Valeur Opérationnelle
 
 - Reduction du MTTD  
 - Reduction du MTTR  
@@ -80,8 +80,9 @@ class D improve;
 
 ---
 
-Maintenu dans le cadre du projet d ingenierie de detection **sigma-rules**
+Maintenu dans le cadre du projet d'ingénierie de détection **sigma-rules**
+---
+## ✍🏿 Auteur
 
-**Auteur :** Adama ASSIONGBON – Consultant SOC & CTI  
-[Profil LinkedIn](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+[Adama ASSIONGBON – Consultant SOC & CTI ](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 

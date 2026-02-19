@@ -81,7 +81,7 @@ class D improve;
 ---
 
 Maintained as part of the **sigma-rules Detection Engineering Project**
----
+
 ## ✍🏿 Author
 [Adama ASSIONGBON – SOC & CTI Consultant](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
