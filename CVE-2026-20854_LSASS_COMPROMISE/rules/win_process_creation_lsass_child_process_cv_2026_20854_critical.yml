@@ -1,0 +1,53 @@
+title: CRITICAL - LSASS Spawning Child Process (Active Exploitation CVE-2026-20854)
+id: 3a4f5d6e-7b8c-9d0e-1f2a-3b4c5d6e7f8a
+status: experimental
+description: |
+  CRITICAL - Detects LSASS.exe creating a child process. LSASS should NEVER spawn child processes in normal operation. This is a strong indicator of code execution within LSASS, such as exploitation of CVE-2026-20854 or other LSASS vulnerabilities.
+  
+  FR => CRITIQUE - Détecte LSASS.exe créant un processus enfant. LSASS ne doit JAMAIS créer de processus enfants en fonctionnement normal. C'est un indicateur fort d'exécution de code dans LSASS, comme l'exploitation de CVE-2026-20854.
+references:
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-20854
+  - https://attack.mitre.org/techniques/T1003/001/
+author: Adama ASSIONGBON SOC/CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-02-21
+modified: 2026-02-21
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    ParentImage|endswith: '\lsass.exe'
+    IntegrityLevel|contains:
+      - High
+      - System
+  filter_werfault:
+    Image|endswith: '\WerFault.exe'  # Windows Error Reporting (rare, en cas de crash)
+  filter_legit_signed:
+    SignatureStatus: Valid
+    SignatureProductName|contains: 
+      - 'Microsoft Windows'
+      - 'Microsoft Corporation'
+  condition: selection and not filter_werfault and not filter_legit_signed
+fields:
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - IntegrityLevel
+  - User
+  - ProcessGuid
+  - ParentProcessGuid
+  - Hostname
+  - SignatureStatus
+  - SignatureProductName
+falsepositives:
+  - Almost none. Only possible during a system crash (WerFault.exe) which is filtered.
+  - If a Microsoft-signed tool legitimately runs as child of LSASS (extremely rare), add to filter.
+level: critical
+tags:
+  - attack.credential-access
+  - attack.privilege-escalation
+  - attack.t1003
+  - attack.t1003.001
+  - attack.t1068
+  - cve.2026-20854

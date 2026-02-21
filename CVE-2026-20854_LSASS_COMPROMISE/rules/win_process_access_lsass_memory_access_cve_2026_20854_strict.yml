@@ -1,0 +1,110 @@
+title: STRICT - LSASS Memory Access With Suspicious Access Mask (Possible Credential Dumping) (CVE-2026-20854)
+id: 5f11ecc0-2aa8-4193-8837-49d981c566af
+status: experimental
+description: |
+  High-confidence detection of suspicious process access to LSASS memory with commonly abused access masks. Designed to catch credential dumping / LSASS read attempts potentially related to CVE-2026-20854 post-exploitation.
+  
+  FR => Détection à haute confiance d'un accès suspect à la mémoire de LSASS via des masques d'accès couramment abusés.
+  Conçue pour identifier des tentatives de credential dumping / lecture de LSASS potentiellement liées à une exploitation postérieure à CVE-2026-20854.
+references:
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-20854
+  - https://www.cve.org/CVERecord?id=CVE-2026-20854
+  - https://attack.mitre.org/techniques/T1003/001/
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-20854
+author: Adama ASSIONGBON SOC/CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-01-20
+modified: 2026-02-21
+logsource:
+  product: windows
+  category: process_access
+detection:
+  # Sélection de l'accès à LSASS avec des masks suspects
+  selection_lsass_access:
+    TargetImage|endswith: '\lsass.exe'
+    GrantedAccess:
+      - '0x10'          # PROCESS_VM_READ
+      - '0x30'          # PROCESS_VM_READ | PROCESS_VM_WRITE
+      - '0x1410'        # PROCESS_VM_READ | PROCESS_VM_OPERATION | 0x1000 (très suspect)
+  
+  # Outils de dump connus (avec filtrage des signés Microsoft)
+  selection_known_dumpers:
+    SourceImage|endswith:
+      - '\procdump.exe'
+      - '\procdump64.exe'
+      - '\rundll32.exe'
+      - '\comsvcs.exe'
+      - '\nanodump.exe'
+      - '\lsassy.exe'
+      - '\mimikatz.exe'
+  
+  # Filtre pour les outils Microsoft légitimes (ex: procdump signé)
+  filter_microsoft_signed_tools:
+    SourceImage|endswith:
+      - '\procdump.exe'
+      - '\procdump64.exe'
+      - '\rundll32.exe'
+      - '\comsvcs.exe'
+    SignatureStatus: Valid
+    SignatureProductName|contains: 'Microsoft'
+  
+  # Masque d'accès fort (0x1410) en correspondance exacte
+  selection_strong_accessmask:
+    GrantedAccess: '0x1410'
+  
+  # Filtres pour les processus légitimes (par chemin et signature)
+  filter_legitimate:
+    # Processus système Microsoft
+    - SourceImage|startswith:
+        - 'C:\Windows\System32\'
+        - 'C:\Windows\SysWOW64\'
+      SignatureStatus: Valid
+      SignatureProductName|contains: 'Microsoft'
+    
+    # Antivirus/EDR Microsoft
+    - SourceImage|startswith:
+        - 'C:\Program Files\Windows Defender\'
+        - 'C:\Program Files\Microsoft Security Client\'
+        - 'C:\ProgramData\Microsoft\Windows Defender\'
+      SignatureStatus: Valid
+    
+    # EDR/AV tiers courants (à adapter à votre environnement)
+    - SourceImage|startswith:
+        - 'C:\Program Files\SentinelOne\'
+        - 'C:\Program Files\CrowdStrike\'
+        - 'C:\Program Files\CarbonBlack\'
+        - 'C:\Program Files\VMware\VMware Tools\'
+    
+    # Outils d'administration légitimes
+    - SourceImage|endswith:
+        - '\taskmgr.exe'
+        - '\perfmon.exe'
+        - '\mmc.exe'
+      SignatureStatus: Valid
+  
+  # Condition finale
+  condition: |
+    selection_lsass_access and 
+    (
+      selection_strong_accessmask or 
+      (selection_known_dumpers and not filter_microsoft_signed_tools)
+    ) and 
+    not filter_legitimate
+fields:
+  - SourceImage
+  - TargetImage
+  - GrantedAccess
+  - CallTrace
+  - User
+  - ProcessGuid
+  - TargetProcessGuid
+  - Hostname
+  - SignatureStatus
+  - SignatureProductName
+falsepositives:
+  - Very rare. Legitimate security scans or backups accessing LSASS with proper signatures.
+  - Some EDR solutions may still trigger; add to allowlist by path and signer if necessary.
+level: high
+tags:
+  - attack.credential-access
+  - attack.t1003
+  - attack.t1003.001
