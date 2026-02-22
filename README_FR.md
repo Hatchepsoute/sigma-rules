@@ -99,12 +99,14 @@ Chaque pack de détection suit une **structure cohérente et réutilisable** :
 
 Analystes SOC • Ingénieurs détection • Équipes Blue Team • MSSP
 
----
+
+<!--
 ## 📊 Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Hatchepsoute/sigma-rules&type=Date)](https://star-history.com/#Hatchepsoute/sigma-rules&Date)
 
-> L’évolution des étoiles reflète l’intérêt et la visibilité communautaire.  
+> L’évolution des étoiles reflète l’intérêt et la visibilité communautaire.
+-->
 ---
 ## Licence
 
