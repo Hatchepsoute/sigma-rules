@@ -1,8 +1,6 @@
 # Validation des règles Sigma – Windows
-
-Ce document explique comment **valider toutes les règles Sigma** du dépôt sous **Windows** à l’aide du script PowerShell fourni.
-
 👉🏾 [**English version available**](README.md)
+Ce document explique comment **valider toutes les règles Sigma** du dépôt sous **Windows** à l’aide du script PowerShell fourni.
 
 ---
 
