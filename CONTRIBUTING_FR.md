@@ -1,17 +1,16 @@
-👉🏾 English version available here: [CONTRIBUTING.md](CONTRIBUTING.md)
 # Contribuer au projet sigma-rules
-
+👉🏾 [English version available here](CONTRIBUTING.md)
 Merci pour votre intérêt à contribuer à ce projet 🙌  
 Ce dépôt vise à fournir du **contenu Sigma prêt pour des SOC de production** à destination des équipes SOC, MSSP et Detection Engineers.
-Toute contribution est la bienvenue, sous réserve du respect des règles ci-dessous.
+Toute contribution est la bienvenue.
 
 ---
 
 ## 🎯 Périmètre des contributions
 
-Les contributions acceptées concernent notamment :
+Les contributions concernent notamment :
 
-- Règles Sigma (BROAD, STRICT, SUPPORT, corrélation)
+- Règles Sigma (BROAD, STRICT)
 - Packs de détection orientés CVE
 - Packs de détection orientés campagne
 - Tables de décision SOC

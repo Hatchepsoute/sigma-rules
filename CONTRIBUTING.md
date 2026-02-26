@@ -1,20 +1,17 @@
-👉🏾 **French version available here:** [CONTRIBUTING_FR.md](CONTRIBUTING_FR.md)
-
 # Contributing to sigma-rules
-
+👉🏾 [**French version available here**](CONTRIBUTING_FR.md)
 Thank you for your interest in contributing to this project 🙌  
-This repository aims to provide **production-ready Sigma detection content**
-for SOC teams, MSSPs, and Detection Engineers.
+This repository aims to provide **production-ready Sigma detection content** for SOC teams, MSSPs, and Detection Engineers.
 
-All contributions are welcome, provided they follow the guidelines below.
+All contributions are welcome.
 
 ---
 
-## 🎯 Scope of Contributions
+## 🎯 Scope of contributions
 
 We welcome contributions related to:
 
-- Sigma detection rules (BROAD, STRICT, SUPPORT, correlation)
+- Sigma detection rules (BROAD, STRICT)
 - CVE-focused detection packs
 - Campaign-based detection packs
 - Decision tables (SOC triage & response)
