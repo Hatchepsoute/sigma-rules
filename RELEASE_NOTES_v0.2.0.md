@@ -1,4 +1,4 @@
-# Release v0.2.0 – Patch Tuesday Detection Pack Update (2025-12-22)
+# Release v0.2.0 - Patch tuesday detection pack update (2025-12-22)
 
 ## Highlights
 - ✅ Added full SOC pack for **CVE-2025-54100 (Windows Userland RCE)**:
@@ -7,7 +7,7 @@
   - Attack flow diagrams (SVG + 3D PNG)
   - SOAR-ready TheHive playbook YAML
 
-## Recommended Deployment
+## Recommended deployment
 - Enable **STRICT** rule for alerting/actioning
 - Keep **BROAD** rule for hunting and context enrichment
 - Use decision table for standardized SOC analyst L1/L2 triage

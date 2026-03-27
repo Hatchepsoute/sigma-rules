@@ -1,0 +1,42 @@
+title: Suspicious DLL Creation In Print Spooler Driver Path - CVE-2026-23669
+id: d3e4f5a6-b7c8-4d91-9a2b-6f1e3c9d8a77
+status: experimental
+description: |
+  Detects DLL file creation by the Windows Print Spooler service in sensitive spool directories.
+  This behavior is highly suspicious and may indicate exploitation of Print Spooler vulnerabilities such as CVE-2026-23669 for persistence or privilege escalation.
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2026-23669
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-23669
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-23669
+author: Adama Assiongbon SOC & CTI consultant  | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-03-27
+logsource:
+  category: file_event
+  product: windows
+detection:
+  selection_spoolsv:
+    Image|endswith: '\spoolsv.exe'
+
+  selection_target_path:
+    TargetFilename|contains:
+      - '\Windows\System32\spool\drivers\'
+      - '\Windows\System32\spool\prtprocs\'
+
+  selection_dll:
+    TargetFilename|endswith: '.dll'
+
+  filter_legit:
+    TargetFilename|endswith:
+      - '\PrintConfig.dll'
+
+  condition: selection_spoolsv and selection_target_path and selection_dll and not filter_legit
+
+falsepositives:
+  - Legitimate printer driver installation or update
+  - Print server maintenance operations
+level: high
+tags:
+  - attack.persistence
+  - attack.privilege-escalation
+  - attack.t1574
+  - cve.2026-23669

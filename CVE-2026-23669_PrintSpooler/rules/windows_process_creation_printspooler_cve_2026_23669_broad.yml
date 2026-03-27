@@ -1,0 +1,47 @@
+title: Suspicious Child Process Spawned By Print Spooler - CVE-2026-23669
+id: 9c1a6c3e-7c9e-4c2a-bf5d-8e3a91d2e4b1
+status: experimental
+description: |
+  Detects suspicious processes spawned by the Windows Print Spooler service (spoolsv.exe).
+  This behavior is uncommon and may indicate exploitation of Print Spooler vulnerabilities such as CVE-2026-23669, leading to remote code execution.
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2026-23669
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-23669
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-23669
+author: Adama Assiongbon, SOC & CTI consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-03-27
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_parent:
+    ParentImage|endswith: '\spoolsv.exe'
+
+  selection_suspicious_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+      - '\schtasks.exe'
+      - '\certutil.exe'
+      - '\bitsadmin.exe'
+      - '\wmic.exe'
+      - '\net.exe'
+      - '\whoami.exe'
+
+  condition: selection_parent and selection_suspicious_child
+
+falsepositives:
+  - Rare administrative or debugging activity involving print services
+  - Third-party printer management tools
+level: high
+tags:
+  - attack.execution
+  - attack.t1059
+  - attack.t1218
+  - cve.2026-23669

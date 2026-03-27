@@ -3,7 +3,7 @@
 ```markdown
 # RELEASE NOTES – v0.3.0
 
-## SOC Detection Framework Expansion
+## SOC detection framework expansion
 
 Version 0.3.0 transforms the repository from a Sigma rule collection into a
 **production-ready SOC Detection Engineering framework**.
