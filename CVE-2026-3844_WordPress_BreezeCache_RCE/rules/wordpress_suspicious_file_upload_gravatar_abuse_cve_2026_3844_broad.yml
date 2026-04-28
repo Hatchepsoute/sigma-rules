@@ -1,0 +1,77 @@
+title: Suspicious WordPress Gravatar Abuse or Malicious Upload - Potential RCE (CVE-2026-3844)
+id: 9f1c2a6e-8d3b-4e6a-9a1b-384420260001
+status: experimental
+description: |
+    Detects suspicious file upload attempts targeting WordPress, including potential abuse of the
+    Breeze Cache plugin fetch_gravatar_from_remote function (CVE-2026-3844). Focuses on anomalous
+    POST requests with executable extensions in WordPress-specific paths.
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2026-3844
+  - https://wordpress.org/plugins/breeze/
+author: ASSIONGBON Adama SOC/CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026/04/24
+modified: 2026/04/28
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.execution
+  - attack.t1059.007
+  - cve.2026-3844
+logsource:
+  category: webserver
+detection:
+  selection_method:
+    http_method: POST
+
+  # Endpoint gravatar spécifique au plugin Breeze
+  selection_gravatar_specific:
+    url|contains:
+      - 'fetch_gravatar_from_remote'
+      - 'action=fetch_gravatar'
+
+  # Paths WordPress sensibles (plus précis)
+  selection_wordpress_sensitive:
+    url|contains:
+      - '/wp-content/uploads/'
+      - '/wp-admin/admin-ajax.php'
+      - '/wp-json/'
+
+  # Extensions exécutables — doubles extensions incluses
+  selection_executable_ext:
+    url|contains:
+      - '.php'
+      - '.phtml'
+      - '.phar'
+      - '.php5'
+      - '.php7'
+      - '.shtml'
+      - '.jpg.php'
+      - '.png.php'
+      - '.gif.php'
+      - '.jpeg.php'
+
+  # Exclure les requêtes PHP légitimes sur des chemins connus sûrs
+  filter_legit_admin:
+    url|contains:
+      - '/wp-admin/admin.php?page='
+      - '/wp-login.php'
+      - '/wp-cron.php'
+
+  # Réponses indiquant un traitement côté serveur
+  selection_status:
+    http_status:
+      - 200
+      - 201
+
+  condition: >
+    selection_method
+    and (selection_gravatar_specific or selection_wordpress_sensitive)
+    and selection_executable_ext
+    and selection_status
+    and not filter_legit_admin
+
+falsepositives:
+  - Plugins légitimes effectuant des uploads de fichiers PHP (rare)
+  - Outils de scan de sécurité autorisés
+  - Fichiers PHP dans uploads (normalement bloqués par WordPress)
+level: medium
