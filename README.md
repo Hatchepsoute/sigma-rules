@@ -14,9 +14,9 @@
 
 ![SOC Framework](diagrams/sigma_rules_global_soc_workflow_3D_EN.png)
 
-## Sigma Rules -SOC detection engineering framework
+## Sigma rules -SOC detection engineering framework
 
-This repository provides a **production-oriented SOC Detection Engineering framework** based on **Sigma rules**, **CTI-driven analysis**, and **real-world attack campaigns**.
+This repository provides a **production-oriented SOC detection engineering framework** based on **Sigma rules**, **CTI-driven analysis**, and **real-world attack campaigns**.
 
 This framework is designed to help SOC teams:
 - Detect exploitation attempts **early**
@@ -44,8 +44,7 @@ Each CVE detection pack is documented in its own directory and includes Sigma ru
 
 ## Campaign-based detection packs
 
-Beyond CVE-centric detections, this repository includes
-**campaign-oriented detection packs** based on real-world threat actor activity.
+Beyond CVE-centric detections, this repository includes **campaign-oriented detection packs** based on real-world threat actor activity.
 
 These packs are built from **incident analysis and CTI research**, not theoretical attack models.
 
@@ -109,7 +108,7 @@ SOC analysts • Detection engineers • Blue teams • MSSP
 ---
 ## License
 
-This project is licensed under the **Apache License, version 2.0**.
+This project is licensed under the **Apache license, version 2.0**.
 - Official license text: https://www.apache.org/licenses/LICENSE-2.0
 - Repository copy: [LICENSE](LICENSE)
 

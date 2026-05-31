@@ -13,7 +13,7 @@
 
 ![SOC Framework](diagrams/sigma_rules_vue_globale_soc_3D_FR.png)
 
-## Sigma Rules - Framework d’Ingénierie de Détection SOC
+## Sigma rules - framework d’ingénierie de détection SOC
 
 Ce dépôt fournit un **framework d’ingénierie de détection SOC orienté production**,  basé sur des **règles Sigma**, une **approche CTI (Cyber Threat Intelligence)** et des **campagnes d’attaque réelles**.
 
@@ -25,9 +25,7 @@ Ce framework est conçu pour aider les équipes SOC à :
 ---
 
 ## Philosophie de Détection
-
 Les règles de ce projet sont comportementales par conception : elles ne reposent pas sur des IoC statiques, mais sur des invariants d’attaque et des comportements observables, validés en conditions SOC.:
-
 - **Règles BROAD** pour la visibilité et le threat hunting
 - **Règles STRICT** pour la confirmation et l’alerte à haute confiance
 - **Détections comportementales** résistantes au renommage des payloads
@@ -41,7 +39,7 @@ des règles Sigma, des tables de décision et des playbooks SOC.
 
 ---
 
-## Packs de Détection Basés sur des Campagnes
+## Packs de détection basés sur des campagnes
 
 Au-delà des détections centrées sur les CVE, ce dépôt inclut des **packs de détection orientés campagnes**, basés sur l’activité réelle des acteurs de menace.
 
@@ -62,9 +60,7 @@ Ils offrent :
   - Vulnérabilités Azure Monitor Agent
   - Vulnérabilités Microsoft Copilot
 
-Les packs CVE permettent aux équipes SOC d’anticiper les **phases de weaponization**  
-en combinant règles BROAD et STRICT avec des artefacts SOC prêts à l’emploi  
-(tables de décision, playbooks, diagrammes).
+Les packs CVE permettent aux équipes SOC d’anticiper les **phases de weaponization**  en combinant règles BROAD et STRICT avec des artefacts SOC prêts à l’emploi  (tables de décision, playbooks, diagrammes).
 
 ---
 
@@ -77,7 +73,6 @@ Les règles sont conçues pour des **environnements SOC en production** et peuve
 ---
 
 ## Structure du Dépôt
-
 Chaque pack de détection suit une **structure cohérente et réutilisable** :
 - Règles Sigma
 - Tables de décision
@@ -96,9 +91,7 @@ Chaque pack de détection suit une **structure cohérente et réutilisable** :
 ---
 
 ## À qui s’adresse ce dépôt ?
-
 Analystes SOC • Ingénieurs détection • Équipes Blue Team • MSSP
-
 
 <!--
 ## 📊 Star History
@@ -110,7 +103,7 @@ Analystes SOC • Ingénieurs détection • Équipes Blue Team • MSSP
 ---
 ## Licence
 
-Ce projet est sous licence **Apache License, Version 2.0**.
+Ce projet est sous licence **Apache license, version 2.0**.
 - Texte officiel : https://www.apache.org/licenses/LICENSE-2.0
 - Copie du dépôt : [LICENSE](LICENSE)
 
