@@ -72,7 +72,7 @@ Les règles sont conçues pour des **environnements SOC en production** et peuve
 
 ---
 
-## Structure du Dépôt
+## Structure du dépôt
 Chaque pack de détection suit une **structure cohérente et réutilisable** :
 - Règles Sigma
 - Tables de décision
