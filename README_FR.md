@@ -24,7 +24,7 @@ Ce framework est conçu pour aider les équipes SOC à :
 
 ---
 
-## Philosophie de Détection
+## Philosophie de détection
 Les règles de ce projet sont comportementales par conception : elles ne reposent pas sur des IoC statiques, mais sur des invariants d’attaque et des comportements observables, validés en conditions SOC.:
 - **Règles BROAD** pour la visibilité et le threat hunting
 - **Règles STRICT** pour la confirmation et l’alerte à haute confiance
@@ -61,9 +61,7 @@ Ils offrent :
   - Vulnérabilités Microsoft Copilot
 
 Les packs CVE permettent aux équipes SOC d’anticiper les **phases de weaponization**  en combinant règles BROAD et STRICT avec des artefacts SOC prêts à l’emploi  (tables de décision, playbooks, diagrammes).
-
 ---
-
 ## Intégration SOC & SOAR
 
 Les règles sont conçues pour des **environnements SOC en production** et peuvent être intégrées avec :
