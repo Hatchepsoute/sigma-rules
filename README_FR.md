@@ -61,6 +61,7 @@ Ils offrent :
   - Vulnérabilités Microsoft Copilot
 
 Les packs CVE permettent aux équipes SOC d’anticiper les **phases de weaponization**  en combinant règles BROAD et STRICT avec des artefacts SOC prêts à l’emploi  (tables de décision, playbooks, diagrammes).
+
 ---
 ## Intégration SOC & SOAR
 
