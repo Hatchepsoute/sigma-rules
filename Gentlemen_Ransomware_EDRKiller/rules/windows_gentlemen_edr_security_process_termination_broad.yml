@@ -10,7 +10,7 @@ description: >
   HavocKiller) that collectively target 400+ processes across 48 security vendors.
 
   DETECTION BLIND SPOT: GentleKiller primarily terminates processes via direct Windows API calls
-  (OpenProcess + TerminateProcess / NtTerminateProcess) — no child process is spawned and this
+  (OpenProcess + TerminateProcess / NtTerminateProcess), no child process is spawned and this
   rule will NOT fire. The correlation rule (process_access, >=8 targets in 1 min) covers that
   vector. This rule covers CLI-based termination used in simpler or script-based scenarios.
 
@@ -38,21 +38,14 @@ logsource:
   category: process_creation
 
 detection:
-  # taskkill /F /IM <process> — name-based forced kill
+  # taskkill /F /IM <process>, name-based forced kill
   selection_taskkill_im:
     Image|endswith: '\taskkill.exe'
     CommandLine|contains|all:
       - '/F'
       - '/IM'
 
-  # taskkill /F /PID <pid> — PID-based forced kill (evades /IM detection)
-  selection_taskkill_pid:
-    Image|endswith: '\taskkill.exe'
-    CommandLine|contains|all:
-      - '/F'
-      - '/PID'
-
-  # sc stop / sc delete / sc config ... start= disabled — service disabling
+  # sc stop / sc delete / sc config ... start= disabled, service disabling
   selection_sc_stop:
     Image|endswith: '\sc.exe'
     CommandLine|contains:
@@ -68,21 +61,21 @@ detection:
       - '\net1.exe'
     CommandLine|contains: ' stop '
 
-  # WMIC process termination — evades taskkill-based detection
+  # WMIC process termination, evades taskkill-based detection
   selection_wmic_kill:
     Image|endswith: '\wmic.exe'
     CommandLine|contains|all:
       - 'process'
       - 'terminate'
 
-  # PowerShell Stop-Process — evades taskkill-based detection
+  # PowerShell Stop-Process and Set-Service, evades taskkill-based detection
   selection_ps_stopprocess:
     Image|endswith:
       - '\powershell.exe'
       - '\pwsh.exe'
     CommandLine|contains:
       - 'Stop-Process'
-      - 'kill '
+      - 'Set-Service'
 
   # Security processes and services targeted by Gentlemen EDR killers
   selection_security_targets:
@@ -169,7 +162,10 @@ detection:
       - '\TiWorker.exe'
       - '\TrustedInstaller.exe'
 
-  condition: (selection_taskkill_im or selection_taskkill_pid or selection_sc_stop or selection_net_stop or selection_wmic_kill or selection_ps_stopprocess) and selection_security_targets and not filter_main_legitimate_mgmt
+  # NOTE: taskkill /F /PID is intentionally excluded, PID-based kills carry no process name
+  # in CommandLine, so selection_security_targets can never match. Use the behavioral
+  # correlation rule (process_access) to cover API-level and PID-based termination.
+  condition: (selection_taskkill_im or selection_sc_stop or selection_net_stop or selection_wmic_kill or selection_ps_stopprocess) and selection_security_targets and not filter_main_legitimate_mgmt
 
 fields:
   - Image
@@ -183,7 +179,7 @@ falsepositives:
   - Legitimate IT administrator manually stopping a security service (validate with change management ticket)
   - EDR or security platform self-update process temporarily stopping its own service (check ParentImage)
   - Vendor-provided uninstaller script stopping services as part of a documented migration
-  - Automated patch management tools (SCCM, Intune, PDQ, TrustedInstaller) — partially filtered; validate ParentImage
-  - PowerShell scripts with Stop-Process for legitimate maintenance — validate CommandLine and scheduling context
+  - Automated patch management tools (SCCM, Intune, PDQ, TrustedInstaller), partially filtered; validate ParentImage
+  - PowerShell scripts with Stop-Process for legitimate maintenance, validate CommandLine and scheduling context
 
 level: medium

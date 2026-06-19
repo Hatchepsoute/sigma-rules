@@ -1,6 +1,6 @@
-# CHANGELOG — Kernel_Rootkit_MVDR
+# CHANGELOG, Kernel_Rootkit_MVDR
 
-## [1.0.0] — 2026-01-09
+## [1.0.0], 2026-01-09
 
 ### Added
 - Initial detection pack release.

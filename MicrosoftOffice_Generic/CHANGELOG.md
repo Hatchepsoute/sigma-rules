@@ -1,6 +1,6 @@
-# CHANGELOG — MicrosoftOffice_Generic
+# CHANGELOG, MicrosoftOffice_Generic
 
-## [1.0.0] — 2025-12-24
+## [1.0.0], 2025-12-24
 
 ### Added
 - Initial detection pack release.

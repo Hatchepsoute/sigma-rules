@@ -8,7 +8,7 @@ description: >
   CRITICAL FIX: The previous condition required ALL four selection blocks to be true on a
   SINGLE file_event. Since each file_event covers ONE file at a time, the condition
   `selection_dir AND selection_auth AND selection_crypto AND selection_memory` could NEVER
-  fire — it requires the same event to match four different filenames simultaneously.
+  fire, it requires the same event to match four different filenames simultaneously.
   Fixed to OR logic: any one of the critical file types accessed by a suspicious process
   constitutes an alert. Correlation across multiple events should be done at the SIEM layer
   (e.g., same ProcessId or same host within a 5-minute window).
@@ -63,7 +63,7 @@ detection:
   condition: (selection_openclaw_dir or selection_critical_files) and selection_suspicious_accessor and not filter_legitimate
 
 falsepositives:
-  - Extremely rare — developer scripts legitimately copying config files
+  - Extremely rare, developer scripts legitimately copying config files
   - Backup tools reading AI agent directories (should be allowlisted by Image path)
 
 level: critical

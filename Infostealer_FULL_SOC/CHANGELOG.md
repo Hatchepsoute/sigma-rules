@@ -1,6 +1,6 @@
-# CHANGELOG — Infostealer_FULL_SOC
+# CHANGELOG, Infostealer_FULL_SOC
 
-## [1.0.0] — 2026-01-06
+## [1.0.0], 2026-01-06
 
 ### Added
 - Initial detection pack release.

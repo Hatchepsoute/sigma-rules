@@ -1,6 +1,6 @@
-# CHANGELOG — FortiWeb-Sliver-Campaign
+# CHANGELOG, FortiWeb-Sliver-Campaign
 
-## [1.0.0] — 2026-02-05
+## [1.0.0], 2026-02-05
 
 ### Added
 - Initial detection pack release.

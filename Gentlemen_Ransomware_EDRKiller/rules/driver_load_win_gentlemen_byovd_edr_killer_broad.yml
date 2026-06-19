@@ -57,10 +57,10 @@ detection:
             - 'EC296F9501AD71E430810CB5CDC38D954D4BA536'   # googleApiUtil64.sys
             - '82ED942A52CDCF120A8919730E00BA37619661A3'   # ThrottleBlood.sys
             - '1FA071303FB846308571E64727501FB98B1C2BE6'   # havoc.sys
-    # Legitimate vgk.sys from Riot Vanguard — name-only match only; hash match is unaffected
+    # Legitimate vgk.sys from Riot Vanguard, name-only match only; hash match is unaffected
     filter_legit_vgk:
         ImageLoaded|startswith: 'C:\Program Files\Riot Vanguard\'
-    # GameDriverX64.sys and dmx.sys have no confirmed hash — name-only hits need triage
+    # GameDriverX64.sys and dmx.sys have no confirmed hash, name-only hits need triage
     filter_legit_game_drivers:
         ImageLoaded|startswith:
             - 'C:\Program Files\'
@@ -77,8 +77,8 @@ fields:
     - Computer
     - User
 falsepositives:
-    - vgk.sys on gaming endpoints (Riot Vanguard) — filtered for legitimate install path; hash hits are NOT affected
-    - GameDriverX64.sys and dmx.sys from Program Files (no confirmed Gentlemen hash) — filtered; any other path warrants triage
+    - vgk.sys on gaming endpoints (Riot Vanguard), filtered for legitimate install path; hash hits are NOT affected
+    - GameDriverX64.sys and dmx.sys from Program Files (no confirmed Gentlemen hash), filtered; any other path warrants triage
     - Authorized red-team / BYOVD research in a controlled lab
     - Security vendor testing of vulnerable-driver blocklists
 level: medium

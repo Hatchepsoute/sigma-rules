@@ -12,7 +12,7 @@ description: |
   compromised host. Removed standalone '.toml' from CLI check (too many Rust-based tools use
   .toml; if needed, combine with Image-level filter).
 
-  Also missing: Chisel, Ligolo, and other tunnelers — see companion rules if available.
+  Also missing: Chisel, Ligolo, and other tunnelers, see companion rules if available.
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-08
 modified: 2026-06-19

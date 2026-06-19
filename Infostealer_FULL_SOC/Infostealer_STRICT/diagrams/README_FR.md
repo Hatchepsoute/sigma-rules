@@ -28,16 +28,16 @@ classDef no fill:#f6f8fa,stroke:#57606a,color:#000,stroke-width:1px;
 classDef header fill:#f2f2f2,stroke:#8c8c8c,color:#000,stroke-width:1px;
 
 %% --- Header / Badges ---
-H1["🛡️ Infostealer STRICT — High Confidence"]:::header
+H1["🛡️ Infostealer STRICT, High Confidence"]:::header
 H2["🏷️ Badges:  ✅ Correlation 3/3  |  🔴 P1 Incident  |  🟠 P2 Investigate  |  🔵 P3 Triage"]:::header
 H1 --> H2
 
 %% --- Inputs / Conditions ---
 subgraph S0["🧩 Conditions (toutes nécessaires)"]
   direction TB
-  E1{"E1 — Exécution suspecte\nLOLBIN + chemin user-writable ?"}:::p3
-  E2{"E2 — Accès credentials navigateur ?\n(Login Data / Cookies / CryptUnprotectData)"}:::p3
-  E3{"E3 — Indicateurs d'exfiltration ?\n(http/https, IWR, curl, wget)"}:::p3
+  E1{"E1, Exécution suspecte\nLOLBIN + chemin user-writable ?"}:::p3
+  E2{"E2, Accès credentials navigateur ?\n(Login Data / Cookies / CryptUnprotectData)"}:::p3
+  E3{"E3, Indicateurs d'exfiltration ?\n(http/https, IWR, curl, wget)"}:::p3
 end
 
 H2 --> E1
@@ -61,7 +61,7 @@ end
 TRIG --> A1 --> A2 --> A3 --> A4 --> A5
 
 %% --- Optional investigation paths (non-trigger) ---
-subgraph INV["🟠 P2 / 🔵 P3 — Pistes d’investigation (si signal partiel)"]
+subgraph INV["🟠 P2 / 🔵 P3, Pistes d’investigation (si signal partiel)"]
   direction TB
   P2a["🟠 P2: Si E1+E2 sans E3 → vérifier proxy/DNS, egress bloqué, tenter de retrouver la destination"]:::p2
   P2b["🟠 P2: Si E1+E3 sans E2 → possible downloader/staging, vérifier artefacts déposés"]:::p2

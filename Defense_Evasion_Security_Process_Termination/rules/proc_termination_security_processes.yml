@@ -6,7 +6,7 @@ description: |
   is commonly observed during defense evasion phases of ransomware and post-exploitation activity.
 
   FILTER FIX: Removed '\svchost.exe' from filter_legit_system_activity. A process injected
-  into svchost.exe running as NT AUTHORITY\SYSTEM can terminate EDR processes — the previous
+  into svchost.exe running as NT AUTHORITY\SYSTEM can terminate EDR processes, the previous
   filter would suppress these alerts. filter_legit_system_activity now only covers
   '\services.exe' and '\MsMpEng.exe' (Windows Defender self-update context).
 references:
@@ -49,7 +49,7 @@ detection:
 falsepositives:
   - Legitimate EDR self-protection or update actions (covered by MsMpEng filter)
   - Administrator intentionally stopping security services during maintenance
-  - svchost.exe: NOT filtered — investigate any svchost-based termination of EDR processes
+  - svchost.exe: NOT filtered, investigate any svchost-based termination of EDR processes
 level: high
 tags:
   - attack.defense-evasion

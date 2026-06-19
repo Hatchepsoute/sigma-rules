@@ -29,7 +29,7 @@ falsepositives:
   - Legitimate kernel driver installation by system administrators or hardware vendors
   - EDR/AV product updates that load signed kernel drivers
   - Authorized driver deployment via software management platforms
-  - Unsigned drivers in some hardware/legacy device scenarios — tune by ImageLoaded path or signature
+  - Unsigned drivers in some hardware/legacy device scenarios, tune by ImageLoaded path or signature
 level: medium
 tags:
   - attack.t1014

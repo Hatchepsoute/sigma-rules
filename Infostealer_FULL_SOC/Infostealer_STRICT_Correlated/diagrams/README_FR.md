@@ -1,12 +1,12 @@
-# 🛡️ Infostealer STRICT v2 — Table de Décision
+# 🛡️ Infostealer STRICT v2, Table de Décision
 
 ## 🎯 Objectif
 
 Cette table de décision structure l’analyse SOC pour les trois règles STRICT v2 :
 
-- **Step 1 (E1)** — Exécution suspecte depuis un chemin user-writable via LOLBin  
-- **Step 2 (E2)** — Accès aux stockages d’identifiants navigateur par un processus non-browser  
-- **Step 3 (E3)** — Communication sortante vers Internet depuis LOLBin/loader  
+- **Step 1 (E1)**, Exécution suspecte depuis un chemin user-writable via LOLBin  
+- **Step 2 (E2)**, Accès aux stockages d’identifiants navigateur par un processus non-browser  
+- **Step 3 (E3)**, Communication sortante vers Internet depuis LOLBin/loader  
 
 🕒 **Fenêtre de corrélation recommandée : ≤ 10 minutes**
 
@@ -36,7 +36,7 @@ flowchart TD
   G -->|Non| N[[Cas 6\nE2 seul\n🟡 P2/P3]]
 
   H -->|Oui| O[[Cas 7\nE3 seul\n🟡 P3 Tuning]]
-  H -->|Non| P[[Cas 8\nAucun signal\n—]]
+  H -->|Non| P[[Cas 8\nAucun signal\n-]]
 
   I --> Q([Actions: isoler, collecter, bloquer, reset creds])
   J --> R([Actions: proxy/DNS, monitor 30–60 min])
@@ -57,7 +57,7 @@ flowchart TD
 | 5 | ✅ | ❌ | ❌ | 🟡 Faible à moyenne | Suspicious LOLBin seul | P3 | Triage rapide |
 | 6 | ❌ | ✅ | ❌ | 🟡 Moyenne | Accès aux stores sans exfil visible | P2/P3 | Vérifier password managers / EDR |
 | 7 | ❌ | ❌ | ✅ | 🟡 Faible à moyenne | Egress LOLBin isolé | P3 | Valider réputation IP/domain |
-| 8 | ❌ | ❌ | ❌ | — | Aucun signal | — | — |
+| 8 | ❌ | ❌ | ❌ |, | Aucun signal |, |, |
 
 ---
 

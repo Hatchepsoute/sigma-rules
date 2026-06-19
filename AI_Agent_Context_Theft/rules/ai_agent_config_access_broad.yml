@@ -48,7 +48,7 @@ detection:
       - '\wget.exe'
       - '\python.exe'
 
-  # NOTE: 'Image|endswith: .exe' removed — it matches every Windows process (universal FP).
+  # NOTE: 'Image|endswith: .exe' removed, it matches every Windows process (universal FP).
   # Replaced with targeted list of unexpected accessors. If the OpenClaw process itself is
   # the target (credential theft), the filter_legitimate block below would suppress that.
   filter_legitimate:

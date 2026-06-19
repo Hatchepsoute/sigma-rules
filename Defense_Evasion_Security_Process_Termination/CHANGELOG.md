@@ -1,6 +1,6 @@
-# CHANGELOG — Defense_Evasion_Security_Process_Termination
+# CHANGELOG, Defense_Evasion_Security_Process_Termination
 
-## [1.0.0] — 2026-02-08
+## [1.0.0], 2026-02-08
 
 ### Added
 - Initial detection pack release.

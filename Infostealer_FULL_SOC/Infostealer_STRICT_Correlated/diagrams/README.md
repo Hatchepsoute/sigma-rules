@@ -1,12 +1,12 @@
-# 🛡️ Infostealer STRICT v2 — Decision Table
+# 🛡️ Infostealer STRICT v2, Decision Table
 
 ## 🎯 Objective
 
 This decision table structures SOC analysis for the three STRICT v2 rules:
 
-- **Step 1 (E1)** — Suspicious execution from user-writable path via LOLBin  
-- **Step 2 (E2)** — Non-browser process accessing browser credential stores  
-- **Step 3 (E3)** — Public network egress from LOLBin/loader  
+- **Step 1 (E1)**, Suspicious execution from user-writable path via LOLBin  
+- **Step 2 (E2)**, Non-browser process accessing browser credential stores  
+- **Step 3 (E3)**, Public network egress from LOLBin/loader  
 
 🕒 **Recommended correlation window: ≤ 10 minutes**
 
@@ -36,7 +36,7 @@ flowchart TD
   G -->|No| N[[Case 6\nE2 only\n🟡 P2/P3]]
 
   H -->|Yes| O[[Case 7\nE3 only\n🟡 P3 Tuning]]
-  H -->|No| P[[Case 8\nNo signal\n—]]
+  H -->|No| P[[Case 8\nNo signal\n-]]
 
   I --> Q([Actions: isolate, collect, block, reset creds])
   J --> R([Actions: proxy/DNS, monitor 30–60 min])
@@ -57,7 +57,7 @@ flowchart TD
 | 5 | ✅ | ❌ | ❌ | 🟡 Low to Medium | Suspicious LOLBin only | P3 | Quick triage |
 | 6 | ❌ | ✅ | ❌ | 🟡 Medium | Credential access without exfil | P2/P3 | Check password managers |
 | 7 | ❌ | ❌ | ✅ | 🟡 Low to Medium | Isolated LOLBin egress | P3 | Validate IP/domain reputation, tune exclusions |
-| 8 | ❌ | ❌ | ❌ | — | No signal | — | — |
+| 8 | ❌ | ❌ | ❌ |, | No signal |, |, |
 
 ---
 

@@ -21,6 +21,12 @@ description: >
 related:
   - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
     type: similar
+  - id: e6a7b8c9-d0e1-4f2a-3b4c-5d6e7f809102
+    type: similar
+  - id: a2f6c1e4-9b73-4d8a-8e51-6c2f0a3d7b94
+    type: similar
+  - id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
+    type: similar
 
 references:
   - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
@@ -42,7 +48,7 @@ logsource:
   category: process_creation
 
 detection:
-  # Explicit EDR killer tool names — fire on any path
+  # Explicit EDR killer tool names, fire on any path
   selection_explicit_edr_killer:
     Image|contains:
       - 'GentleKiller'
@@ -94,6 +100,7 @@ detection:
       - 'TrendMicro'
       - 'trendmicro'
       - 'ESET'
+      - 'eset'
       - 'Avast'
       - 'avast'
 
@@ -109,7 +116,7 @@ detection:
       - '\Intel\'
       - '\Recovery\'
 
-  # Legitimate installation paths — exclude from impersonation branch
+  # Legitimate installation paths, exclude from impersonation branch
   filter_legit_kaspersky:
     Image|startswith:
       - 'C:\Program Files (x86)\Kaspersky Lab\'
@@ -135,6 +142,7 @@ detection:
     Image|startswith:
       - 'C:\Program Files\Riot Vanguard\'
       - 'C:\Program Files (x86)\Riot Games\'
+      - 'C:\Riot Games\'
 
   filter_legit_symantec:
     Image|startswith:
@@ -174,9 +182,9 @@ fields:
   - CurrentDirectory
 
 falsepositives:
-  - Explicit EDR killer names (GentleKiller, HexKiller, etc.): virtually no legitimate use — investigate immediately
-  - Impersonation + suspicious path: legitimate security software never runs from Temp/AppData — verify with vendor and change ticket
-  - Riot Vanguard anti-cheat may be present in AppData on gaming systems — partially filtered
-  - ESET, Avast or Sophos update processes may temporarily write to ProgramData — validate ParentImage against vendor updater
+  - Explicit EDR killer names (GentleKiller, HexKiller, etc.): virtually no legitimate use, investigate immediately
+  - Impersonation + suspicious path: legitimate security software never runs from Temp/AppData, verify with vendor and change ticket
+  - Riot Vanguard anti-cheat may be present in AppData on gaming systems, partially filtered
+  - ESET, Avast or Sophos update processes may temporarily write to ProgramData, validate ParentImage against vendor updater
 
 level: high

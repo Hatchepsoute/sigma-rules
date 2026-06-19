@@ -44,7 +44,7 @@ detection:
       - 'CSFalconService'
       - 'SentinelAgent'
       - 'CylanceSvc'
-      # NOTE: 'Defender' and 'Sense' removed — too broad (match legitimate commands like
+      # NOTE: 'Defender' and 'Sense' removed, too broad (match legitimate commands like
       # "Windows Defender App Guard", "Sense" as a sensor word, etc.). Replaced with
       # specific service/process names to reduce FP while keeping coverage.
 

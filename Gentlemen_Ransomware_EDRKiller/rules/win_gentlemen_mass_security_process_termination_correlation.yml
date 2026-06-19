@@ -5,7 +5,7 @@ status: experimental
 description: |
   Building-block rule: a process opening a handle to a known security/EDR product process. Not actionable on its own (security tools and the OS access each other constantly); it exists only to feed the mass-termination correlation below. Behavioral by design - resilient to EDR-killer renaming because it keys on the TARGET security processes, not on the attacker tool.
   DEPLOYMENT REQUIREMENT: this rule uses Sysmon Event ID 10 (ProcessAccess). Default Sysmon configurations do NOT log all process access events. You must explicitly configure ProcessAccess events targeting the security processes listed below, otherwise this rule and the correlation above it will never fire. Example Sysmon config entry: <ProcessAccess onmatch="include"><TargetImage condition="end with">MsMpEng.exe</TargetImage></ProcessAccess>
-  BLIND SPOT: if GentleKiller uses process hollowing to inject into a legitimate process (e.g. explorer.exe, svchost.exe), SourceImage will show the host process rather than the malicious binary. The correlation still fires but the analyst sees a legitimate-looking source — add SourceProcessId to your investigation workflow.
+  BLIND SPOT: if GentleKiller uses process hollowing to inject into a legitimate process (e.g. explorer.exe, svchost.exe), SourceImage will show the host process rather than the malicious binary. The correlation still fires but the analyst sees a legitimate-looking source, add SourceProcessId to your investigation workflow.
 
 references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
