@@ -2,25 +2,30 @@ title: Gentlemen Ransomware - EDR Killer Security Process or Service Termination
 id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
 status: experimental
 description: >
-  Detects forced termination of known security product processes or services via taskkill, sc.exe
-  or net.exe, consistent with EDR killer frameworks used by the Gentlemen ransomware operation.
+  Detects forced termination or disabling of known security product processes and services via
+  taskkill, sc.exe, net.exe, WMIC or PowerShell Stop-Process, consistent with EDR killer
+  frameworks used by the Gentlemen ransomware operation.
 
   Gentlemen RaaS deploys multiple EDR killer tools (GentleKiller, HexKiller, ThrottleBlood,
-  HavocKiller) that collectively target 400+ processes across 48 security vendors including
-  Microsoft Defender, CrowdStrike Falcon, SentinelOne, Palo Alto XDR, Sophos, ESET, Bitdefender,
-  Kaspersky, Trellix (McAfee), Carbon Black and others.
+  HavocKiller) that collectively target 400+ processes across 48 security vendors.
 
-  BROAD rule: any forced termination of a known security process/service is flagged. False
-  positives are expected from legitimate IT administration — use for hunting and L1 triage.
-  Correlate with STRICT rules (impersonation, BYOVD driver load) for high-confidence alerting.
+  DETECTION BLIND SPOT: GentleKiller primarily terminates processes via direct Windows API calls
+  (OpenProcess + TerminateProcess / NtTerminateProcess) — no child process is spawned and this
+  rule will NOT fire. The correlation rule (process_access, >=8 targets in 1 min) covers that
+  vector. This rule covers CLI-based termination used in simpler or script-based scenarios.
+
+  BROAD rule: false positives expected from legitimate IT administration.
+  Correlate with STRICT rules for high-confidence alerting.
 
 references:
   - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
+  - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
   - https://attack.mitre.org/techniques/T1562/001/
   - https://attack.mitre.org/techniques/T1489/
 
 author: Adama ASSIONGBON
 date: 2026-06-19
+modified: 2026-06-19
 
 tags:
   - attack.defense-evasion
@@ -33,36 +38,65 @@ logsource:
   category: process_creation
 
 detection:
-  # taskkill /F /IM <security_process>
-  selection_taskkill:
+  # taskkill /F /IM <process> — name-based forced kill
+  selection_taskkill_im:
     Image|endswith: '\taskkill.exe'
     CommandLine|contains|all:
       - '/F'
       - '/IM'
 
-  # sc stop <security_service> or net stop <security_service>
-  selection_sc_net_stop:
+  # taskkill /F /PID <pid> — PID-based forced kill (evades /IM detection)
+  selection_taskkill_pid:
+    Image|endswith: '\taskkill.exe'
+    CommandLine|contains|all:
+      - '/F'
+      - '/PID'
+
+  # sc stop / sc delete / sc config ... start= disabled — service disabling
+  selection_sc_stop:
+    Image|endswith: '\sc.exe'
+    CommandLine|contains:
+      - ' stop '
+      - ' delete '
+      - 'start= disabled'
+      - 'start=disabled'
+
+  # net stop / net1 stop
+  selection_net_stop:
     Image|endswith:
-      - '\sc.exe'
       - '\net.exe'
       - '\net1.exe'
-    CommandLine|contains: 'stop'
+    CommandLine|contains: ' stop '
+
+  # WMIC process termination — evades taskkill-based detection
+  selection_wmic_kill:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains|all:
+      - 'process'
+      - 'terminate'
+
+  # PowerShell Stop-Process — evades taskkill-based detection
+  selection_ps_stopprocess:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+    CommandLine|contains:
+      - 'Stop-Process'
+      - 'kill '
 
   # Security processes and services targeted by Gentlemen EDR killers
-  # Covers primary processes from 48 vendors mentioned in the article
   selection_security_targets:
     CommandLine|contains:
       # Microsoft Defender / Windows Security
-      - 'MsMpEng'
-      - 'MpCmdRun'
+      - 'MsMpEng.exe'
+      - 'MpCmdRun.exe'
+      - 'MsSense.exe'
       - 'SecurityHealthService'
       - 'WinDefend'
-      - 'Sense'
       # CrowdStrike Falcon
       - 'CSFalconService'
       - 'CSFalconContainer'
-      - 'csfalcon'
-      - 'falcon'
+      - 'CsFalconService'
       # SentinelOne
       - 'SentinelAgent'
       - 'SentinelOne'
@@ -70,24 +104,23 @@ detection:
       - 'sentineld'
       # Palo Alto Cortex XDR / Traps
       - 'coreServiceShell'
-      - 'Traps'
-      - 'cortex'
+      - 'Traps.exe'
+      - 'CortexXDR'
       # Sophos
       - 'SophosHealth'
       - 'SophosFIM'
       - 'SAVService'
-      - 'sophosav'
       # ESET
-      - 'ekrn'
-      - 'egui'
+      - 'ekrn.exe'
+      - 'egui.exe'
       - 'EsetSvc'
       # Bitdefender
       - 'bdagent'
       - 'bdredline'
       - 'bdntwrk'
-      - 'vsserv'
+      - 'vsserv.exe'
       # Kaspersky
-      - 'avp'
+      - 'avp.exe'
       - 'kavtray'
       - 'klnagent'
       # Trend Micro
@@ -99,23 +132,31 @@ detection:
       - 'CarbonBlack'
       - 'cbdefense'
       - 'cbstream'
+      - 'cb.exe'
       # Trellix / McAfee / FireEye
-      - 'xagt'
+      - 'xagt.exe'
       - 'masvc'
       - 'McAfeeFramework'
       # Cylance
       - 'CylanceSvc'
-      - 'cylanceui'
       # Malwarebytes
       - 'MBAMService'
-      - 'mbam'
       # Cybereason
       - 'cyserver'
       - 'minionhost'
       # Webroot
-      - 'WRSA'
+      - 'WRSA.exe'
       # Deep Security (Trend Micro)
       - 'ds_agent'
+      # Fortinet EDR
+      - 'fortiedr'
+      # Huntress
+      - 'HuntressAgent'
+      # Elastic
+      - 'elastic-agent'
+      # Symantec / Broadcom
+      - 'SepMasterService'
+      - 'ccSvcHst.exe'
 
   filter_main_legitimate_mgmt:
     ParentImage|endswith:
@@ -125,8 +166,10 @@ detection:
       - '\pdqdeploy.exe'
       - '\intuneManagementExtension.exe'
       - '\chocolatey.exe'
+      - '\TiWorker.exe'
+      - '\TrustedInstaller.exe'
 
-  condition: (selection_taskkill or selection_sc_net_stop) and selection_security_targets and not filter_main_legitimate_mgmt
+  condition: (selection_taskkill_im or selection_taskkill_pid or selection_sc_stop or selection_net_stop or selection_wmic_kill or selection_ps_stopprocess) and selection_security_targets and not filter_main_legitimate_mgmt
 
 fields:
   - Image
@@ -140,6 +183,7 @@ falsepositives:
   - Legitimate IT administrator manually stopping a security service (validate with change management ticket)
   - EDR or security platform self-update process temporarily stopping its own service (check ParentImage)
   - Vendor-provided uninstaller script stopping services as part of a documented migration
-  - Automated patch management tools (SCCM, Intune, PDQ) — partially filtered; validate ParentImage
+  - Automated patch management tools (SCCM, Intune, PDQ, TrustedInstaller) — partially filtered; validate ParentImage
+  - PowerShell scripts with Stop-Process for legitimate maintenance — validate CommandLine and scheduling context
 
 level: medium

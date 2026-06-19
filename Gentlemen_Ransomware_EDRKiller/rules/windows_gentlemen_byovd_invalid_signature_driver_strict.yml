@@ -1,24 +1,24 @@
-title: Gentlemen Ransomware - BYOVD Driver Load with Invalid or Revoked Signature (STRICT)
+title: Gentlemen Ransomware - BYOVD Driver Load with Invalid or Missing Signature (STRICT)
 id: e6a7b8c9-d0e1-4f2a-3b4c-5d6e7f809102
 status: experimental
 description: >
-  Detects loading of a kernel driver from a user-writable path where the digital signature is
-  present but invalid (Expired, Revoked, NotTrusted), characteristic of the BYOVD technique
-  used by all Gentlemen ransomware EDR killer variants.
+  Detects loading of a kernel driver from a user-writable or non-standard path where the digital
+  signature is absent, invalid, expired or revoked — characteristic of the BYOVD technique used
+  by all Gentlemen ransomware EDR killer variants.
 
-  GentleKiller and its companion tools (HexKiller, ThrottleBlood, HavocKiller) achieve
-  kernel-level access via Bring Your Own Vulnerable Driver (BYOVD). A key evasion feature is
-  the use of STOLEN INVALID signatures from legitimate software — binaries appear signed
-  (Signed=true) but carry expired or revoked certificates. The framework is designed for easy
-  driver swapping between variants, making IoC-based detection insufficient.
+  GentleKiller and companion tools (HexKiller, ThrottleBlood, HavocKiller) achieve kernel-level
+  access via BYOVD. A key evasion feature is the use of STOLEN INVALID signatures from legitimate
+  software — binaries appear signed (Signed=true) but carry expired or revoked certificates.
+  Some variants use fully unsigned drivers.
 
-  This rule focuses on the BEHAVIORAL signal: a signed driver with a non-valid certificate
-  loaded from a non-system path. This covers all BYOVD variants regardless of the specific
-  driver used.
-
-  Detection blind spot: if the attacker drops the driver into C:\Windows\System32\drivers\
-  or C:\Program Files\ (legitimate system paths), this rule will not fire. Monitor for
-  unexpected driver names in system driver directories as a complementary control.
+  DETECTION BLIND SPOTS:
+  1. Driver dropped into C:\Windows\System32\drivers\ — filtered as legitimate path.
+     To cover this, monitor for unexpected driver names appearing in System32\drivers\ via
+     a file_event rule (separate coverage).
+  2. Driver loaded via a network/UNC path (\\server\share\evil.sys) — not covered by path
+     selectors. EDR telemetry with full UNC path logging is required.
+  3. SignatureStatus field values depend on the telemetry source (Sysmon EID 6 vs EDR) —
+     verify field mapping before deploying on non-Sysmon backends.
 
 related:
   - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
@@ -28,11 +28,13 @@ related:
 
 references:
   - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
+  - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
   - https://attack.mitre.org/techniques/T1068/
-  - https://attack.mitre.org/techniques/T1562.001/
+  - https://attack.mitre.org/techniques/T1562/001/
 
 author: Adama ASSIONGBON
 date: 2026-06-19
+modified: 2026-06-19
 
 tags:
   - attack.defense-evasion
@@ -52,11 +54,16 @@ detection:
       - '\Temp\'
       - '\AppData\'
       - '\Users\Public\'
-      - '\ProgramData\'
       - '\Downloads\'
+      - '\Perflogs\'
+      - '\Intel\'
 
-  # Signed=true but certificate is NOT valid — stolen/expired/revoked signature
-  # This is the Gentlemen-specific evasion: appear signed to bypass naive checks
+  # ProgramData is user-writable but also used by legitimate security vendors
+  # Only flag ProgramData when combined with invalid signature (handled by condition)
+  selection_programdata_path:
+    ImageLoaded|startswith: 'C:\ProgramData\'
+
+  # Signed=true but certificate NOT valid — stolen/expired/revoked signature (Gentlemen primary pattern)
   selection_invalid_signature:
     Signed: 'true'
     SignatureStatus:
@@ -66,16 +73,35 @@ detection:
       - 'Invalid'
       - 'Error'
 
-  # Exclude legitimate system driver paths
-  filter_legit_system_paths:
+  # Completely unsigned driver — covers variants that skip signature stealing
+  selection_unsigned:
+    Signed: 'false'
+
+  # Exclude known legitimate paths (C:\Program Files\ can contain \Temp\ subfolders)
+  filter_legit_program_files:
     ImageLoaded|startswith:
-      - 'C:\Windows\System32\drivers\'
-      - 'C:\Windows\SysWOW64\drivers\'
       - 'C:\Program Files\'
       - 'C:\Program Files (x86)\'
-      - 'C:\Windows\WinSxS\'
 
-  condition: selection_suspicious_path and selection_invalid_signature and not filter_legit_system_paths
+  # Exclude legitimate EDR/security vendor ProgramData driver paths
+  filter_legit_edr_programdata:
+    ImageLoaded|startswith:
+      - 'C:\ProgramData\CrowdStrike\'
+      - 'C:\ProgramData\SentinelOne\'
+      - 'C:\ProgramData\Sophos\'
+      - 'C:\ProgramData\ESET\'
+      - 'C:\ProgramData\Bitdefender\'
+      - 'C:\ProgramData\Kaspersky Lab\'
+      - 'C:\ProgramData\McAfee\'
+      - 'C:\ProgramData\Trellix\'
+      - 'C:\ProgramData\Trend Micro\'
+      - 'C:\ProgramData\Symantec\'
+      - 'C:\ProgramData\Carbon Black\'
+      - 'C:\ProgramData\CarbonBlack\'
+      - 'C:\ProgramData\Cylance\'
+      - 'C:\ProgramData\Malwarebytes\'
+
+  condition: (selection_suspicious_path or selection_programdata_path) and (selection_invalid_signature or selection_unsigned) and not (filter_legit_program_files or filter_legit_edr_programdata)
 
 fields:
   - ImageLoaded
@@ -84,10 +110,12 @@ fields:
   - Signature
   - Hashes
   - Computer
+  - User
 
 falsepositives:
-  - Legitimate vendor drivers with recently expired certificates deployed via non-standard paths (should be rare and documented)
+  - Legitimate vendor drivers with recently expired certificates in non-standard paths — rare, validate hash against ioc/ioc_hashes.csv and vendor advisory
   - Lab or development environments testing driver signing workflows
-  - Enterprise software using self-signed or internally-signed drivers (adjust filter to include internal CA root)
+  - Unsigned drivers from internal development tools — add their paths to filter_legit_edr_programdata
+  - Enterprise software storing unsigned helper drivers in ProgramData (partially filtered for known EDR vendors)
 
 level: high

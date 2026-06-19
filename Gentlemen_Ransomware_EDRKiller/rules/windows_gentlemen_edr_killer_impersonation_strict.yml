@@ -6,16 +6,17 @@ description: >
   from user-writable or non-standard paths, indicating EDR killer staging or execution.
 
   The Gentlemen ransomware operation deploys GentleKiller in at least eight variants that
-  impersonate legitimate security products (Kaspersky, WatchDog, Javelin) and gaming/anti-cheat
-  tools (Valorant/Vanguard) to avoid suspicion. Binaries are packed with Enigma or Themida and
-  carry stolen invalid digital signatures. They are dropped into Temp, AppData, ProgramData or
-  other user-writable directories before execution.
+  impersonate legitimate security products (Kaspersky, WatchDog, Javelin, ESET, Avast,
+  Symantec, McAfee, Malwarebytes, Webroot, Trend Micro) and gaming/anti-cheat tools
+  (Valorant/Vanguard, FACEIT, EA Anti-Cheat) to avoid suspicion. Binaries are packed with
+  Enigma or Themida and carry stolen invalid digital signatures.
 
-  The rule also covers explicitly named EDR killer tools: GentleKiller, HexKiller, ThrottleBlood,
-  HavocKiller, OxideHarvest — whose filenames may appear verbatim in post-compromise scenarios.
+  DETECTION BLIND SPOT: any binary rename (WindowsUpdateHelper.exe, svchost32.exe) fully
+  evades this rule. This is a defense-in-depth signal, not a primary detection layer.
+  Combine with the BYOVD driver rule and the behavioral correlation rule.
 
-  STRICT rule: impersonation name AND suspicious path are both required. False positives are
-  extremely rare. Investigate immediately on alert.
+  STRICT rule: impersonation name AND suspicious path are both required for the impersonation
+  branch. Explicit killer tool names (GentleKiller, HexKiller…) fire on any path.
 
 related:
   - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
@@ -23,11 +24,13 @@ related:
 
 references:
   - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
+  - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
   - https://attack.mitre.org/techniques/T1562/001/
   - https://attack.mitre.org/techniques/T1036/005/
 
 author: Adama ASSIONGBON
 date: 2026-06-19
+modified: 2026-06-19
 
 tags:
   - attack.defense-evasion
@@ -39,62 +42,84 @@ logsource:
   category: process_creation
 
 detection:
-  # Explicit EDR killer tool names (verbatim, regardless of path)
+  # Explicit EDR killer tool names — fire on any path
   selection_explicit_edr_killer:
     Image|contains:
       - 'GentleKiller'
-      - 'gentlekiller'
       - 'HexKiller'
-      - 'hexkiller'
       - 'ThrottleBlood'
-      - 'throttleblood'
       - 'HavocKiller'
-      - 'havockiller'
       - 'OxideHarvest'
-      - 'oxideharvest'
 
-  # Security/gaming product name impersonation from user-writable paths
+  # Security / gaming product name impersonation
   selection_impersonating_name:
     Image|contains:
+      # Kaspersky
       - 'kaspersky'
       - 'Kaspersky'
+      - 'Kasps'
+      # Watchdog
       - 'watchdog'
       - 'WatchDog'
+      # Javelin
       - 'javelin'
       - 'Javelin'
+      # Gaming / anti-cheat
       - 'valorant'
       - 'Valorant'
       - 'vanguard'
+      - 'FaceIT'
+      - 'faceit'
+      - 'EAAntiCheat'
+      - 'EASolo'
+      # Security vendors
       - 'SentinelOne'
       - 'sentinelone'
       - 'CrowdStrike'
       - 'crowdstrike'
       - 'Sophos'
+      - 'sophos'
       - 'BitDefender'
       - 'bitdefender'
+      - 'Symantec'
+      - 'symantec'
+      - 'McAfee'
+      - 'mcafee'
+      - 'Trellix'
+      - 'trellix'
+      - 'Malwarebytes'
+      - 'malwarebytes'
+      - 'Webroot'
+      - 'webroot'
+      - 'TrendMicro'
+      - 'trendmicro'
+      - 'ESET'
+      - 'Avast'
+      - 'avast'
 
+  # User-writable and non-standard execution paths
   selection_suspicious_path:
     Image|contains:
       - '\Temp\'
-      - '\AppData\Local\Temp\'
-      - '\AppData\Roaming\'
+      - '\AppData\'
       - '\Downloads\'
       - '\Users\Public\'
       - '\ProgramData\'
+      - '\Perflogs\'
+      - '\Intel\'
+      - '\Recovery\'
 
-  # Legitimate installation paths for impersonated products
+  # Legitimate installation paths — exclude from impersonation branch
   filter_legit_kaspersky:
     Image|startswith:
       - 'C:\Program Files (x86)\Kaspersky Lab\'
       - 'C:\Program Files\Kaspersky Lab\'
 
   filter_legit_sentinelone:
-    Image|startswith:
-      - 'C:\Program Files\SentinelOne\'
+    Image|startswith: 'C:\Program Files\SentinelOne\'
 
   filter_legit_crowdstrike:
-    Image|startswith:
-      - 'C:\Program Files\CrowdStrike\'
+    Image|startswith: 'C:\Program Files\CrowdStrike\'
 
   filter_legit_sophos:
     Image|startswith:
@@ -109,13 +134,35 @@ detection:
   filter_legit_vanguard:
     Image|startswith:
       - 'C:\Program Files\Riot Vanguard\'
+      - 'C:\Program Files (x86)\Riot Games\'
 
-  condition: >
-    selection_explicit_edr_killer
-    or (selection_impersonating_name and selection_suspicious_path
-        and not (filter_legit_kaspersky or filter_legit_sentinelone
-                 or filter_legit_crowdstrike or filter_legit_sophos
-                 or filter_legit_bitdefender or filter_legit_vanguard))
+  filter_legit_symantec:
+    Image|startswith:
+      - 'C:\Program Files\Symantec\'
+      - 'C:\Program Files (x86)\Symantec\'
+
+  filter_legit_mcafee:
+    Image|startswith:
+      - 'C:\Program Files\McAfee\'
+      - 'C:\Program Files (x86)\McAfee\'
+      - 'C:\Program Files\Trellix\'
+
+  filter_legit_eset:
+    Image|startswith:
+      - 'C:\Program Files\ESET\'
+      - 'C:\Program Files (x86)\ESET\'
+
+  filter_legit_trend:
+    Image|startswith:
+      - 'C:\Program Files\Trend Micro\'
+      - 'C:\Program Files (x86)\Trend Micro\'
+
+  filter_legit_avast:
+    Image|startswith:
+      - 'C:\Program Files\Avast Software\'
+      - 'C:\Program Files (x86)\Avast Software\'
+
+  condition: selection_explicit_edr_killer or (selection_impersonating_name and selection_suspicious_path and not (filter_legit_kaspersky or filter_legit_sentinelone or filter_legit_crowdstrike or filter_legit_sophos or filter_legit_bitdefender or filter_legit_vanguard or filter_legit_symantec or filter_legit_mcafee or filter_legit_eset or filter_legit_trend or filter_legit_avast))
 
 fields:
   - Image
@@ -128,7 +175,8 @@ fields:
 
 falsepositives:
   - Explicit EDR killer names (GentleKiller, HexKiller, etc.): virtually no legitimate use — investigate immediately
-  - Impersonation + suspicious path: extremely rare for legitimate security software to run from Temp/AppData — verify with vendor and change ticket
-  - Riot Vanguard anti-cheat may be present in AppData on gaming systems — partially filtered via filter_legit_vanguard
+  - Impersonation + suspicious path: legitimate security software never runs from Temp/AppData — verify with vendor and change ticket
+  - Riot Vanguard anti-cheat may be present in AppData on gaming systems — partially filtered
+  - ESET, Avast or Sophos update processes may temporarily write to ProgramData — validate ParentImage against vendor updater
 
 level: high
