@@ -4,7 +4,7 @@ description: >
 severity: Critical
 trigger:
   type: sigma
-  rule: infostealer_STRICT_credential_access_and_exfiltration
+  rule: infostealer_strict_credential_access_and_exfiltration
 tasks:
   - title: Isolate affected host
   - title: Invalidate all user credentials

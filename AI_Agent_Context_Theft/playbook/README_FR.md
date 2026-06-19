@@ -9,9 +9,9 @@ Guider les équipes SOC et IR lors d’alertes indiquant un vol d’identité ou
 
 ## 🔎 Déclencheur
 - Détection par l’une des règles Sigma suivantes :
-  - AI_Agent_Secrets_Exfiltration_STRICT
-  - AI_Agent_Crypto_Identity_Compromise_STRICT
-  - AI_Agent_MultiFile_Exfiltration_STRICT
+  - ai_agent_secrets_exfiltration_strict
+  - ai_agent_crypto_identity_compromise_strict
+  - ai_agent_multifile_exfiltration_strict
 
 Sévérité : **Élevée / Critique**
 

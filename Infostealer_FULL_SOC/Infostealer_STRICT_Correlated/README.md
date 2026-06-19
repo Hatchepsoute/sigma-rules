@@ -5,7 +5,7 @@
 To minimize false positives and increase alert confidence, these rules are divided into three critical stages. Correlating these three events on a single host within a 10-minute window indicates a high-probability compromise.
 ## 1️⃣ Step 1: Suspicious Execution (LOLBins) 🚀
 
-    File:  [infostealer_STRICTv2_step1_suspicious_exec.yml](./rules/infostealer_STRICTv2_step1_suspicious_exec.yml)
+    File:  [infostealer_strictv2_step1_suspicious_exec.yml](./rules/infostealer_strictv2_step1_suspicious_exec.yml)
 
     Logic: Detects the execution of legitimate Windows binaries (PowerShell, CMD, Rundll32, etc.) from user-writable directories like \Downloads\, \AppData\, or \Temp\.
 
@@ -15,7 +15,7 @@ To minimize false positives and increase alert confidence, these rules are divid
 
 ## 2️⃣ Step 2: Browser Credential Access 🔑
 
-    File:[infostealer_STRICTv2_step2_browser_cred_access.yml](./rules/infostealer_STRICTv2_step2_browser_cred_access.yml)
+    File:[infostealer_strictv2_step2_browser_cred_access.yml](./rules/infostealer_strictv2_step2_browser_cred_access.yml)
 
     Logic: Identifies any non-browser process attempting to read database files containing passwords, cookies, or session data from Chrome, Edge, or Firefox.
 
@@ -25,7 +25,7 @@ To minimize false positives and increase alert confidence, these rules are divid
 
 ## 3️⃣ Step 3: Public Network Egress 🌐
 
-    File: [infostealer_STRICTv2_step3_public_egress.yml](./rules/ infostealer_STRICTv2_step3_public_egress.yml)
+    File: [infostealer_strictv2_step3_public_egress.yml](./rules/ infostealer_strictv2_step3_public_egress.yml)
 
     Logic: Detects outbound network connections to public IP addresses initiated by common LOLBins (PowerShell, Cscript, Mshta, etc.).
 

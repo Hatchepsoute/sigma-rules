@@ -18,8 +18,8 @@ Ce dépôt fournit un arsenal complet (règles Sigma, IoCs et Playbooks) conçu 
 ## 🔍 Analyse Technique des Règles (Résumé)
 Cinq règles spécialisées couvrent le cycle de vie de l'attaque :
 1.  **Déploiement de l'implant** ([lnx_sliver_implant_deployment.yml](./rules/lnx_sliver_implant_deployment.yml)) : Surveillance des répertoires suspects (`/.root/`, `/app/web/`).
-2.  **Persistance Systemd** ([PERSIST_LNX_Sliver_Systemd_Service.yml](./rules/PERSIST_LNX_Sliver_Systemd_Service.yml) ) : Détection du service malveillant "Updater Service".
-3.  **Masquage de Proxy** ( [PROC_LNX_Microsocks_LPD_Masquerade.yml](./rules/PROC_LNX_Microsocks_LPD_Masquerade.yml)) : Identification des arguments `microsocks` camouflés en `cups-lpd`.
+2.  **Persistance Systemd** ([persist_lnx_sliver_systemd_service.yml](./rules/persist_lnx_sliver_systemd_service.yml) ) : Détection du service malveillant "Updater Service".
+3.  **Masquage de Proxy** ( [proc_lnx_microsocks_lpd_masquerade.yml](./rules/proc_lnx_microsocks_lpd_masquerade.yml)) : Identification des arguments `microsocks` camouflés en `cups-lpd`.
 4.  **Tunneling FRP** ( [lnx_frp_reverse_proxy_activity.yml ](./rules/lnx_frp_reverse_proxy_activity.yml) ) : Surveillance de l'activité du client `frpc` et ses fichiers de conf.
 5.  **Écoute Réseau Suspecte** ([lnx_lpd_listener_printer_service_masquerade.yml](./rules/lnx_lpd_listener_printer_service_masquerade.yml)) : Détection de listeners non-CUPS sur le **port TCP 515**.
 ## 🛡️ Résilience et Anticipation

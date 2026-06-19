@@ -4,7 +4,7 @@ description: >
 severity: Critique
 trigger:
   type: sigma
-  rule: infostealer_STRICT_credential_access_and_exfiltration
+  rule: infostealer_strict_credential_access_and_exfiltration
 tasks:
   - title: Isoler le poste affecté
   - title: Réinitialiser les identifiants utilisateurs

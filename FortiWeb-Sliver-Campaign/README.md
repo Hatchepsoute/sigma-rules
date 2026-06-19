@@ -16,8 +16,8 @@ This repository provides a comprehensive detection suite (Sigma Rules, IoCs, and
 
 ## 🔍 Technical Analysis (Ruleset)
 1.  **Implant Deployment** ([lnx_sliver_implant_deployment.yml](./rules/lnx_sliver_implant_deployment.yml)): Targets hidden binary drops in `/.root/`.
-2.  **Systemd Persistence** ([PERSIST_LNX_Sliver_Systemd_Service.yml](./rules/PERSIST_LNX_Sliver_Systemd_Service.yml)): Detects malicious service configurations.
-3.  **Proxy Masquerading** ([PROC_LNX_Microsocks_LPD_Masquerade.yml](./rules/PROC_LNX_Microsocks_LPD_Masquerade.yml)): Spots disguised proxies via command-line flags.
+2.  **Systemd Persistence** ([persist_lnx_sliver_systemd_service.yml](./rules/persist_lnx_sliver_systemd_service.yml)): Detects malicious service configurations.
+3.  **Proxy Masquerading** ([proc_lnx_microsocks_lpd_masquerade.yml](./rules/proc_lnx_microsocks_lpd_masquerade.yml)): Spots disguised proxies via command-line flags.
 4.  **FRP Tunneling** ( [lnx_frp_reverse_proxy_activity.yml ](./rules/lnx_frp_reverse_proxy_activity.yml)): Monitors reverse proxy client activity.
 5.  **Network Listener** ([lnx_lpd_listener_printer_service_masquerade.yml](./rules/lnx_lpd_listener_printer_service_masquerade.yml)): Detects unauthorized listeners on **TCP port 515**.
 

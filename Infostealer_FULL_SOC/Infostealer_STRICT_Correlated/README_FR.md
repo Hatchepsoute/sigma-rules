@@ -8,7 +8,7 @@ Pour réduire les faux positifs et augmenter la confiance dans les alertes, ces 
 
 ## 1️⃣ Étape 1 : Exécution Suspecte (LOLBins) 🚀
 
-    Fichier : [infostealer_STRICTv2_step1_suspicious_exec.yml](./rules/infostealer_STRICTv2_step1_suspicious_exec.yml)
+    Fichier : [infostealer_strictv2_step1_suspicious_exec.yml](./rules/infostealer_strictv2_step1_suspicious_exec.yml)
 
     Logique : Détecte l'exécution de binaires légitimes Windows (PowerShell, CMD, Rundll32, etc.) depuis des répertoires normalement réservés aux utilisateurs (\Downloads\, \AppData\, \Temp\).
 
@@ -18,7 +18,7 @@ Pour réduire les faux positifs et augmenter la confiance dans les alertes, ces 
 
 ## 2️⃣ Étape 2 : Accès aux Identifiants Navigateurs 🔑
 
-    Fichier : [infostealer_STRICTv2_step2_browser_cred_access.yml](./rules/infostealer_STRICTv2_step2_browser_cred_access.yml)
+    Fichier : [infostealer_strictv2_step2_browser_cred_access.yml](./rules/infostealer_strictv2_step2_browser_cred_access.yml)
 
     Logique : Identifie tout processus non-navigateur qui tente de lire les bases de données de mots de passe, cookies ou sessions (Chrome, Edge, Firefox).
 
@@ -28,7 +28,7 @@ Pour réduire les faux positifs et augmenter la confiance dans les alertes, ces 
 
 ## 3️⃣ Étape 3 : Exfiltration & Communication Externe 🌐
 
-    Fichier : [infostealer_STRICTv2_step3_public_egress.yml](./rules/ infostealer_STRICTv2_step3_public_egress.yml)
+    Fichier : [infostealer_strictv2_step3_public_egress.yml](./rules/ infostealer_strictv2_step3_public_egress.yml)
 
     Logique : Détecte les connexions réseau sortantes vers des adresses IP publiques initiées par des LOLBins (PowerShell, Cscript, Mshta).
 
