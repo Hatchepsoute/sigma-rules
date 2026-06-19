@@ -1,0 +1,14 @@
+type,value,context,source,date_added,last_verified,status,confidence,notes
+driver_name,eb.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 BA914FE77B177B45799403B16DD14765C510A074
+driver_name,nseckrnl.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 B0B912A3FD1C05D72080848EC4C92880004021A1
+driver_name,GameDriverX64.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,medium,No confirmed hash yet — name-only hit requires triage
+driver_name,vgk.sys,BYOVD driver — abused Riot Vanguard anti-cheat driver,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,medium,Legitimate vgk.sys exists on gaming endpoints — hash required for confirmation (SHA-1 7556AE58C215B8245A43F764F0676C7A8F0FDD1A)
+driver_name,stpm_old.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 711EF221526997039E804A18DB9647C91680BBE2
+driver_name,stpm_new.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 68FEC379F2AE76C3D2CE913F7BE650CEA1D06990
+driver_name,dmx.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,medium,Name alone is not sufficient — verify hash SHA-1 96F0DBF52AED0AFD43E44500116B04B674F7358E
+driver_name,360netmon_wfp.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 9AD51AD97C01E97AB59214116740785E0F6320A8
+driver_name,IMFForceDelete.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 12500F6C87CE62712A0ED6652C57468D15C14223. Original report omits .sys extension
+driver_name,G11.sys,BYOVD driver — GentleKiller/PoisonX toolset,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 56BEE9DF5833A637F5C54D5911DF98B0812FE643
+driver_name,googleApiUtil64.sys,BYOVD driver — GentleKiller framework,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Impersonates a Google utility — name alone is not sufficient. Verify hash SHA-1 EC296F9501AD71E430810CB5CDC38D954D4BA536
+driver_name,ThrottleBlood.sys,BYOVD driver — ThrottleBlood EDR killer,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 82ED942A52CDCF120A8919730E00BA37619661A3
+driver_name,havoc.sys,BYOVD driver — HavocKiller EDR killer,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Name alone is not sufficient — verify hash SHA-1 1FA071303FB846308571E64727501FB98B1C2BE6
