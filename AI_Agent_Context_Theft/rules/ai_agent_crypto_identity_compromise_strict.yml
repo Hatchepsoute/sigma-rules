@@ -1,35 +1,92 @@
-title: AI Agent Cryptographic Identity Access from Unexpected Process
+title: AI agent cryptographic identity file access from suspicious context
 id: f59de936-0c3e-11f1-97ae-9704b79e784d
 status: experimental
-description: >
-  Detects access to AI agent device identity files containing private cryptographic keys (PEM). This may indicate full agent impersonation and persistent compromise.
+description: |
+  Detects access to AI agent device identity files containing private cryptographic keys (PEM)
+  or device binding files (device.json) by processes running from user-writable paths or by
+  processes that have no legitimate reason to read cryptographic material. A match indicates
+  potential full agent impersonation and persistent compromise of the AI agent identity.
 
-  FR: « Détecte l'accès aux fichiers d'identité d'agents IA contenant des clés cryptographiques privées (PEM).Un tel accès par un processus non autorisé peut indiquer une usurpation complète de l'identité de l'agent et une compromission persistante du système. »
-author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
-date: 2026-02-16
-modified: 2026-02-18
+  STRICT rule: combine path-based context (process running from Temp/AppData) with suspicious
+  process names to cover both staged infostealers and LOLBin-based theft.
+
+related:
+  - id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
+    type: similar
+  - id: a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d
+    type: similar
+  - id: 02b62c0a-0c3f-11f1-aa25-c7684f6249e0
+    type: similar
+
 references:
   - https://attack.mitre.org/techniques/T1552/
   - https://attack.mitre.org/techniques/T1554/
   - https://owasp.org/www-project-top-10-for-large-language-model-applications/
+  - https://www.infostealers.com/article/hudson-rock-identifies-real-world-infostealer-infection-targeting-openclaw-configurations/
+
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-02-16
+modified: 2026-06-19
+
 tags:
   - attack.credential-access
   - attack.persistence
   - attack.t1552
+  - attack.t1552.001
   - attack.t1554
+
 logsource:
   category: file_event
   product: windows
+
 detection:
-  crypto_files:
+  selection_crypto_files:
     TargetFilename|endswith:
       - 'device.json'
       - '.pem'
-  suspicious_process:
+
+  # Branch 1: process image itself is staged in a user-writable path (infostealer staging).
+  # Single-backslash paths; Sysmon EID 11 uses single backslashes in TargetFilename and Image.
+  selection_suspicious_path:
     Image|contains:
-      - '\\Temp\\'
-      - '\\AppData\\'
-  condition: crypto_files and suspicious_process
+      - '\Temp\'
+      - '\AppData\'
+      - '\Downloads\'
+      - '\Users\Public\'
+
+  # Branch 2: processes that should never read cryptographic identity files.
+  selection_suspicious_process:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\cmd.exe'
+      - '\rundll32.exe'
+      - '\mshta.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\curl.exe'
+      - '\wget.exe'
+
+  filter_legitimate:
+    Image|endswith:
+      - '\OpenClaw.exe'
+      - '\python.exe'
+      - '\node.exe'
+      - '\code.exe'
+      - '\openssl.exe'
+
+  condition: selection_crypto_files and (selection_suspicious_path or selection_suspicious_process) and not filter_legitimate
+
+fields:
+  - TargetFilename
+  - Image
+  - ProcessId
+  - User
+  - Computer
+
 falsepositives:
-  - Security audits
+  - OpenSSL or developer tooling reading PEM files for legitimate TLS configuration (filtered via openssl.exe)
+  - Authorized security audit scripts accessing device identity files with a documented change ticket
+  - Python-based AI agent runtimes reading device.json at startup (filtered via python.exe)
+
 level: critical

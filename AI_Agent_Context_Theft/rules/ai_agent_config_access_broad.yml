@@ -1,29 +1,49 @@
-title: Suspicious Access to AI Agent Configuration or Memory Files
+title: Suspicious access to AI agent configuration or memory files
 id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
 status: experimental
-description: >
-  Detects access to local AI agent configuration or memory files (e.g. OpenClaw) by unexpected processes. These files may contain authentication tokens, cryptographic material, or sensitive contextual data.
+description: |
+  Detects access to local AI agent configuration or memory files (OpenClaw and similar agents)
+  by unexpected processes. These files may contain authentication tokens, cryptographic material,
+  or sensitive contextual data that infostealers harvest for credential theft or agent
+  impersonation.
 
-  FR: « Détecte l'accès aux fichiers de configuration ou de mémoire d'agents IA locaux (exemple OpenClaw) par des processus inattendus. Ces fichiers peuvent contenir des jetons d'authentification (tokens), des éléments cryptographiques ou des données contextuelles sensibles. »
-author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
-date: 2026-02-16
-modified: 2026-02-17
+  BROAD rule: any suspicious process accessing the OpenClaw directory or known config filenames.
+  Expect some noise from developer tooling; tune filter_legitimate to the environment.
+
+related:
+  - id: f59de936-0c3e-11f1-97ae-9704b79e784d
+    type: similar
+  - id: a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d
+    type: similar
+  - id: 02b62c0a-0c3f-11f1-aa25-c7684f6249e0
+    type: similar
+
 references:
   - https://www.infostealers.com/article/hudson-rock-identifies-real-world-infostealer-infection-targeting-openclaw-configurations/
+
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-02-16
+modified: 2026-06-19
+
 tags:
   - attack.collection
   - attack.credential-access
   - attack.t1005
   - attack.t1552
+  - attack.t1552.001
+
 logsource:
   category: file_event
   product: windows
+
 detection:
+  # Single-backslash paths; Sysmon EID 11 logs Windows paths with single backslashes.
   selection_directory:
     TargetFilename|contains:
-      - '\\.openclaw\\'
-      - '\\.openc1aw\\'
-      - '\\OpenClaw\\'
+      - '\.openclaw\'
+      - '\.openc1aw\'
+      - '\OpenClaw\'
+
   selection_files:
     TargetFilename|endswith:
       - 'openclaw.json'
@@ -34,7 +54,8 @@ detection:
       - 'paired.json'
       - 'pending.json'
       - 'device-auth.json'
-  # Suspicious accessors: processes not expected to read AI agent config files
+
+  # Processes not expected to read AI agent config files
   selection_suspicious_accessor:
     Image|endswith:
       - '\powershell.exe'
@@ -48,17 +69,25 @@ detection:
       - '\wget.exe'
       - '\python.exe'
 
-  # NOTE: 'Image|endswith: .exe' removed, it matches every Windows process (universal FP).
-  # Replaced with targeted list of unexpected accessors. If the OpenClaw process itself is
-  # the target (credential theft), the filter_legitimate block below would suppress that.
   filter_legitimate:
     Image|endswith:
       - '\OpenClaw.exe'
       - '\code.exe'
       - '\notepad.exe'
       - '\explorer.exe'
+
   condition: (selection_directory or selection_files) and selection_suspicious_accessor and not filter_legitimate
+
+fields:
+  - TargetFilename
+  - Image
+  - ProcessId
+  - User
+  - Computer
+
 falsepositives:
-  - Legitimate backup or audit tools
-  - User manually opening files
+  - Legitimate backup or audit tools reading config directories (allowlist by Image path)
+  - Developer scripts copying or inspecting agent files during debugging
+  - User manually opening files via explorer or notepad (filtered)
+
 level: medium

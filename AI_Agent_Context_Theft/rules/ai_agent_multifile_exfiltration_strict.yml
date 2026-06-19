@@ -1,32 +1,41 @@
-title: Single Process Accessing Multiple Critical AI Agent Files
+title: Single process accessing multiple critical AI agent files
 id: a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d
 status: experimental
-description: >
+description: |
   Detects access to critical AI agent files (authentication, cryptographic identity and memory)
-  by suspicious processes. Strongly indicating agent compromise or credential theft.
+  by suspicious processes. Any single critical file access by an unexpected process is a strong
+  indicator of agent compromise or credential theft.
 
-  CRITICAL FIX: The previous condition required ALL four selection blocks to be true on a
-  SINGLE file_event. Since each file_event covers ONE file at a time, the condition
-  `selection_dir AND selection_auth AND selection_crypto AND selection_memory` could NEVER
-  fire, it requires the same event to match four different filenames simultaneously.
-  Fixed to OR logic: any one of the critical file types accessed by a suspicious process
-  constitutes an alert. Correlation across multiple events should be done at the SIEM layer
-  (e.g., same ProcessId or same host within a 5-minute window).
+  Note: file_event telemetry produces one event per file; multi-file correlation across events
+  requires a SIEM-level sequence rule (EQL, OpenSearch PPL) grouping by ProcessId within a
+  short time window. Use this rule as the building block for that correlation.
 
-  For full multi-file correlation, use this rule as input to an EQL/Elasticsearch sequence rule.
+related:
+  - id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
+    type: similar
+  - id: f59de936-0c3e-11f1-97ae-9704b79e784d
+    type: similar
+  - id: 02b62c0a-0c3f-11f1-aa25-c7684f6249e0
+    type: similar
+
+references:
+  - https://www.infostealers.com/article/hudson-rock-identifies-real-world-infostealer-infection-targeting-openclaw-configurations/
+
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-17
 modified: 2026-06-19
-references:
-  - https://www.infostealers.com/article/hudson-rock-identifies-real-world-infostealer-infection-targeting-openclaw-configurations/
+
 tags:
   - attack.collection
   - attack.credential-access
   - attack.t1005
   - attack.t1552
+  - attack.t1552.001
+
 logsource:
   category: file_event
   product: windows
+
 detection:
   selection_openclaw_dir:
     TargetFilename|contains:
@@ -62,8 +71,15 @@ detection:
 
   condition: (selection_openclaw_dir or selection_critical_files) and selection_suspicious_accessor and not filter_legitimate
 
+fields:
+  - TargetFilename
+  - Image
+  - ProcessId
+  - User
+  - Computer
+
 falsepositives:
-  - Extremely rare, developer scripts legitimately copying config files
-  - Backup tools reading AI agent directories (should be allowlisted by Image path)
+  - Extremely rare; developer scripts legitimately copying config files (allowlist by Image path)
+  - Backup tools reading AI agent directories (allowlist by Image path in filter_legitimate)
 
 level: critical
