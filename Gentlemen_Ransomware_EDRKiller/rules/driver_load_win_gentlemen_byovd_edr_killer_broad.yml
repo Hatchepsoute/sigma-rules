@@ -1,0 +1,59 @@
+title: Gentlemen Ransomware - BYOVD Abused Driver Load (GentleKiller suite) - BROAD
+id: a2f6c1e4-9b73-4d8a-8e51-6c2f0a3d7b94
+status: experimental
+description: |
+  Detects the load of vulnerable / malicious kernel drivers abused by the Gentlemen ransomware-as-a-service EDR-killer suite (GentleKiller and the integrated HexKiller / ThrottleBlood / HavocKiller). Per ESET research (June 2026), each GentleKiller variant drops and loads a different BYOVD driver to gain kernel privileges and disable security products. This BROAD rule combines driver-filename matching (hunting, false positives possible) with the known sample SHA-1 hashes (high confidence). Use for visibility and to corroborate the STRICT staging rule and the mass-kill correlation.
+  Telemetry: Sysmon Event ID 6 (Driver loaded). Some driver filenames (e.g. vgk.sys) also belong to legitimate software, so a name-only hit requires triage; a hash hit is a confirmed Gentlemen sample.
+  IoC freshness: driver names and hashes may go stale as the actor swaps drivers between campaigns. See ioc/ioc_hashes.csv and ioc/ioc_driver_names.csv for last_verified dates.
+
+references:
+    - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
+    - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
+author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-06-19
+modified: 2026-06-19
+tags:
+    - attack.defense-evasion
+    - attack.t1562.001
+    - attack.privilege-escalation
+    - attack.t1068
+    - attack.t1543.003
+logsource:
+    product: windows
+    category: driver_load
+detection:
+    selection_abused_driver_name:
+        ImageLoaded|endswith:
+            - '\eb.sys'
+            - '\nseckrnl.sys'
+            - '\GameDriverX64.sys'
+            - '\vgk.sys'
+            - '\stpm_old.sys'
+            - '\stpm_new.sys'
+            - '\dmx.sys'
+            - '\360netmon_wfp.sys'
+            - '\IMFForceDelete.sys'
+            - '\G11.sys'
+            - '\googleApiUtil64.sys'
+            - '\ThrottleBlood.sys'
+            - '\havoc.sys'
+    selection_known_driver_hash:
+        Hashes|contains:
+            - 'BA914FE77B177B45799403B16DD14765C510A074'   # eb.sys
+            - 'B0B912A3FD1C05D72080848EC4C92880004021A1'   # nseckrnl.sys
+            - '7556AE58C215B8245A43F764F0676C7A8F0FDD1A'   # vgk.sys
+            - '711EF221526997039E804A18DB9647C91680BBE2'   # stpm_old.sys
+            - '68FEC379F2AE76C3D2CE913F7BE650CEA1D06990'   # stpm_new.sys
+            - '96F0DBF52AED0AFD43E44500116B04B674F7358E'   # dmx.sys
+            - '9AD51AD97C01E97AB59214116740785E0F6320A8'   # 360netmon_wfp.sys
+            - '12500F6C87CE62712A0ED6652C57468D15C14223'   # IMFForceDelete.sys
+            - '56BEE9DF5833A637F5C54D5911DF98B0812FE643'   # G11.sys (PoisonX)
+            - 'EC296F9501AD71E430810CB5CDC38D954D4BA536'   # googleApiUtil64.sys
+            - '82ED942A52CDCF120A8919730E00BA37619661A3'   # ThrottleBlood.sys
+            - '1FA071303FB846308571E64727501FB98B1C2BE6'   # havoc.sys
+    condition: selection_abused_driver_name or selection_known_driver_hash
+falsepositives:
+    - Legitimate software shipping a driver that shares a filename above (e.g. vgk.sys on gaming endpoints, dmx.sys) - hash hits are NOT affected
+    - Authorized red-team / BYOVD research in a controlled lab
+    - Security vendor testing of vulnerable-driver blocklists
+level: medium

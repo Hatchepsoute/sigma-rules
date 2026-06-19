@@ -1,0 +1,96 @@
+title: Security Product Process Access (building block for EDR-killer correlation)
+id: c9e1a4d6-3f82-4b7e-8a14-7d0b6c5e2f31
+name: gentlemen_security_process_access
+status: experimental
+description: |
+  Building-block rule: a process opening a handle to a known security/EDR product process. Not actionable on its own (security tools and the OS access each other constantly); it exists only to feed the mass-termination correlation below. Behavioral by design - resilient to EDR-killer renaming because it keys on the TARGET security processes, not on the attacker tool.
+references:
+    - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
+author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-06-19
+modified: 2026-06-19
+tags:
+    - attack.defense-evasion
+    - attack.t1562.001
+logsource:
+    product: windows
+    category: process_access
+detection:
+    selection_security_targets:
+        TargetImage|endswith:
+            - '\MsMpEng.exe'
+            - '\MsSense.exe'
+            - '\SecurityHealthService.exe'
+            - '\CSFalconService.exe'
+            - '\CSFalconContainer.exe'
+            - '\SentinelAgent.exe'
+            - '\SentinelServiceHost.exe'
+            - '\SentinelStaticEngine.exe'
+            - '\ekrn.exe'
+            - '\egui.exe'
+            - '\bdservicehost.exe'
+            - '\bdagent.exe'
+            - '\avp.exe'
+            - '\kavfs.exe'
+            - '\mcshield.exe'
+            - '\masvc.exe'
+            - '\PccNTMon.exe'
+            - '\coreServiceShell.exe'
+            - '\cb.exe'
+            - '\RepMgr.exe'
+            - '\CylanceSvc.exe'
+            - '\cybereason.exe'
+            - '\cortexService.exe'
+            - '\Traps.exe'
+            - '\fortiedr.exe'
+            - '\SophosFS.exe'
+            - '\SAVService.exe'
+            - '\HuntressAgent.exe'
+            - '\elastic-agent.exe'
+            - '\ccSvcHst.exe'
+            - '\SepMasterService.exe'
+            - '\WRSA.exe'
+            - '\TaniumClient.exe'
+            - '\Sysmon.exe'
+            - '\Sysmon64.exe'
+    filter_legit_sources:
+        SourceImage|endswith:
+            - '\services.exe'
+            - '\svchost.exe'
+            - '\MsMpEng.exe'
+            - '\CSFalconService.exe'
+            - '\SentinelAgent.exe'
+            - '\taskmgr.exe'
+            - '\wmiprvse.exe'
+    condition: selection_security_targets and not filter_legit_sources
+falsepositives:
+    - Endpoint management / inventory tools legitimately enumerating processes (add to filter_legit_sources)
+    - Security products inspecting one another - tune filter_legit_sources to your stack
+level: informational
+---
+title: Gentlemen Ransomware - Mass Security Process Termination by Single Process (EDR Killer Behavior) - STRICT
+id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
+status: experimental
+description: |
+  Behavioral correlation that fires when a single source process accesses many distinct security/EDR product processes within a short window - the core behavior of an EDR killer such as Gentlemen's GentleKiller, which terminates 400+ security processes across ~48 vendors in a loop. This detection is resilient to tool renaming, repacking and new BYOVD drivers because it keys on the killing behavior, not on file artifacts. Pair it with the BYOVD driver-load BROAD rule and the GentlemenCollection STRICT rule for full-confidence attribution.
+  Tune the threshold (default: >= 8 distinct security processes in 1 minute) to your environment.
+references:
+    - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
+author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+date: 2026-06-19
+modified: 2026-06-19
+tags:
+    - attack.defense-evasion
+    - attack.t1562.001
+correlation:
+    type: value_count
+    rules:
+        - gentlemen_security_process_access
+    group-by:
+        - SourceImage
+        - Computer
+    timespan: 1m
+    condition:
+        gte: 8
+        field: TargetImage
+level: high
