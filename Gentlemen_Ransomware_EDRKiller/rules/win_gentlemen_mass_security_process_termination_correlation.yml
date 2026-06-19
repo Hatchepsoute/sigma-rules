@@ -1,4 +1,4 @@
-title: Security Product Process Access (building block for EDR-killer correlation)
+title: Security product process access (building block for EDR-killer correlation)
 id: c9e1a4d6-3f82-4b7e-8a14-7d0b6c5e2f31
 name: gentlemen_security_process_access
 status: experimental
@@ -68,7 +68,7 @@ falsepositives:
     - Security products inspecting one another - tune filter_legit_sources to your stack
 level: informational
 ---
-title: Gentlemen Ransomware - Mass Security Process Termination by Single Process (EDR Killer Behavior) - STRICT
+title: Gentlemen ransomware - Mass security process termination by single process (EDR killer behavior)
 id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
 status: experimental
 description: |
