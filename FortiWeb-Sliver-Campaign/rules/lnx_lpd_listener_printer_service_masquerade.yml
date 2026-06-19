@@ -1,27 +1,49 @@
-title: Suspicious Network Listener on TCP 515 (LPD Masquerade - Non CUPS)
+title: Suspicious network listener on TCP 515 (LPD masquerade, non-CUPS)
 id: 8f3c2e91-7b6a-4e77-9cfa-2a1e9d4cbe12
 status: experimental
 description: |
-  Detects a process listening on TCP port 515 (LPD) that is not a legitimate CUPS printing service. In the FortiWeb Sliver campaign, attackers deployed a SOCKS proxy (microsocks) renamed as 'cups-lpd' to masquerade as a printer  daemon and expose remote access tunnels. (Détecte un processus à l’écoute sur le port TCP 515 (LPD) qui ne correspond pas à un service d’impression CUPS légitime. Dans la campagne Sliver ciblant FortiWeb, les attaquants ont déployé un proxy SOCKS (microsocks), renommé en « cups-lpd », afin de se faire passer pour un démon d’impression et d’exposer des tunnels d’accès à distance)
-author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
-date: 2026/01/08
+  Detects a process listening on TCP port 515 (LPD) that is not a legitimate CUPS printing service.
+  In the FortiWeb Sliver campaign, attackers deployed a SOCKS proxy (microsocks) renamed as
+  'cups-lpd' to masquerade as a printer daemon and expose remote access tunnels.
 references:
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-01-08
+modified: 2026-06-19
+related:
+  - id: c3e7f5a8-1b2d-4f9c-88a0-9d1e2f3a4b5c
+    type: similar
+  - id: 7d12a3b4-e9c8-4f51-b8d2-3a1b4c5d6e7f
+    type: similar
 tags:
   - attack.t1090
+  - attack.t1090.001
+  - attack.command-and-control
 logsource:
-  category: network_listen
+  category: network_connection
   product: linux
+
 detection:
   selection_port:
     DestinationPort: 515
+
   filter_legitimate:
-    ProcessName|contains:
+    Image|contains:
       - 'cupsd'
       - 'lpd'
-  condition: selection_port and not filter_legitimate
-falsepositives:
-  - Legacy printing servers exposing LPD without CUPS (rare).
-  - Custom embedded systems explicitly running LPD services.
-level: high
 
+  condition: selection_port and not filter_legitimate
+
+fields:
+  - Computer
+  - User
+  - Image
+  - DestinationPort
+  - SourceIp
+  - DestinationIp
+
+falsepositives:
+  - Legacy printing servers exposing LPD without CUPS (rare)
+  - Custom embedded systems explicitly running LPD services
+
+level: high

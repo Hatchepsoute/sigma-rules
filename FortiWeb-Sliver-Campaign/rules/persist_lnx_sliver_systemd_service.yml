@@ -1,26 +1,45 @@
-title: Suspicious Systemd Service for Persistence (Updater Service)
+title: Suspicious systemd service creation for Sliver persistence
 id: a9f2b4c1-8d3e-45f6-92a7-12b345c6d789
 status: experimental
-description: Detects the creation of a systemd service file matching the Sliver persistence pattern (Détection de la création d'un service systemd correspondant au schéma de persistance de Sliver).
-author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
-date: 2026/01/08
+description: |
+  Detects the creation of a systemd service file matching the Sliver persistence pattern
+  observed in the FortiWeb campaign: service description "Updater Service", ExecStart pointing
+  to the implant binary, and Restart=on-failure for resilience.
 references:
   - https://bishopfox.com/blog/sliver-command-and-control-framework
   - https://attack.mitre.org/techniques/T1543/002/
-logsource:
-    category: file_event
-    product: linux
-detection:
-    selection:
-        TargetFilename|endswith: '.service'
-        FileContent|contains|all:
-            - 'Description=Updater Service'
-            - 'ExecStart='
-            - 'Restart=on-failure'
-    condition: selection
-falsepositives:
-    - Custom administrator services (Services personnalisés par l'administrateur).
-level: high
+  - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-01-08
+modified: 2026-06-19
+related:
+  - id: 5b8c3a2d-7f1e-4e32-b1d9-64f9c8a1e3f2
+    type: similar
 tags:
-    - attack.persistence
-    - attack.t1543.002
+  - attack.persistence
+  - attack.t1543.002
+logsource:
+  category: file_event
+  product: linux
+
+detection:
+  selection_main:
+    TargetFilename|endswith: '.service'
+    FileContent|contains|all:
+      - 'Description=Updater Service'
+      - 'ExecStart='
+      - 'Restart=on-failure'
+
+  condition: selection_main
+
+fields:
+  - Computer
+  - User
+  - Image
+  - TargetFilename
+  - CreationUtcTime
+
+falsepositives:
+  - Custom administrator services using identical description and restart configuration (no known case)
+
+level: high

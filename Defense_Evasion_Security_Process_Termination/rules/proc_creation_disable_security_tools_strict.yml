@@ -1,12 +1,24 @@
-title: Defense Evasion - High Confidence Security Tool Disable via Command Line (Strict)
+title: High-confidence security tool disable via command line
 id: 7f1a3c2e-0c9f-4e3a-9f45-1c4b2a9d6e3f
 status: experimental
 description: |
-  High-confidence detection of attempts to disable or stop security/EDR/AV tooling via explicit command-line patterns (e.g., taskkill /F /IM <security_process>, sc stop <security_service>, PowerShell Defender tampering). Designed to reduce false positives by requiring strong intent + explicit target indicators.
+  High-confidence detection of attempts to disable or stop security/EDR/AV tooling via explicit
+  command-line patterns (e.g., taskkill /F /IM <security_process>, sc stop <security_service>,
+  PowerShell Defender tampering). Designed to reduce false positives by requiring strong intent
+  combined with explicit target indicators.
 references:
   - https://attack.mitre.org/techniques/T1562/001/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-08
+related:
+  - id: 3c2d9b7a-9f4d-4b8f-8c2a-6a7a2f7b1c4e
+    type: similar
+  - id: 5d6b7a2c-3f2e-4b91-9a7e-8f9c1b2a7d11
+    type: similar
+tags:
+  - attack.defense-evasion
+  - attack.t1562
+  - attack.t1562.001
 logsource:
   category: process_creation
   product: windows
@@ -29,8 +41,7 @@ detection:
 
   selection_sc_stop_service:
     Image|endswith: '\sc.exe'
-    CommandLine|contains|all:
-      - 'stop'
+    CommandLine|contains: 'stop'
     CommandLine|contains:
       - 'WinDefend'
       - 'WdNisSvc'
@@ -39,8 +50,7 @@ detection:
 
   selection_net_stop_service:
     Image|endswith: '\net.exe'
-    CommandLine|contains|all:
-      - 'stop'
+    CommandLine|contains: 'stop'
     CommandLine|contains:
       - 'WinDefend'
       - 'WdNisSvc'
@@ -71,15 +81,28 @@ detection:
       - 'SenseCE.exe'
       - 'CSFalconService.exe'
 
-  condition: selection_taskkill_im or selection_sc_stop_service or selection_net_stop_service or selection_powershell_defender_tamper or selection_wmic_delete_security_process
+  condition: >
+    selection_taskkill_im
+    or selection_sc_stop_service
+    or selection_net_stop_service
+    or selection_powershell_defender_tamper
+    or selection_wmic_delete_security_process
+
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - IntegrityLevel
+  - ProcessId
+  - ParentProcessId
 
 falsepositives:
   - Rare: Security team or administrators intentionally disabling Microsoft Defender features during maintenance or troubleshooting
   - Endpoint hardening / imaging scripts that explicitly set Defender exclusions (should be allowlisted)
   - Incident response actions where defenders intentionally stop EDR/AV components for containment (documented change window)
-level: critical
-tags:
-  - attack.defense-evasion
-  - attack.t1562
-  - attack.t1562.001
 
+level: critical

@@ -1,4 +1,4 @@
-title: Fast Reverse Proxy (FRP) Client or Server Execution on Linux
+title: Fast reverse proxy (FRP) client or server execution on Linux
 id: 7d12a3b4-e9c8-4f51-b8d2-3a1b4c5d6e7f
 status: experimental
 description: |
@@ -6,31 +6,37 @@ description: |
   FRP is a legitimate open-source tunneling tool frequently abused in post-exploitation for
   C2 traffic tunneling and firewall bypass.
 
-  FIX: Replaced overly broad `CommandLine|contains: 'frpc'` (matched substrings like xfrpc,
-  ifrpc, and any command mentioning 'frpc' as an arg) with Image-based detection anchored to
-  the binary name. Added frps (FRP server) which is equally suspicious when deployed on a
-  compromised host. Removed standalone '.toml' from CLI check (too many Rust-based tools use
-  .toml; if needed, combine with Image-level filter).
+  Image-based detection anchored to the binary name avoids substring false positives (e.g., xfrpc,
+  ifrpc). frps (FRP server) is equally suspicious when deployed on a compromised host.
+  Standalone .toml CLI check is deliberately excluded — many Rust-based tools use .toml config
+  files; combine with Image-level detection for specificity.
 
-  Also missing: Chisel, Ligolo, and other tunnelers, see companion rules if available.
-author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
-date: 2026-01-08
-modified: 2026-06-19
+  Also missing: Chisel, Ligolo, and other tunnelers — see companion rules if available.
 references:
   - https://github.com/fatedier/frp
   - https://attack.mitre.org/techniques/T1572/
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-01-08
+modified: 2026-06-19
+related:
+  - id: 8f3c2e91-7b6a-4e77-9cfa-2a1e9d4cbe12
+    type: similar
+  - id: c3e7f5a8-1b2d-4f9c-88a0-9d1e2f3a4b5c
+    type: similar
+tags:
+  - attack.t1572
+  - attack.command-and-control
 logsource:
   category: process_creation
   product: linux
+
 detection:
-  # Primary: binary name is frpc or frps
   selection_frp_binary:
     Image|endswith:
       - '/frpc'
       - '/frps'
 
-  # Secondary: frpc/frps passed as an argument with a config file
   selection_frp_cli_invoke:
     CommandLine|contains|all:
       - 'frpc'
@@ -49,12 +55,19 @@ detection:
 
   condition: (selection_frp_binary or selection_frp_cli_invoke or selection_frps_cli_invoke) and not filter_authorized_vpn
 
+fields:
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - ProcessId
+  - ParentProcessId
+
 falsepositives:
   - Authorized remote maintenance using FRP in enterprise VPN infrastructure
   - DevOps tunneling for SSH forwarding in approved CI/CD pipelines
   - Corporate remote access solutions built on FRP (filter by Image path via filter_authorized_vpn)
 
 level: medium
-tags:
-  - attack.t1572
-  - attack.command-and-control
