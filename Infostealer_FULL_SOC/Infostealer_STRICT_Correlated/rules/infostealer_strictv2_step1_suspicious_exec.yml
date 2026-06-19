@@ -8,7 +8,7 @@ description: >
 references:
   - https://www.dexpose.io/deep-dive-into-arkanix-stealer-and-its-infrastructure/
   - https://attack.mitre.org/techniques/T1059/
-author: Adama ASSIONGBON SOC & CTI  Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-06
 tags:
   - attack.execution
@@ -19,10 +19,18 @@ logsource:
 detection:
   selection_user_writable:
     Image|contains:
-      - '\\Users\\'
-      - '\\AppData\\'
-      - '\\Temp\\'
-      - '\\Downloads\\'
+      - '\Users\'
+      - '\AppData\'
+      - '\Downloads\'
+
+  # Temp under user profile (not C:\Windows\Temp which is system-managed)
+  selection_user_temp:
+    Image|re: '(?i)\\Users\\[^\\]+\\.*\\Temp\\'
+
+  filter_system_temp:
+    Image|startswith:
+      - 'C:\Windows\Temp\'
+      - 'C:\Windows\System32\'
   selection_lolbins:
     Image|endswith:
       - '\\powershell.exe'
@@ -42,7 +50,7 @@ detection:
       - '-EncodedCommand'
       - 'http://'
       - 'https://'
-  condition: selection_user_writable and selection_lolbins and selection_suspicious_cli
+  condition: (selection_user_writable or (selection_user_temp and not filter_system_temp)) and selection_lolbins and selection_suspicious_cli
 falsepositives:
   - Rare IT scripts executed from user profile (validate signer, ticket, parent process)
 level: high

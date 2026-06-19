@@ -5,9 +5,13 @@ description: >
   Detects access to AI agent device identity files containing private cryptographic keys (PEM). This may indicate full agent impersonation and persistent compromise.
 
   FR: « Détecte l'accès aux fichiers d'identité d'agents IA contenant des clés cryptographiques privées (PEM).Un tel accès par un processus non autorisé peut indiquer une usurpation complète de l'identité de l'agent et une compromission persistante du système. »
-author: Adama ASSIONGBON - SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-16
 modified: 2026-02-18
+references:
+  - https://attack.mitre.org/techniques/T1552/
+  - https://attack.mitre.org/techniques/T1554/
+  - https://owasp.org/www-project-top-10-for-large-language-model-applications/
 tags:
   - attack.credential-access
   - attack.persistence

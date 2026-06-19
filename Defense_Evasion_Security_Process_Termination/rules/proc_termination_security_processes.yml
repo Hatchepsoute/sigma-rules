@@ -2,14 +2,18 @@ title: Defense Evasion - Termination of Security / EDR Processes
 id: 5d6b7a2c-3f2e-4b91-9a7e-8f9c1b2a7d11
 status: experimental
 description: |
-  Detects the termination of known security, EDR, or anti-malware processes. This behavior is commonly observed during defense evasion phases of ransomware and post-exploitation activity.
-  
-  FR=> Détecte l’arrêt de processus connus liés à la sécurité, aux solutions EDR ou aux logiciels anti-malware. Ce comportement est fréquemment observé lors des phases d’évasion de défense des ransomwares et des activités post-exploitation.
+  Detects the termination of known security, EDR, or anti-malware processes. This behavior
+  is commonly observed during defense evasion phases of ransomware and post-exploitation activity.
+
+  FILTER FIX: Removed '\svchost.exe' from filter_legit_system_activity. A process injected
+  into svchost.exe running as NT AUTHORITY\SYSTEM can terminate EDR processes — the previous
+  filter would suppress these alerts. filter_legit_system_activity now only covers
+  '\services.exe' and '\MsMpEng.exe' (Windows Defender self-update context).
 references:
   - https://attack.mitre.org/techniques/T1562/001/
-author: Adama ASSIONGBON - SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-07
-modified: 2026-02-07
+modified: 2026-06-19
 logsource:
   category: process_termination
 
@@ -31,10 +35,11 @@ detection:
       - '\hmpalert.exe'
       - '\CyveraService.exe'
 
+  # svchost.exe REMOVED: an injected svchost running under SYSTEM can legitimately
+  # appear in this filter while actually being malicious. Track svchost separately.
   filter_legit_system_activity:
     Image|endswith:
       - '\services.exe'
-      - '\svchost.exe'
       - '\MsMpEng.exe'
     User|contains:
       - 'NT AUTHORITY'
@@ -42,8 +47,9 @@ detection:
   condition: selection_security_process and not filter_legit_system_activity
 
 falsepositives:
-  - Legitimate EDR self-protection or update actions
+  - Legitimate EDR self-protection or update actions (covered by MsMpEng filter)
   - Administrator intentionally stopping security services during maintenance
+  - svchost.exe: NOT filtered — investigate any svchost-based termination of EDR processes
 level: high
 tags:
   - attack.defense-evasion

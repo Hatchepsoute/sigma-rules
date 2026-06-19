@@ -1,18 +1,35 @@
 title: Kernel Driver Loaded (Visibility Rule)
 id: 7e2a6a12-9c6d-4c2a-8b2f-2e8bb6b2b6a1
 status: stable
-description: >
-  Detects loading of a kernel driver (.sys). Kernel driver loading is rare and should always be monitored as it may indicate rootkit activity. (« Détecte le chargement d'un pilote de noyau (.sys). Le chargement d'un pilote de noyau est rare et doit toujours être surveillé, car il peut indiquer une activité de rootkit. »)
-author: Adama ASSIONGBON | SOC & CTI  Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+description: |
+  Detects loading of a kernel driver via Sysmon Event ID 6. Kernel driver loading is rare
+  and should always be monitored as it may indicate rootkit activity.
+
+  LOGSOURCE FIX: The previous version used `service: system, EventID: 6` which is WRONG.
+  EventID 6 in the Windows System log has no standard definition for driver loading.
+  The correct source is Sysmon EventID 6 (DriverLoad), which maps to
+  `logsource: category: driver_load, product: windows` in Sigma.
+  Requires Sysmon deployed with at least EventID 6 enabled in the Sysmon configuration.
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-18
+modified: 2026-06-19
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
+  - https://attack.mitre.org/techniques/T1014/
 logsource:
   product: windows
-  service: system
+  category: driver_load
 detection:
-  selection:
-    EventID: 6
-  condition: selection
+  selection_unsigned:
+    Signed: 'false'
+
+  condition: selection_unsigned
+
+falsepositives:
+  - Legitimate kernel driver installation by system administrators or hardware vendors
+  - EDR/AV product updates that load signed kernel drivers
+  - Authorized driver deployment via software management platforms
+  - Unsigned drivers in some hardware/legacy device scenarios — tune by ImageLoaded path or signature
 level: medium
 tags:
   - attack.t1014

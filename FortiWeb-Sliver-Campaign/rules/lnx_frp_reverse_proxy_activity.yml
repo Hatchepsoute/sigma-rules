@@ -1,21 +1,60 @@
-title: Fast Reverse Proxy (FRP) Execution and Configuration
+title: Fast Reverse Proxy (FRP) Client or Server Execution on Linux
 id: 7d12a3b4-e9c8-4f51-b8d2-3a1b4c5d6e7f
 status: experimental
-description: Detects FRP client execution typically used for remote access tunneling (Détecte l'exécution du client FRP utilisé pour le tunneling d'accès à distance).
-author: Adama ASSIONGBON SOC & CTI  Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
-date: 2026/01/08
+description: |
+  Detects execution of the FRP (Fast Reverse Proxy) client (frpc) or server (frps) binary on Linux.
+  FRP is a legitimate open-source tunneling tool frequently abused in post-exploitation for
+  C2 traffic tunneling and firewall bypass.
+
+  FIX: Replaced overly broad `CommandLine|contains: 'frpc'` (matched substrings like xfrpc,
+  ifrpc, and any command mentioning 'frpc' as an arg) with Image-based detection anchored to
+  the binary name. Added frps (FRP server) which is equally suspicious when deployed on a
+  compromised host. Removed standalone '.toml' from CLI check (too many Rust-based tools use
+  .toml; if needed, combine with Image-level filter).
+
+  Also missing: Chisel, Ligolo, and other tunnelers — see companion rules if available.
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-01-08
+modified: 2026-06-19
+references:
+  - https://github.com/fatedier/frp
+  - https://attack.mitre.org/techniques/T1572/
+  - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 logsource:
-    category: process_creation
-    product: linux
+  category: process_creation
+  product: linux
 detection:
-    selection:
-        CommandLine|contains:
-            - 'frpc'
-            - '.toml'
-            - '.ini'
-    condition: selection
+  # Primary: binary name is frpc or frps
+  selection_frp_binary:
+    Image|endswith:
+      - '/frpc'
+      - '/frps'
+
+  # Secondary: frpc/frps passed as an argument with a config file
+  selection_frp_cli_invoke:
+    CommandLine|contains|all:
+      - 'frpc'
+      - '.toml'
+
+  selection_frps_cli_invoke:
+    CommandLine|contains|all:
+      - 'frps'
+      - '.toml'
+
+  filter_authorized_vpn:
+    Image|startswith:
+      - '/etc/frp/'
+      - '/usr/local/etc/frp/'
+      - '/opt/frp/'
+
+  condition: (selection_frp_binary or selection_frp_cli_invoke or selection_frps_cli_invoke) and not filter_authorized_vpn
+
 falsepositives:
-    - Authorized remote maintenance tools (Outils de maintenance à distance autorisés).
+  - Authorized remote maintenance using FRP in enterprise VPN infrastructure
+  - DevOps tunneling for SSH forwarding in approved CI/CD pipelines
+  - Corporate remote access solutions built on FRP (filter by Image path via filter_authorized_vpn)
+
 level: medium
 tags:
-    - attack.t1572
+  - attack.t1572
+  - attack.command-and-control

@@ -5,7 +5,7 @@ description: |
   Detects suspicious attempts to disable or stop security/EDR/AV tools via common command-line utilities (taskkill, sc, net, PowerShell, wmic). Frequently observed in ransomware pre-encryption and post-exploitation to impair defenses before lateral movement, credential access, or encryption.
 references:
   - https://attack.mitre.org/techniques/T1562/001/
-author: Adama ASSIONGBON - SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-08
 logsource:
   category: process_creation
@@ -39,9 +39,14 @@ detection:
       - 'WinDefend'
       - 'WdNisSvc'
       - 'MsMpEng'
-      - 'Sense'
+      - 'SenseIR'
       - 'SecurityHealthService'
-      - 'Defender'
+      - 'CSFalconService'
+      - 'SentinelAgent'
+      - 'CylanceSvc'
+      # NOTE: 'Defender' and 'Sense' removed — too broad (match legitimate commands like
+      # "Windows Defender App Guard", "Sense" as a sensor word, etc.). Replaced with
+      # specific service/process names to reduce FP while keeping coverage.
 
   selection_wmic_delete:
     CommandLine|contains|all:
@@ -55,7 +60,7 @@ falsepositives:
   - Legitimate EDR/AV maintenance, upgrades, or troubleshooting by administrators
   - Provisioning / hardening scripts that disable Defender on specific server roles (golden image)
   - IT support actions during incident response (containment, remediation)
-level: high
+level: medium
 tags:
   - attack.defense-evasion
   - attack.t1562

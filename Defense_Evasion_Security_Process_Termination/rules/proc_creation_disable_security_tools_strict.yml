@@ -5,7 +5,7 @@ description: |
   High-confidence detection of attempts to disable or stop security/EDR/AV tooling via explicit command-line patterns (e.g., taskkill /F /IM <security_process>, sc stop <security_service>, PowerShell Defender tampering). Designed to reduce false positives by requiring strong intent + explicit target indicators.
 references:
   - https://attack.mitre.org/techniques/T1562/001/
-author: Adama ASSIONGBON - SOC & CTI Consultant  | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-08
 logsource:
   category: process_creation

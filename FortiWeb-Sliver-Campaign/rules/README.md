@@ -13,8 +13,8 @@ This directory contains the core detection logic for the **FortiWeb Sliver C2 Ca
 | File Name | Detection Focus | Severity |
 | :--- | :--- | :--- |
 | [lnx_sliver_implant_deployment.yml](./lnx_sliver_implant_deployment.yml)  | Initial binary drop in hidden paths (`/.root/`, `/app/web/`). | Critical |
-| [PERSIST_LNX_Sliver_Systemd_Service.yml](./PERSIST_LNX_Sliver_Systemd_Service.yml)  | Persistence via "Updater Service" systemd creation. | High |
-| [PROC_LNX_Microsocks_LPD_Masquerade.yml](./PROC_LNX_Microsocks_LPD_Masquerade.yml) | Process masquerading (Microsocks running as `cups-lpd`). | High |
+| [persist_lnx_sliver_systemd_service.yml](./persist_lnx_sliver_systemd_service.yml)  | Persistence via "Updater Service" systemd creation. | High |
+| [proc_lnx_microsocks_lpd_masquerade.yml](./proc_lnx_microsocks_lpd_masquerade.yml) | Process masquerading (Microsocks running as `cups-lpd`). | High |
 |  [lnx_frp_reverse_proxy_activity.yml ](./lnx_frp_reverse_proxy_activity.yml)  | FRP client execution for remote access tunneling. | Medium |
 | [lnx_lpd_listener_printer_service_masquerade.yml](./lnx_lpd_listener_printer_service_masquerade.yml) | Unauthorized network listeners on TCP port 515. | High |
 

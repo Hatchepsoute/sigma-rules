@@ -8,7 +8,7 @@ description: >
 references:
   - https://attack.mitre.org/techniques/T1105/
   - https://attack.mitre.org/techniques/T1059/001/
-author: Adama Assiongbon (SOC & CTI  Consultant) |  https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2025-12-23
 modified: 2026-02-14
 tags:
@@ -22,13 +22,13 @@ logsource:
 detection:
   selection_office_parent:
     ParentImage|endswith:
-      - '\WINWORD.EXE'
-      - '\EXCEL.EXE'
-      - '\POWERPNT.EXE'
-      - '\OUTLOOK.EXE'
-      - '\MSACCESS.EXE'
-      - '\VISIO.EXE'
-      - '\ONENOTE.EXE'
+      - '\winword.exe'
+      - '\excel.exe'
+      - '\powerpnt.exe'
+      - '\outlook.exe'
+      - '\msaccess.exe'
+      - '\visio.exe'
+      - '\onenote.exe'
   selection_child:
     Image|endswith:
       - '\powershell.exe'
@@ -55,12 +55,12 @@ detection:
       - 'bitsadmin'
       - 'certutil'
       - ' -urlcache'
-      - ' -split'
+      - '-ec '
       - ' /transfer'
   selection_obfuscation_or_exec:
     CommandLine|contains:
       - ' -enc'
-      - ' -e '
+      - '-EncodedCommand '
       - 'EncodedCommand'
       - 'FromBase64String'
       - ' IEX'

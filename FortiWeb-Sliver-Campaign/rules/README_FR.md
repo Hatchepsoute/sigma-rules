@@ -13,8 +13,8 @@ Ce répertoire contient la logique de détection cœur pour la campagne **Sliver
 | Nom du Fichier | Focus de Détection | Gravité |
 | :--- | :--- | :--- |
 | [lnx_sliver_implant_deployment.yml](./lnx_sliver_implant_deployment.yml) | Dépôt du binaire initial dans des répertoires cachés (`/.root/`). | Critique |
-| [PERSIST_LNX_Sliver_Systemd_Service.yml](./PERSIST_LNX_Sliver_Systemd_Service.yml) | Création de persistance via un service système factice. | Élevée |
-| [PROC_LNX_Microsocks_LPD_Masquerade.yml](./PROC_LNX_Microsocks_LPD_Masquerade.yml)| Masquage de processus (Microsocks lancé en tant que `cups-lpd`). | Élevée |
+| [persist_lnx_sliver_systemd_service.yml](./persist_lnx_sliver_systemd_service.yml) | Création de persistance via un service système factice. | Élevée |
+| [proc_lnx_microsocks_lpd_masquerade.yml](./proc_lnx_microsocks_lpd_masquerade.yml)| Masquage de processus (Microsocks lancé en tant que `cups-lpd`). | Élevée |
 | [lnx_frp_reverse_proxy_activity.yml ](./lnx_frp_reverse_proxy_activity.yml) | Utilisation de FRP pour le tunneling et l'accès distant. | Moyenne |
 | [lnx_lpd_listener_printer_service_masquerade.yml](./lnx_lpd_listener_printer_service_masquerade.yml) | Écoute réseau non autorisée sur le port TCP 515 (LPD). | Élevée |
 

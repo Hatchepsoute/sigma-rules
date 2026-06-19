@@ -2,8 +2,11 @@ title: Suspicious Systemd Service for Persistence (Updater Service)
 id: a9f2b4c1-8d3e-45f6-92a7-12b345c6d789
 status: experimental
 description: Detects the creation of a systemd service file matching the Sliver persistence pattern (Détection de la création d'un service systemd correspondant au schéma de persistance de Sliver).
-author: Adama ASSIONGBON SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026/01/08
+references:
+  - https://bishopfox.com/blog/sliver-command-and-control-framework
+  - https://attack.mitre.org/techniques/T1543/002/
 logsource:
     category: file_event
     product: linux

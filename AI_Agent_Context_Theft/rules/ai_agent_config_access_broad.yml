@@ -5,7 +5,7 @@ description: >
   Detects access to local AI agent configuration or memory files (e.g. OpenClaw) by unexpected processes. These files may contain authentication tokens, cryptographic material, or sensitive contextual data.
 
   FR: « Détecte l'accès aux fichiers de configuration ou de mémoire d'agents IA locaux (exemple OpenClaw) par des processus inattendus. Ces fichiers peuvent contenir des jetons d'authentification (tokens), des éléments cryptographiques ou des données contextuelles sensibles. »
-author: Adama ASSIONGBON - SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-16
 modified: 2026-02-17
 references:
@@ -34,22 +34,30 @@ detection:
       - 'paired.json'
       - 'pending.json'
       - 'device-auth.json'
-  selection_process:
+  # Suspicious accessors: processes not expected to read AI agent config files
+  selection_suspicious_accessor:
     Image|endswith:
-      - '.exe'
-      - '.ps1'
-      - '.bat'
-      - '.js'
-      - '.vbs'
-      - '.cmd'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\cmd.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\curl.exe'
+      - '\wget.exe'
+      - '\python.exe'
+
+  # NOTE: 'Image|endswith: .exe' removed — it matches every Windows process (universal FP).
+  # Replaced with targeted list of unexpected accessors. If the OpenClaw process itself is
+  # the target (credential theft), the filter_legitimate block below would suppress that.
   filter_legitimate:
     Image|endswith:
-      - '\\OpenClaw.exe'
-      - '\\python.exe'
-      - '\\code.exe'
-      - '\\notepad.exe'
-      - '\\explorer.exe'
-  condition: selection_directory and selection_files and selection_process and not filter_legitimate
+      - '\OpenClaw.exe'
+      - '\code.exe'
+      - '\notepad.exe'
+      - '\explorer.exe'
+  condition: (selection_directory or selection_files) and selection_suspicious_accessor and not filter_legitimate
 falsepositives:
   - Legitimate backup or audit tools
   - User manually opening files

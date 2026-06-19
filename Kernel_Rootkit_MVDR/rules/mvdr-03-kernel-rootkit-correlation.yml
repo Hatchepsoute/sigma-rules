@@ -3,7 +3,12 @@ id: 7998e5ca-ed58-11f0-b925-83f625c1804d
 status: stable
 description: >
   High-confidence detection of kernel-mode rootkits by correlating kernel driver load and kernel service creation. (« Détection à haut niveau de confiance des rootkits en mode noyau par corrélation entre le chargement d'un pilote de noyau et la création d'un service système associé. »)
-author: Adama ASSIONGBON | SOC & CTI  Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-18
+references:
+  - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
+  - https://attack.mitre.org/techniques/T1014/
+  - https://attack.mitre.org/techniques/T1547/
 logsource:
   product: windows
 detection:
@@ -13,6 +18,9 @@ detection:
     EventID: 7045
     ServiceType: kernel driver
   condition: driver_load and kernel_service
+falsepositives:
+  - Simultaneous legitimate driver load and service creation during OS patch or driver update
+  - Hardware vendor tooling that installs and registers kernel drivers in sequence
 level: critical
 tags:
   - attack.persistence

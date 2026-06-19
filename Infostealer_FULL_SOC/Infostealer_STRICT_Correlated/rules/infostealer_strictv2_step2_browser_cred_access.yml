@@ -10,7 +10,7 @@ description: >
 references:
   - https://www.dexpose.io/deep-dive-into-arkanix-stealer-and-its-infrastructure/
   - https://attack.mitre.org/techniques/T1555/
-author: "Adama ASSIONGBON SOC & CTI  Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/"
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-06
 tags:
   - attack.t1555
@@ -38,9 +38,15 @@ detection:
       - '\\cookies.sqlite'
   filter_known_browsers:
     Image|endswith:
-      - '\\chrome.exe'
-      - '\\msedge.exe'
-      - '\\firefox.exe'
+      - '\chrome.exe'
+      - '\msedge.exe'
+      - '\firefox.exe'
+      - '\brave.exe'
+      - '\opera.exe'
+      - '\vivaldi.exe'
+      - '\waterfox.exe'
+      - '\librewolf.exe'
+      - '\chromium.exe'
   condition: (((selection_chromium_paths and selection_chromium_files) or (selection_firefox_paths and selection_firefox_files))) and not filter_known_browsers
 falsepositives:
   - Password managers and enterprise browser security tools
