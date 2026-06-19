@@ -1,17 +1,20 @@
-title: Microsoft Office spawns LOLBIN or script engine (BROAD)
+title: Microsoft Office spawning LOLBin or script engine
 id: f94eb6ef-dccf-481b-92c8-8a6c844b8355
 status: experimental
 description: >
-  Broad detection for Microsoft Office applications spawning common LOLBINs or script engines. Use for triage and hunting. This behavior is frequently observed in Office-based exploitation
+  Broad detection for Microsoft Office applications spawning common LOLBins or script engines.
+  Use for triage and hunting. This behavior is frequently observed in Office-based exploitation
   chains (malicious documents, external content execution), including multiple Office CVEs.
-  
-  FR=> Détection large des applications Microsoft Office générant des LOLBINs communs ou des moteurs de script. À utiliser pour le triage et le hunting. Ce comportement est fréquemment observé dans les chaînes d'exploitation basées sur Office (documents malveillants, exécution de contenu externe), incluant plusieurs CVE Office.
 references:
   - https://attack.mitre.org/techniques/T1204/002/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2025-12-23
-modified: 2026-02-14
+modified: 2026-06-19
+related:
+  - id: a6f0558c-14a3-44e0-88f9-605044bb3ecc
+    type: similar
 tags:
+  - attack.execution
   - attack.t1204.002
   - attack.t1059
   - attack.t1059.001
@@ -19,6 +22,7 @@ tags:
 logsource:
   product: windows
   category: process_creation
+
 detection:
   selection_office_parent:
     ParentImage|endswith:
@@ -29,6 +33,7 @@ detection:
       - '\msaccess.exe'
       - '\visio.exe'
       - '\onenote.exe'
+
   selection_lolbin_or_script_child:
     Image|endswith:
       - '\powershell.exe'
@@ -42,8 +47,31 @@ detection:
       - '\msiexec.exe'
       - '\bitsadmin.exe'
       - '\certutil.exe'
-  condition: selection_office_parent and selection_lolbin_or_script_child
+
+  # /automation, /pt, /embedding are standard COM/OLE invocation modes used by legitimate integrations
+  filter_main_office_automation:
+    ParentCommandLine|contains:
+      - '/automation'
+      - '/pt '
+      - '/embedding'
+
+  condition: selection_office_parent and selection_lolbin_or_script_child and not filter_main_office_automation
+
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - IntegrityLevel
+  - ProcessId
+  - ParentProcessId
+
 falsepositives:
   - Legitimate Office add-ins or automation that launches scripts/tools (validate with IT change tickets)
   - Enterprise templates/macros invoking PowerShell for approved tasks
+  - COM/OLE automation invocations (covered by filter_main_office_automation)
+
 level: medium

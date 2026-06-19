@@ -1,35 +1,53 @@
-title: Kernel Driver Loaded (Visibility Rule)
+title: Kernel driver load from unsigned source
 id: 7e2a6a12-9c6d-4c2a-8b2f-2e8bb6b2b6a1
-status: stable
+status: experimental
 description: |
-  Detects loading of a kernel driver via Sysmon Event ID 6. Kernel driver loading is rare
-  and should always be monitored as it may indicate rootkit activity.
+  Detects loading of an unsigned kernel driver via Sysmon EventID 6 (DriverLoad). Kernel driver
+  loading is rare and unsigned drivers should always be investigated as they may indicate
+  rootkit or BYOVD activity.
 
-  LOGSOURCE FIX: The previous version used `service: system, EventID: 6` which is WRONG.
-  EventID 6 in the Windows System log has no standard definition for driver loading.
-  The correct source is Sysmon EventID 6 (DriverLoad), which maps to
-  `logsource: category: driver_load, product: windows` in Sigma.
-  Requires Sysmon deployed with at least EventID 6 enabled in the Sysmon configuration.
-author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
-date: 2026-06-18
-modified: 2026-06-19
+  Requires Sysmon deployed with EventID 6 enabled. The correct logsource is
+  category: driver_load (Sysmon EventID 6), not the Windows System log EventID 6
+  which has no equivalent definition.
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
   - https://attack.mitre.org/techniques/T1014/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-18
+modified: 2026-06-19
+related:
+  - id: 6778f01a-ed58-11f0-a580-aff152632512
+    type: similar
+  - id: 7998e5ca-ed58-11f0-b925-83f625c1804d
+    type: similar
+tags:
+  - attack.defense-evasion
+  - attack.t1014
+  - attack.t1068
 logsource:
   product: windows
   category: driver_load
+
 detection:
   selection_unsigned:
     Signed: 'false'
 
   condition: selection_unsigned
 
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - ImageLoaded
+  - Hashes
+  - Signed
+  - Signature
+  - SignatureStatus
+
 falsepositives:
   - Legitimate kernel driver installation by system administrators or hardware vendors
   - EDR/AV product updates that load signed kernel drivers
   - Authorized driver deployment via software management platforms
-  - Unsigned drivers in some hardware/legacy device scenarios, tune by ImageLoaded path or signature
+  - Unsigned drivers in some hardware/legacy device scenarios; tune by ImageLoaded path or signature
+
 level: medium
-tags:
-  - attack.t1014

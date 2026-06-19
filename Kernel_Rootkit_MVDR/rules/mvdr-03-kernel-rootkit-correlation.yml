@@ -1,27 +1,56 @@
-title: Kernel Rootkit High-Confidence Correlation
+title: Kernel rootkit high-confidence correlation (driver load + service creation)
 id: 7998e5ca-ed58-11f0-b925-83f625c1804d
-status: stable
+status: experimental
 description: >
-  High-confidence detection of kernel-mode rootkits by correlating kernel driver load and kernel service creation. (« Détection à haut niveau de confiance des rootkits en mode noyau par corrélation entre le chargement d'un pilote de noyau et la création d'un service système associé. »)
-author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
-date: 2026-06-18
+  High-confidence detection of kernel-mode rootkits by correlating a Sysmon kernel driver load
+  event (EventID 6) with a Windows System log kernel service creation event (EventID 7045).
+  Both signals occurring close together strongly indicate a rootkit or BYOVD installation sequence.
+
+  Note: this rule requires a SIEM that ingests both Sysmon logs and Windows System logs in the
+  same event store, or a correlation engine that can join events across sources. In environments
+  with source separation, run mvdr-01 and mvdr-02 independently and correlate at the SIEM level.
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
   - https://attack.mitre.org/techniques/T1014/
   - https://attack.mitre.org/techniques/T1547/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-18
+modified: 2026-06-19
+related:
+  - id: 7e2a6a12-9c6d-4c2a-8b2f-2e8bb6b2b6a1
+    type: similar
+  - id: 6778f01a-ed58-11f0-a580-aff152632512
+    type: similar
+tags:
+  - attack.persistence
+  - attack.defense-evasion
+  - attack.t1014
+  - attack.t1547
 logsource:
   product: windows
+
 detection:
-  driver_load:
+  selection_driver_load:
     EventID: 6
-  kernel_service:
+
+  selection_kernel_service:
     EventID: 7045
     ServiceType: kernel driver
-  condition: driver_load and kernel_service
+
+  condition: selection_driver_load and selection_kernel_service
+
+fields:
+  - UtcTime
+  - Computer
+  - EventID
+  - ImageLoaded
+  - Signed
+  - ServiceName
+  - ServiceType
+  - ImagePath
+
 falsepositives:
   - Simultaneous legitimate driver load and service creation during OS patch or driver update
   - Hardware vendor tooling that installs and registers kernel drivers in sequence
+
 level: critical
-tags:
-  - attack.persistence
-  - attack.t1014

@@ -1,16 +1,11 @@
-title: Suspicious Public Network Egress From LOLBins (STRICT v2 - Step 3)
+title: Infostealer suspicious public network egress from LOLBins (step 3 of 3)
 id: 9ddb6120-1dd5-4bc4-9a3e-bebe5a1afc52
 status: experimental
 description: >
   Step 3 of correlated infostealer detection: public egress from common LOLBins or loaders.
-  Correlate with Step 1 (execution) and Step 2 (credential-store access) within a short
-  time window (<=10 minutes).
-
-  FIXES:
-  - Removed duplicate `description:` key (YAML silently uses the last one, first was lost).
-  - Added IPv6 private ranges: ::1/128 (loopback), fe80:: (link-local), fc00:: and fd00:: (ULA).
-  - Added 169.254. (APIPA/link-local IPv4).
-
+  Correlate with step 1 (execution) and step 2 (credential-store access) within a short
+  time window (<=10 minutes). IPv6 private ranges (::1, fe80::, fc00::/7) and IPv4
+  link-local (169.254.) are filtered in addition to RFC1918 ranges.
 references:
   - https://www.dexpose.io/deep-dive-into-arkanix-stealer-and-its-infrastructure/
   - https://attack.mitre.org/techniques/T1071/001/
@@ -18,12 +13,22 @@ references:
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-06
 modified: 2026-06-19
+related:
+  - id: 26090645-90c0-40ee-9aa9-5d0037b33ae7
+    type: similar
+  - id: 12caf5be-99d5-432d-b049-ba9263962835
+    type: similar
+  - id: 50f27880-01d7-42b2-9368-0939504fa162
+    type: similar
 tags:
-  - attack.t1071.001
+  - attack.exfiltration
   - attack.t1041
+  - attack.command-and-control
+  - attack.t1071.001
 logsource:
   product: windows
   category: network_connection
+
 detection:
   selection_lolbins:
     Image|endswith:
@@ -37,7 +42,6 @@ detection:
 
   filter_private_ranges:
     DestinationIp|startswith:
-      # IPv4 private + link-local
       - '10.'
       - '192.168.'
       - '127.'
@@ -58,7 +62,6 @@ detection:
       - '172.30.'
       - '172.31.'
       - '169.254.'
-      # IPv6 private + loopback
       - '::1'
       - 'fe80:'
       - 'fc00:'
@@ -66,6 +69,17 @@ detection:
 
   condition: selection_lolbins and not filter_private_ranges
 
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - DestinationIp
+  - DestinationPort
+  - ProcessId
+
 falsepositives:
-  - Legitimate automation reaching public endpoints (validate dest, signer, ticket)
+  - Legitimate automation reaching public endpoints (validate destination, signer, ticket)
+
 level: high

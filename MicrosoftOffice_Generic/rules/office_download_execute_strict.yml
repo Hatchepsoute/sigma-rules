@@ -1,17 +1,21 @@
-title: Microsoft Office spawns LOLBIN with download/execute or obfuscation patterns (STRICT)
+title: Microsoft Office spawning LOLBin with download or obfuscation indicators
 id: a6f0558c-14a3-44e0-88f9-605044bb3ecc
 status: experimental
 description: >
-  High-confidence detection for Microsoft Office spawning LOLBINs or script engines with command-line patterns consistent with download-and-execute, remote payload retrieval, or obfuscated execution (e.g., PowerShell -enc, IEX, FromBase64String).
-  
-  FR=> Détection à haute confiance des applications Microsoft Office lançant des LOLBINs ou des moteurs de script avec des arguments de ligne de commande caractéristiques de schémas "téléchargement et exécution" (download-and-execute), de récupération de charges utiles distantes ou d'exécution obfusquée (ex: PowerShell -enc, IEX, FromBase64String).
+  High-confidence detection for Microsoft Office spawning LOLBins or script engines with
+  command-line patterns consistent with download-and-execute, remote payload retrieval, or
+  obfuscated execution (e.g., PowerShell -enc, IEX, FromBase64String).
 references:
   - https://attack.mitre.org/techniques/T1105/
   - https://attack.mitre.org/techniques/T1059/001/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2025-12-23
-modified: 2026-02-14
+modified: 2026-06-19
+related:
+  - id: f94eb6ef-dccf-481b-92c8-8a6c844b8355
+    type: similar
 tags:
+  - attack.execution
   - attack.t1204.002
   - attack.t1059.001
   - attack.t1105
@@ -19,6 +23,7 @@ tags:
 logsource:
   product: windows
   category: process_creation
+
 detection:
   selection_office_parent:
     ParentImage|endswith:
@@ -29,6 +34,7 @@ detection:
       - '\msaccess.exe'
       - '\visio.exe'
       - '\onenote.exe'
+
   selection_child:
     Image|endswith:
       - '\powershell.exe'
@@ -41,6 +47,7 @@ detection:
       - '\regsvr32.exe'
       - '\bitsadmin.exe'
       - '\certutil.exe'
+
   selection_download_transfer:
     CommandLine|contains:
       - 'http://'
@@ -57,6 +64,7 @@ detection:
       - ' -urlcache'
       - '-ec '
       - ' /transfer'
+
   selection_obfuscation_or_exec:
     CommandLine|contains:
       - ' -enc'
@@ -67,8 +75,23 @@ detection:
       - 'Invoke-Expression'
       - 'DownloadString'
       - 'DownloadFile'
+
   condition: selection_office_parent and selection_child and (selection_download_transfer or selection_obfuscation_or_exec)
+
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - IntegrityLevel
+  - ProcessId
+  - ParentProcessId
+
 falsepositives:
-  - Approved IT automation launched from Office templates (must be backed by ticket + signed scripts)
-  - Red-team / purple-team exercises
+  - Approved IT automation launched from Office templates (must be backed by ticket and signed scripts)
+  - Red-team or purple-team exercises
+
 level: high

@@ -1,25 +1,46 @@
-title: Kernel Driver Service Creation (Type 1)
+title: Kernel driver service creation (type 1)
 id: 6778f01a-ed58-11f0-a580-aff152632512
-status: stable
+status: experimental
 description: >
-  Detects creation of a Windows kernel driver service (Type=1), commonly abused by kernel-mode rootkits for persistence. (« Détecte la création d’un service de pilote de noyau Windows (Type=1), couramment utilisé de manière abusive par les rootkits en mode noyau pour assurer leur persistance. »)
-author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
-date: 2026-06-18
+  Detects creation of a Windows kernel driver service (ServiceType=kernel driver), commonly
+  abused by kernel-mode rootkits for persistence via EventID 7045 in the Windows System log.
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
   - https://attack.mitre.org/techniques/T1547/
-logsource:
-  product: windows
-  service: system
-detection:
-  selection:
-    EventID: 7045
-    ServiceType: kernel driver
-  condition: selection
-falsepositives:
-  - Legitimate kernel driver service registration by hardware vendors or security products
-  - Authorized deployment of signed drivers via system management tools
-level: high
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-18
+modified: 2026-06-19
+related:
+  - id: 7e2a6a12-9c6d-4c2a-8b2f-2e8bb6b2b6a1
+    type: similar
+  - id: 7998e5ca-ed58-11f0-b925-83f625c1804d
+    type: similar
 tags:
   - attack.persistence
   - attack.t1547
+  - attack.t1543.003
+logsource:
+  product: windows
+  service: system
+
+detection:
+  selection_main:
+    EventID: 7045
+    ServiceType: kernel driver
+
+  condition: selection_main
+
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - ServiceName
+  - ServiceType
+  - ImagePath
+  - EventID
+
+falsepositives:
+  - Legitimate kernel driver service registration by hardware vendors or security products
+  - Authorized deployment of signed drivers via system management tools
+
+level: high
