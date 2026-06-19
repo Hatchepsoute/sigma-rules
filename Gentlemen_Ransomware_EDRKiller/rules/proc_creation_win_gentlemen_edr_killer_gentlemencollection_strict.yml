@@ -4,8 +4,14 @@ status: experimental
 description: |
   Detects execution of Gentlemen ransomware EDR-killer binaries, anchored on the actor's invariant staging directory "\GentlemenCollection\" (where GentleKiller, HexKiller, ThrottleBlood and HavocKiller are consistently dropped across unrelated intrusions) and corroborated with the known killer sample SHA-1 hashes. Gentlemen binaries masquerade as legitimate security/anti-cheat vendors (Kaspersky, Valorant, FACEIT, Sophos, Avast, Symantec...) with fabricated version info and invalid copied signatures, so filename alone is unreliable - the staging path and the hashes are the high-confidence anchors.
   STRICT rule: if it fires, treat as an active Gentlemen intrusion in the defense-evasion phase that typically precedes encryption. Isolate the host, hunt for the dropped BYOVD driver (see the BROAD rule) and for mass security-process termination (see the correlation rule), and assume ransomware staging is imminent.
+  DETECTION BLIND SPOT: the hash branch (selection_known_killer_hash) requires Sysmon Event ID 1 — the Hashes field is NOT present in Windows Security Event 4688. If the environment uses Security logs without Sysmon, only the staging path branch is active. Renaming the staging directory then fully evades the rule.
   IoC freshness: hashes may go stale as the actor repacks binaries. The staging path \GentlemenCollection\ is more durable — it has been invariant across multiple unrelated intrusions. See ioc/ioc_hashes.csv for last_verified dates.
 
+related:
+    - id: a2f6c1e4-9b73-4d8a-8e51-6c2f0a3d7b94
+      type: similar
+    - id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
+      type: similar
 references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
     - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
@@ -18,7 +24,6 @@ tags:
     - attack.t1036
     - attack.t1036.001
     - attack.execution
-    - attack.t1059.003
 logsource:
     product: windows
     category: process_creation
@@ -41,6 +46,14 @@ detection:
             - '7131B377E96016DC1911020C9F95B1B4D042D7B4'   # Sent.exe (ThrottleBlood)
             - 'F0537CBB773AE12100B36731E7C39F5A9D852B14'   # Sophos.exe (HavocKiller)
     condition: selection_staging_path or selection_known_killer_hash
+fields:
+    - Image
+    - CommandLine
+    - ParentImage
+    - ParentCommandLine
+    - Hashes
+    - User
+    - IntegrityLevel
 falsepositives:
     - Extremely unlikely - a path literally containing "GentlemenCollection" has no plausible legitimate use
     - Samples submitted voluntarily to an internal sandbox for analysis (verify host and user context)

@@ -4,6 +4,9 @@ name: gentlemen_security_process_access
 status: experimental
 description: |
   Building-block rule: a process opening a handle to a known security/EDR product process. Not actionable on its own (security tools and the OS access each other constantly); it exists only to feed the mass-termination correlation below. Behavioral by design - resilient to EDR-killer renaming because it keys on the TARGET security processes, not on the attacker tool.
+  DEPLOYMENT REQUIREMENT: this rule uses Sysmon Event ID 10 (ProcessAccess). Default Sysmon configurations do NOT log all process access events. You must explicitly configure ProcessAccess events targeting the security processes listed below, otherwise this rule and the correlation above it will never fire. Example Sysmon config entry: <ProcessAccess onmatch="include"><TargetImage condition="end with">MsMpEng.exe</TargetImage></ProcessAccess>
+  BLIND SPOT: if GentleKiller uses process hollowing to inject into a legitimate process (e.g. explorer.exe, svchost.exe), SourceImage will show the host process rather than the malicious binary. The correlation still fires but the analyst sees a legitimate-looking source — add SourceProcessId to your investigation workflow.
+
 references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
 author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
@@ -30,15 +33,20 @@ detection:
             - '\egui.exe'
             - '\bdservicehost.exe'
             - '\bdagent.exe'
+            - '\bdredline.exe'
             - '\avp.exe'
             - '\kavfs.exe'
+            - '\klnagent.exe'
             - '\mcshield.exe'
             - '\masvc.exe'
+            - '\xagt.exe'
             - '\PccNTMon.exe'
             - '\coreServiceShell.exe'
+            - '\ds_agent.exe'
             - '\cb.exe'
             - '\RepMgr.exe'
             - '\CylanceSvc.exe'
+            - '\MBAMService.exe'
             - '\cybereason.exe'
             - '\cortexService.exe'
             - '\Traps.exe'
@@ -57,12 +65,25 @@ detection:
         SourceImage|endswith:
             - '\services.exe'
             - '\svchost.exe'
+            - '\lsass.exe'
             - '\MsMpEng.exe'
             - '\CSFalconService.exe'
             - '\SentinelAgent.exe'
             - '\taskmgr.exe'
             - '\wmiprvse.exe'
+            - '\msiexec.exe'
+            - '\TrustedInstaller.exe'
+            - '\wuauclt.exe'
+            - '\UsoClient.exe'
+            - '\SearchIndexer.exe'
     condition: selection_security_targets and not filter_legit_sources
+fields:
+    - SourceImage
+    - SourceProcessId
+    - TargetImage
+    - TargetProcessId
+    - GrantedAccess
+    - Computer
 falsepositives:
     - Endpoint management / inventory tools legitimately enumerating processes (add to filter_legit_sources)
     - Security products inspecting one another - tune filter_legit_sources to your stack
@@ -73,7 +94,8 @@ id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
 status: experimental
 description: |
   Behavioral correlation that fires when a single source process accesses many distinct security/EDR product processes within a short window - the core behavior of an EDR killer such as Gentlemen's GentleKiller, which terminates 400+ security processes across ~48 vendors in a loop. This detection is resilient to tool renaming, repacking and new BYOVD drivers because it keys on the killing behavior, not on file artifacts. Pair it with the BYOVD driver-load BROAD rule and the GentlemenCollection STRICT rule for full-confidence attribution.
-  Tune the threshold (default: >= 8 distinct security processes in 1 minute) to your environment.
+  THRESHOLD CALIBRATION: the default threshold of 8 assumes a reasonably instrumented endpoint. If your environment only runs 3-4 security tools, the threshold may never be reached even during an active attack. Set the threshold to 50-75% of the number of distinct security processes running in your environment. Conversely, lower it to 4-5 for minimal stacks.
+  BLIND SPOT: if GentleKiller injects into a legitimate process (process hollowing), SourceImage will show the host process (e.g. explorer.exe). The correlation still fires correctly but analysts must check SourceProcessId to identify the actual malicious thread rather than dismissing the alert based on the legitimate SourceImage name.
 references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
 author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
@@ -88,6 +110,7 @@ correlation:
         - gentlemen_security_process_access
     group-by:
         - SourceImage
+        - SourceProcessId
         - Computer
     timespan: 1m
     condition:
