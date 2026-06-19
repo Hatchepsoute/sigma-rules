@@ -1,0 +1,134 @@
+title: Gentlemen Ransomware - GentleKiller Security Tool Impersonation from Suspicious Path (STRICT)
+id: d5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091
+status: experimental
+description: >
+  Detects execution of binaries impersonating known security product names (GentleKiller tactic)
+  from user-writable or non-standard paths, indicating EDR killer staging or execution.
+
+  The Gentlemen ransomware operation deploys GentleKiller in at least eight variants that
+  impersonate legitimate security products (Kaspersky, WatchDog, Javelin) and gaming/anti-cheat
+  tools (Valorant/Vanguard) to avoid suspicion. Binaries are packed with Enigma or Themida and
+  carry stolen invalid digital signatures. They are dropped into Temp, AppData, ProgramData or
+  other user-writable directories before execution.
+
+  The rule also covers explicitly named EDR killer tools: GentleKiller, HexKiller, ThrottleBlood,
+  HavocKiller, OxideHarvest — whose filenames may appear verbatim in post-compromise scenarios.
+
+  STRICT rule: impersonation name AND suspicious path are both required. False positives are
+  extremely rare. Investigate immediately on alert.
+
+related:
+  - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
+    type: similar
+
+references:
+  - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
+  - https://attack.mitre.org/techniques/T1562/001/
+  - https://attack.mitre.org/techniques/T1036/005/
+
+author: Adama ASSIONGBON
+date: 2026-06-19
+
+tags:
+  - attack.defense-evasion
+  - attack.t1562.001
+  - attack.t1036.005
+
+logsource:
+  product: windows
+  category: process_creation
+
+detection:
+  # Explicit EDR killer tool names (verbatim, regardless of path)
+  selection_explicit_edr_killer:
+    Image|contains:
+      - 'GentleKiller'
+      - 'gentlekiller'
+      - 'HexKiller'
+      - 'hexkiller'
+      - 'ThrottleBlood'
+      - 'throttleblood'
+      - 'HavocKiller'
+      - 'havockiller'
+      - 'OxideHarvest'
+      - 'oxideharvest'
+
+  # Security/gaming product name impersonation from user-writable paths
+  selection_impersonating_name:
+    Image|contains:
+      - 'kaspersky'
+      - 'Kaspersky'
+      - 'watchdog'
+      - 'WatchDog'
+      - 'javelin'
+      - 'Javelin'
+      - 'valorant'
+      - 'Valorant'
+      - 'vanguard'
+      - 'SentinelOne'
+      - 'sentinelone'
+      - 'CrowdStrike'
+      - 'crowdstrike'
+      - 'Sophos'
+      - 'BitDefender'
+      - 'bitdefender'
+
+  selection_suspicious_path:
+    Image|contains:
+      - '\Temp\'
+      - '\AppData\Local\Temp\'
+      - '\AppData\Roaming\'
+      - '\Downloads\'
+      - '\Users\Public\'
+      - '\ProgramData\'
+
+  # Legitimate installation paths for impersonated products
+  filter_legit_kaspersky:
+    Image|startswith:
+      - 'C:\Program Files (x86)\Kaspersky Lab\'
+      - 'C:\Program Files\Kaspersky Lab\'
+
+  filter_legit_sentinelone:
+    Image|startswith:
+      - 'C:\Program Files\SentinelOne\'
+
+  filter_legit_crowdstrike:
+    Image|startswith:
+      - 'C:\Program Files\CrowdStrike\'
+
+  filter_legit_sophos:
+    Image|startswith:
+      - 'C:\Program Files\Sophos\'
+      - 'C:\Program Files (x86)\Sophos\'
+
+  filter_legit_bitdefender:
+    Image|startswith:
+      - 'C:\Program Files\Bitdefender\'
+      - 'C:\Program Files (x86)\Bitdefender\'
+
+  filter_legit_vanguard:
+    Image|startswith:
+      - 'C:\Program Files\Riot Vanguard\'
+
+  condition: >
+    selection_explicit_edr_killer
+    or (selection_impersonating_name and selection_suspicious_path
+        and not (filter_legit_kaspersky or filter_legit_sentinelone
+                 or filter_legit_crowdstrike or filter_legit_sophos
+                 or filter_legit_bitdefender or filter_legit_vanguard))
+
+fields:
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - User
+  - IntegrityLevel
+  - CurrentDirectory
+
+falsepositives:
+  - Explicit EDR killer names (GentleKiller, HexKiller, etc.): virtually no legitimate use — investigate immediately
+  - Impersonation + suspicious path: extremely rare for legitimate security software to run from Temp/AppData — verify with vendor and change ticket
+  - Riot Vanguard anti-cheat may be present in AppData on gaming systems — partially filtered via filter_legit_vanguard
+
+level: high

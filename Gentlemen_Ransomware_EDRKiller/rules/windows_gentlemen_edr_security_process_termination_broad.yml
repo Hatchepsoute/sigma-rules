@@ -1,0 +1,145 @@
+title: Gentlemen Ransomware - EDR Killer Security Process or Service Termination (BROAD)
+id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
+status: experimental
+description: >
+  Detects forced termination of known security product processes or services via taskkill, sc.exe
+  or net.exe, consistent with EDR killer frameworks used by the Gentlemen ransomware operation.
+
+  Gentlemen RaaS deploys multiple EDR killer tools (GentleKiller, HexKiller, ThrottleBlood,
+  HavocKiller) that collectively target 400+ processes across 48 security vendors including
+  Microsoft Defender, CrowdStrike Falcon, SentinelOne, Palo Alto XDR, Sophos, ESET, Bitdefender,
+  Kaspersky, Trellix (McAfee), Carbon Black and others.
+
+  BROAD rule: any forced termination of a known security process/service is flagged. False
+  positives are expected from legitimate IT administration — use for hunting and L1 triage.
+  Correlate with STRICT rules (impersonation, BYOVD driver load) for high-confidence alerting.
+
+references:
+  - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
+  - https://attack.mitre.org/techniques/T1562/001/
+  - https://attack.mitre.org/techniques/T1489/
+
+author: Adama ASSIONGBON
+date: 2026-06-19
+
+tags:
+  - attack.defense-evasion
+  - attack.impact
+  - attack.t1562.001
+  - attack.t1489
+
+logsource:
+  product: windows
+  category: process_creation
+
+detection:
+  # taskkill /F /IM <security_process>
+  selection_taskkill:
+    Image|endswith: '\taskkill.exe'
+    CommandLine|contains|all:
+      - '/F'
+      - '/IM'
+
+  # sc stop <security_service> or net stop <security_service>
+  selection_sc_net_stop:
+    Image|endswith:
+      - '\sc.exe'
+      - '\net.exe'
+      - '\net1.exe'
+    CommandLine|contains: 'stop'
+
+  # Security processes and services targeted by Gentlemen EDR killers
+  # Covers primary processes from 48 vendors mentioned in the article
+  selection_security_targets:
+    CommandLine|contains:
+      # Microsoft Defender / Windows Security
+      - 'MsMpEng'
+      - 'MpCmdRun'
+      - 'SecurityHealthService'
+      - 'WinDefend'
+      - 'Sense'
+      # CrowdStrike Falcon
+      - 'CSFalconService'
+      - 'CSFalconContainer'
+      - 'csfalcon'
+      - 'falcon'
+      # SentinelOne
+      - 'SentinelAgent'
+      - 'SentinelOne'
+      - 'SentinelServiceHost'
+      - 'sentineld'
+      # Palo Alto Cortex XDR / Traps
+      - 'coreServiceShell'
+      - 'Traps'
+      - 'cortex'
+      # Sophos
+      - 'SophosHealth'
+      - 'SophosFIM'
+      - 'SAVService'
+      - 'sophosav'
+      # ESET
+      - 'ekrn'
+      - 'egui'
+      - 'EsetSvc'
+      # Bitdefender
+      - 'bdagent'
+      - 'bdredline'
+      - 'bdntwrk'
+      - 'vsserv'
+      # Kaspersky
+      - 'avp'
+      - 'kavtray'
+      - 'klnagent'
+      # Trend Micro
+      - 'TmListen'
+      - 'ntrtscan'
+      - 'TrendMicroAmsp'
+      - 'coreFrameworkHost'
+      # Carbon Black / VMware
+      - 'CarbonBlack'
+      - 'cbdefense'
+      - 'cbstream'
+      # Trellix / McAfee / FireEye
+      - 'xagt'
+      - 'masvc'
+      - 'McAfeeFramework'
+      # Cylance
+      - 'CylanceSvc'
+      - 'cylanceui'
+      # Malwarebytes
+      - 'MBAMService'
+      - 'mbam'
+      # Cybereason
+      - 'cyserver'
+      - 'minionhost'
+      # Webroot
+      - 'WRSA'
+      # Deep Security (Trend Micro)
+      - 'ds_agent'
+
+  filter_main_legitimate_mgmt:
+    ParentImage|endswith:
+      - '\sccmexec.exe'
+      - '\ccmexec.exe'
+      - '\msiexec.exe'
+      - '\pdqdeploy.exe'
+      - '\intuneManagementExtension.exe'
+      - '\chocolatey.exe'
+
+  condition: (selection_taskkill or selection_sc_net_stop) and selection_security_targets and not filter_main_legitimate_mgmt
+
+fields:
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - User
+  - IntegrityLevel
+
+falsepositives:
+  - Legitimate IT administrator manually stopping a security service (validate with change management ticket)
+  - EDR or security platform self-update process temporarily stopping its own service (check ParentImage)
+  - Vendor-provided uninstaller script stopping services as part of a documented migration
+  - Automated patch management tools (SCCM, Intune, PDQ) — partially filtered; validate ParentImage
+
+level: medium

@@ -1,0 +1,93 @@
+title: Gentlemen Ransomware - BYOVD Driver Load with Invalid or Revoked Signature (STRICT)
+id: e6a7b8c9-d0e1-4f2a-3b4c-5d6e7f809102
+status: experimental
+description: >
+  Detects loading of a kernel driver from a user-writable path where the digital signature is
+  present but invalid (Expired, Revoked, NotTrusted), characteristic of the BYOVD technique
+  used by all Gentlemen ransomware EDR killer variants.
+
+  GentleKiller and its companion tools (HexKiller, ThrottleBlood, HavocKiller) achieve
+  kernel-level access via Bring Your Own Vulnerable Driver (BYOVD). A key evasion feature is
+  the use of STOLEN INVALID signatures from legitimate software — binaries appear signed
+  (Signed=true) but carry expired or revoked certificates. The framework is designed for easy
+  driver swapping between variants, making IoC-based detection insufficient.
+
+  This rule focuses on the BEHAVIORAL signal: a signed driver with a non-valid certificate
+  loaded from a non-system path. This covers all BYOVD variants regardless of the specific
+  driver used.
+
+  Detection blind spot: if the attacker drops the driver into C:\Windows\System32\drivers\
+  or C:\Program Files\ (legitimate system paths), this rule will not fire. Monitor for
+  unexpected driver names in system driver directories as a complementary control.
+
+related:
+  - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
+    type: similar
+  - id: d5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091
+    type: similar
+
+references:
+  - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
+  - https://attack.mitre.org/techniques/T1068/
+  - https://attack.mitre.org/techniques/T1562.001/
+
+author: Adama ASSIONGBON
+date: 2026-06-19
+
+tags:
+  - attack.defense-evasion
+  - attack.privilege-escalation
+  - attack.t1068
+  - attack.t1562.001
+  - attack.t1036.005
+
+logsource:
+  product: windows
+  category: driver_load
+
+detection:
+  # Driver loaded from user-writable or non-standard path
+  selection_suspicious_path:
+    ImageLoaded|contains:
+      - '\Temp\'
+      - '\AppData\'
+      - '\Users\Public\'
+      - '\ProgramData\'
+      - '\Downloads\'
+
+  # Signed=true but certificate is NOT valid — stolen/expired/revoked signature
+  # This is the Gentlemen-specific evasion: appear signed to bypass naive checks
+  selection_invalid_signature:
+    Signed: 'true'
+    SignatureStatus:
+      - 'Expired'
+      - 'Revoked'
+      - 'NotTrusted'
+      - 'Invalid'
+      - 'Error'
+
+  # Exclude legitimate system driver paths
+  filter_legit_system_paths:
+    ImageLoaded|startswith:
+      - 'C:\Windows\System32\drivers\'
+      - 'C:\Windows\SysWOW64\drivers\'
+      - 'C:\Program Files\'
+      - 'C:\Program Files (x86)\'
+      - 'C:\Windows\WinSxS\'
+
+  condition: selection_suspicious_path and selection_invalid_signature and not filter_legit_system_paths
+
+fields:
+  - ImageLoaded
+  - Signed
+  - SignatureStatus
+  - Signature
+  - Hashes
+  - Computer
+
+falsepositives:
+  - Legitimate vendor drivers with recently expired certificates deployed via non-standard paths (should be rare and documented)
+  - Lab or development environments testing driver signing workflows
+  - Enterprise software using self-signed or internally-signed drivers (adjust filter to include internal CA root)
+
+level: high
