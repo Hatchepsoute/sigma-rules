@@ -21,7 +21,7 @@ This folder contains a **single consolidated detection rule**:
 
 [`infostealer_strict_credential_access_and_exfiltration.yml`](./Infostealer_STRICT/rules/infostealer_strict_credential_access_and_exfiltration.yml) 
 
-### 🔎 Detection Logic
+### 🔎 Detection logic
 
 The rule triggers only when the following 3 behaviors occur together:
 
@@ -33,7 +33,7 @@ Logical condition:
 
     selection_exec AND selection_creds AND selection_net
 
-### 📦 Included Artifacts
+### 📦 Included artifacts
 
 -   MITRE ATT&CK Navigator mapping\
 -   Decision tables (EN / FR)\
@@ -60,7 +60,7 @@ These rules are designed to be correlated using:
 -   OpenSearch pivot logic\
 -   SIEM-native correlation engine
 
-### 🧠 Correlation Model
+### 🧠 Correlation model
 
     Step1 → Step2 → Step3 (≤10 minutes)
 
@@ -70,7 +70,7 @@ This model provides:
 -   Flexible SOC tuning
 -   Advanced correlation capability
 
-### 📦 Included Artifacts
+### 📦 Included artifacts
 
 -   Correlation queries (Elastic EQL / OpenSearch)\
 -   Decision tables\

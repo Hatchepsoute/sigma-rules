@@ -8,13 +8,13 @@
 ## 📝 Overview
 This repository provides a comprehensive detection suite (Sigma Rules, IoCs, and Playbooks) to mitigate sophisticated attack campaigns targeting **FortiWeb appliances**. It standardizes the detection of the **Sliver C2 framework** and network masquerading techniques.
 
-## 🚀 Key Features
+## 🚀 Key features
 - 🔍 **Full Lifecycle Detection**: From initial payload drop to active C2 tunneling.
 - 🛡️ **Anti-Evasion**: Behavioral logic designed to unmask tools like `microsocks` or `frp`.
 - ⚖️ **Operational Readiness**: Integrated **TheHive Playbooks** and decision matrices for SOC analysts.
 - ⚙️ **Quality Assured**: All rules have passed strict `sigma-cli` validation.
 
-## 🔍 Technical Analysis (Ruleset)
+## 🔍 Technical analysis (ruleset)
 1.  **Implant Deployment** ([lnx_sliver_implant_deployment.yml](./rules/lnx_sliver_implant_deployment.yml)): Targets hidden binary drops in `/.root/`.
 2.  **Systemd Persistence** ([persist_lnx_sliver_systemd_service.yml](./rules/persist_lnx_sliver_systemd_service.yml)): Detects malicious service configurations.
 3.  **Proxy Masquerading** ([proc_lnx_microsocks_lpd_masquerade.yml](./rules/proc_lnx_microsocks_lpd_masquerade.yml)): Spots disguised proxies via command-line flags.
@@ -24,7 +24,7 @@ This repository provides a comprehensive detection suite (Sigma Rules, IoCs, and
 ## 🛡️ Future-Proofing & Resilience
 These rules focus on **Behavioral Indicators** (CLI arguments, network ports, and restricted paths) to ensure detection even if attackers rename their binaries or modify their "V2" payloads.
 
-## ⚖️ Incident Response & Decision Making
+## ⚖️ Incident response & decision making
 * **Decision Table**: Step-by-step triage guide located in `/decision-table/`.
 * **TheHive Playbook**: Automated workflow mapping in `TheHive_Playbook_Sliver_FortiWeb.yml`.
 ## 🛠️ How to Use
@@ -39,7 +39,7 @@ These rules focus on **Behavioral Indicators** (CLI arguments, network ports, an
 ### 2. Integrating IoCs
 * Import `artifacts/iocs.csv` into your SIEM Watchlists for automated correlation.
 
-## 📁 Repository Structure
+## 📁 Repository structure
 ```text
 ├── rules/ # 5 Sigma Rules
 │   ├── lnx_sliver_implant_deployment.yml

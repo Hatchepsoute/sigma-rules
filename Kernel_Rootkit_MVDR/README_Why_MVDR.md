@@ -3,7 +3,7 @@
 
  [👉🏾  **French version available here**](./README_Pourquoi_MVDR.md)
 
-## Executive Summary
+## Executive summary
 
 MVDR (Minimum Viable Detection Rules) is a security detection approach focused on detecting real and critical threats with the minimum number of effective rules. The goal is not to increase alert volume, but to increase decision quality.
 
@@ -23,7 +23,7 @@ More rules do not mean better security.
 
 ---
 
-## What Is MVDR?
+## What is MVDR?
 
 MVDR stands for Minimum Viable Detection Rules.
 
@@ -36,7 +36,7 @@ MVDR focuses on correlation and critical attack paths.
 
 ---
 
-## MVDR Is Not Less Security
+## MVDR is not less security
 
 MVDR does not reduce security coverage.
 It removes noise so analysts can focus on what truly matters.
@@ -44,7 +44,7 @@ Less noise = faster response = reduced risk.
 
 ---
 
-## Example: Kernel Rootkit Detection
+## Example: Kernel rootkit detection
 
 Instead of dozens of low-value alerts, MVDR uses:
 - One visibility rule
@@ -58,7 +58,7 @@ Result:
 
 ---
 
-## Business Benefits
+## Business benefits
 
 For Management:
 - Clear risk visibility
@@ -77,7 +77,7 @@ For the Organization:
 
 ---
 
-## SOC Maturity Indicator
+## SOC maturity indicator
 
 A mature SOC values:
 - Detection quality over quantity
@@ -88,7 +88,7 @@ MVDR is a sign of detection maturity.
 
 ---
 
-## Key Message
+## Key message
 
 Security effectiveness is not measured by rule count,
 but by the ability to detect what truly matters.

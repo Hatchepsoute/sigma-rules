@@ -18,7 +18,7 @@ Based on a real-world infostealer infection observed in February 2026.
 
 ---
 
-## Detection Layers
+## Detection layers
 
 | Layer | Rule | Purpose |
 |-------|------|---------|

@@ -1,6 +1,7 @@
 # Gentlemen Ransomware, EDR Killer Detection Pack
+[👉🏾 **French version available here**](./README_FR.md)
 
-## Threat Summary
+## Threat summary
 
 **Gentlemen** is a Ransomware-as-a-Service (RaaS) operation that deploys multiple custom EDR killer
 frameworks to blind security defenses before deploying ransomware. The group's primary tool,
@@ -23,22 +24,22 @@ stealer).
 | Credential theft | OxideHarvest Rust-based stealer for credential harvesting |
 | Proxy C2 | SystemBC proxy malware botnet (1,570+ corporate victims) |
 
-### Initial Access
+### Initial access
 
 Linked to exploitation of FortiGate credentials from the FortiBleed leak (74,000 VPN credentials).
 
 ---
 
-## Detection Strategy
+## Detection strategy
 
-### BROAD, Security Process Termination
+### BROAD, Security process termination
 **File:** `windows_gentlemen_edr_security_process_termination_broad.yml`
 
 Detects `taskkill /F /IM`, `sc stop`, or `net stop` targeting known security product processes
 and services across 48 vendors. False positives are expected from legitimate IT administration.
 Use for hunting and L1 triage. Correlate with STRICT rules for confirmation.
 
-### STRICT, GentleKiller Impersonation
+### STRICT, GentleKiller impersonation
 **File:** `windows_gentlemen_edr_killer_impersonation_strict.yml`
 
 Detects:
@@ -47,7 +48,7 @@ Detects:
 
 Legitimate vendor paths are filtered. Alert on this rule warrants immediate investigation.
 
-### STRICT, BYOVD with Invalid Signature
+### STRICT, BYOVD with invalid signature
 **File:** `windows_gentlemen_byovd_invalid_signature_driver_strict.yml`
 
 Detects kernel drivers loaded from non-system paths that carry a valid-looking but invalid
@@ -57,7 +58,7 @@ the framework.
 
 ---
 
-## Sigma Rules
+## Sigma rules
 
 | File | Tier | Level | Logsource |
 |---|---|---|---|
@@ -67,7 +68,7 @@ the framework.
 
 ---
 
-## Log Sources Required
+## Log sources required
 
 | Rule | Required logs |
 |---|---|
@@ -91,7 +92,7 @@ the framework.
 
 ---
 
-## False Positives
+## False positives
 
 ### BROAD
 - IT admin stopping a security service (validate change ticket)
@@ -108,7 +109,7 @@ the framework.
 
 ---
 
-## Tuning Guidance
+## Tuning guidance
 
 1. **Allowlist management tool parents** in the BROAD rule: add your SCCM/Intune/PDQ parent images to `filter_main_legitimate_mgmt`
 2. **Allowlist internal CA** for the BYOVD rule: if your org uses an internal CA whose certificates may show as NotTrusted on endpoints, add the cert thumbprint or adjust the filter
@@ -117,7 +118,7 @@ the framework.
 
 ---
 
-## SOC Triage Steps
+## SOC triage steps
 
 1. **Check ParentImage** on process termination alerts, EDR killers are typically launched from a dropper, not from msiexec or management tools
 2. **Check IntegrityLevel**, BYOVD and kernel-level EDR killers require High or System integrity

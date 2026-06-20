@@ -20,7 +20,7 @@ They are intended to be **deployed together**.
 
 ---
 
-## Threat Context
+## Threat context
 
 Microsoft Office documents are frequently abused as an **initial execution vector**:
 
@@ -41,7 +41,7 @@ Office applications **should not normally spawn command interpreters or download
 ### Purpose
 Detect abnormal **parent-child process relationships** where Microsoft Office launches a LOLBin or script engine.
 
-### Detection Logic
+### Detection logic
 - **Parent process**: Microsoft Office applications
 - **Child process**: Common LOLBins or script engines
 - **No command-line inspection**
@@ -50,7 +50,7 @@ Detect abnormal **parent-child process relationships** where Microsoft Office la
 - Suspicious but **not sufficient alone** to confirm compromise
 - Provides **early visibility** into potential exploitation attempts
 
-### Recommended Usage
+### Recommended usage
 - SOC analyst L1 / L2 triage
 - Threat hunting
 - Baseline correlation rule
@@ -65,7 +65,7 @@ Detect abnormal **parent-child process relationships** where Microsoft Office la
 ### Purpose
 Detect **explicit malicious intent** following Office execution.
 
-### Detection Logic
+### Detection logic
 - Office parent process
 - LOLBin or script engine child process
 - **AND** command-line indicators such as:
@@ -76,18 +76,18 @@ Detect **explicit malicious intent** following Office execution.
 - **High-confidence malicious activity**
 - Strong indicator of active exploitation or post-exploitation
 
-### Recommended Usage
+### Recommended usage
 - SOC analyst L2 / L3 escalation
 - Incident declaration
 - SOAR / automated response
 
 ---
 
-## Correlation Strategy (Required)
+## Correlation strategy (required)
 
 These rules are designed to be **correlated**.
 
-### Recommended Detection Flow
+### Recommended detection flow
 
 1. **BROAD rule triggers**
    - Suspicious Office behavior detected
@@ -103,7 +103,7 @@ This approach:
 
 ---
 
-## SOC Comparison Table
+## SOC comparison table
 
 | Criteria | BROAD | STRICT |
 |------|------|------|
@@ -118,7 +118,7 @@ This approach:
 
 ---
 
-## Best Practice
+## Best practice
 
 > Always deploy **both rules together**.
 >

@@ -12,9 +12,9 @@ The rules are **behavioral**, **SIEM-agnostic**, and designed for **conversion t
 
 ---
 
-## 📂 Included Sigma Rules
+## 📂 Included Sigma rules
 
-### 1️⃣ Termination of Security Processes
+### 1️⃣ Termination of security processes
 **File:**  [`proc_termination_security_processes.yml`](./rules/proc_termination_security_processes.yml)
 
 **Purpose:**  
@@ -30,7 +30,7 @@ Correlation, investigation pivot, ransomware kill-chain analysis
 
 ---
 
-### 2️⃣ Disable Security Tools via Command Line (BROAD)
+### 2️⃣ Disable security tools via command line (BROAD)
 **File:**   [`proc_creation_disable_security_tools_broad.yml`](./rules/proc_creation_disable_security_tools_broad.yml)
 
 **Purpose:**  
@@ -46,7 +46,7 @@ Threat hunting, early warning, detection of suspicious administrative abuse
 
 ---
 
-### 3️⃣ Disable Security Tools via Command Line (STRICT)
+### 3️⃣ Disable security tools via command line (STRICT)
 **File:**   [`proc_creation_disable_security_tools_strict.yml`](./rules/proc_creation_disable_security_tools_strict.yml)
 
 **Purpose:**  
@@ -64,7 +64,7 @@ SOC alerting, automated response, ransomware containment
 
 ---
 
-## 🎯 Detection Strategy
+## 🎯 Detection strategy
 
 | Rule | Confidence | SOC Usage |
 |---|---|---|
@@ -84,7 +84,7 @@ Correlate multiple rules within a short time window to increase confidence.
 
 ---
 
-## ⚠️ False Positives & Tuning
+## ⚠️ False positives & tuning
 
 Possible benign scenarios:
 - Legitimate maintenance by administrators

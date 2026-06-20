@@ -45,7 +45,7 @@ Usage : incident critique
 [mvdr-03-kernel-rootkit-correlation.yml](./rules/mvdr-03-kernel-rootkit-correlation.yml)
 ---
 
-## 3. Scénarios Pentest / Purple Team
+## 3. Scénarios pentest / purple team
 
 Scénario A : simulation rootkit en laboratoire
 Résultat attendu : déclenchement des 3 règles

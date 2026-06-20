@@ -3,7 +3,7 @@
 
  [👉🏾  **French version available here**](README_FR.md)
 
-## 1. Attack Scenario (Attacker Perspective)
+## 1. Attack scenario (attacker perspective)
 
 This detection pack addresses kernel-mode rootkit attacks on Windows systems.
 
@@ -19,7 +19,7 @@ Once the driver is loaded, operating system trust is broken.
 [mvdr-01-kernel-driver-load.yml](./rules/mvdr-01-kernel-driver-load.yml)
 ---
 
-## 2. Detection Logic (SOC Perspective)
+## 2. Detection logic (SOC perspective)
 
 Each rule maps to a critical attack stage.
 
@@ -46,7 +46,7 @@ Usage: critical incident
 [mvdr-03-kernel-rootkit-correlation.yml](./rules/mvdr-03-kernel-rootkit-correlation.yml)
 ---
 
-## 3. Pentest & Purple Team Scenarios
+## 3. Pentest & purple team scenarios
 
 Scenario A: Deploy test kernel driver in lab
 Expected: all three rules triggered

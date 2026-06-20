@@ -1,4 +1,5 @@
 # Gentlemen Ransomware, Pack de Détection EDR Killer
+[👉🏾 **English version available here**](README.md)
 
 ## Résumé de la menace
 
@@ -37,7 +38,7 @@ Détecte `taskkill /F /IM`, `sc stop` ou `net stop` ciblant des processus et ser
 connus chez 48 vendors. Faux positifs attendus de l'administration IT légitime. À utiliser pour
 la chasse aux menaces et le triage L1.
 
-### STRICT, Impersonnation GentleKiller
+### STRICT, impersonnation GentleKiller
 **Fichier :** `windows_gentlemen_edr_killer_impersonation_strict.yml`
 
 Détecte :
