@@ -1,4 +1,4 @@
-# CHANGELOG, Gentlemen Ransomware EDR Killer Detection Pack
+# CHANGELOG, Thegentlemen ransomware EDR Killer detection pack
 
 ## [1.0.0], 2026-06-19
 

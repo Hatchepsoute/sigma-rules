@@ -32,14 +32,14 @@ Linked to exploitation of FortiGate credentials from the FortiBleed leak (74,000
 
 ## Detection strategy
 
-### BROAD — Security process termination
+### BROAD - Security process termination
 **File:** [`windows_gentlemen_edr_security_process_termination_broad.yml`](./rules/windows_gentlemen_edr_security_process_termination_broad.yml)
 
 Detects `taskkill /F /IM`, `sc stop`, or `net stop` targeting known security product processes
 and services across 48 vendors. False positives are expected from legitimate IT administration.
 Use for hunting and L1 triage. Correlate with STRICT rules for confirmation.
 
-### BROAD — BYOVD driver load (name + hash)
+### BROAD - BYOVD driver load (name + hash)
 **File:** [`driver_load_win_gentlemen_byovd_edr_killer_broad.yml`](./rules/driver_load_win_gentlemen_byovd_edr_killer_broad.yml)
 
 Detects kernel driver loads matching known Gentlemen BYOVD filenames (eb.sys, nseckrnl.sys,
@@ -51,11 +51,11 @@ confirmed samples). Two detection branches:
 > Blind spot: if the actor renames the driver and recompiles, both branches are evaded simultaneously.
 > The behavioral correlation rule is the only coverage resilient to this evasion.
 
-### STRICT — GentleKiller staging path and known hashes
+### STRICT - GentleKiller staging path and known hashes
 **File:** [`proc_creation_win_gentlemen_edr_killer_gentlemencollection_strict.yml`](./rules/proc_creation_win_gentlemen_edr_killer_gentlemencollection_strict.yml)
 
 Detects execution of Gentlemen EDR-killer binaries via two branches:
-- **Staging path:** any image executed from `\GentlemenCollection\` — the actor's invariant staging
+- **Staging path:** any image executed from `\GentlemenCollection\` - the actor's invariant staging
   directory observed consistently across unrelated intrusions
 - **Hash branch:** 13 known SHA-1 hashes (Kasps.exe, FaceIT1.exe, Valorant2.exe, Symantec.exe,
   Avast.exe / HexKiller, Sent.exe / ThrottleBlood, Sophos.exe / HavocKiller, etc.)
@@ -66,7 +66,7 @@ staging is imminent. Isolate the host immediately.
 > Note: the `Hashes` field is populated only by Sysmon Event 1, not by Windows Security Event
 > 4688. Without Sysmon, only the staging path branch is active.
 
-### STRICT — GentleKiller impersonation
+### STRICT - GentleKiller impersonation
 **File:** [`windows_gentlemen_edr_killer_impersonation_strict.yml`](./rules/windows_gentlemen_edr_killer_impersonation_strict.yml)
 
 Detects:
@@ -75,15 +75,15 @@ Detects:
 
 Legitimate vendor paths are filtered. Alert on this rule warrants immediate investigation.
 
-### STRICT — BYOVD with invalid signature
+### STRICT - BYOVD with invalid signature
 **File:** [`windows_gentlemen_byovd_invalid_signature_driver_strict.yml`](./rules/windows_gentlemen_byovd_invalid_signature_driver_strict.yml)
 
 Detects kernel drivers loaded from non-system paths that carry a valid-looking but invalid
 certificate (Expired, Revoked, NotTrusted). This covers all Gentlemen EDR killer variants
-regardless of the specific driver used — the stolen-signature pattern is consistent across
+regardless of the specific driver used - the stolen-signature pattern is consistent across
 the entire framework.
 
-### Building block — Security process access (feeds correlation)
+### Building block - Security process access (feeds correlation)
 **File:** [`win_gentlemen_mass_security_process_termination_correlation.yml`](./rules/win_gentlemen_mass_security_process_termination_correlation.yml) *(first document)*
 
 Informational building block (level: informational). Detects any process opening a handle
@@ -91,14 +91,14 @@ to a known security product process via Sysmon Event 10 (ProcessAccess). Not act
 exists only to feed the mass-termination correlation below. Resilient to tool renaming because
 it keys on the TARGET security processes, not on the attacker binary.
 
-> Requires explicit ProcessAccess configuration in Sysmon — not logged by default. Example:
+> Requires explicit ProcessAccess configuration in Sysmon - not logged by default. Example:
 > `<ProcessAccess onmatch="include"><TargetImage condition="end with">MsMpEng.exe</TargetImage></ProcessAccess>`
 
-### Correlation — Mass security process termination
+### Correlation - Mass security process termination
 **File:** [`win_gentlemen_mass_security_process_termination_correlation.yml`](./rules/win_gentlemen_mass_security_process_termination_correlation.yml) *(second document)*
 
 Behavioral correlation (Sigma `value_count` type) that fires when a **single process accesses
-≥ 8 distinct security product processes within 1 minute** — the core behavior of GentleKiller,
+≥ 8 distinct security product processes within 1 minute** - the core behavior of GentleKiller,
 which terminates 400+ processes from ~48 vendors in a loop. Grouped by `SourceImage`,
 `SourceProcessId`, and `Computer`.
 
@@ -120,7 +120,7 @@ repacking, and tool renaming because it keys purely on killing behavior.
 | `windows_gentlemen_edr_killer_impersonation_strict.yml` | STRICT | high | windows/process_creation |
 | `windows_gentlemen_byovd_invalid_signature_driver_strict.yml` | STRICT | high | windows/driver_load |
 | `win_gentlemen_mass_security_process_termination_correlation.yml` | Building block | informational | windows/process_access |
-| `win_gentlemen_mass_security_process_termination_correlation.yml` | Correlation | high | — (value_count) |
+| `win_gentlemen_mass_security_process_termination_correlation.yml` | Correlation | high | - (value_count) |
 
 ---
 
@@ -157,31 +157,31 @@ repacking, and tool renaming because it keys purely on killing behavior.
 
 ## False positives
 
-### BROAD — Process termination
+### BROAD - Process termination
 - IT admin stopping a security service (validate change ticket)
 - EDR self-update temporarily stopping its own service (check ParentImage)
 - Patch management tools (SCCM, Intune, PDQ), partially filtered
 
-### BROAD — BYOVD driver load
+### BROAD - BYOVD driver load
 - `vgk.sys` on gaming endpoints (Riot Vanguard), filtered for legitimate install path; hash hits are not affected
 - `GameDriverX64.sys` and `dmx.sys` from Program Files (no confirmed Gentlemen hash), filtered
 - Authorized red-team or BYOVD research in a controlled lab
 
-### STRICT — GentleKiller staging
-- Extremely unlikely — a path containing `\GentlemenCollection\` has no plausible legitimate use
+### STRICT - GentleKiller staging
+- Extremely unlikely - a path containing `\GentlemenCollection\` has no plausible legitimate use
 - Samples submitted voluntarily to an internal sandbox (verify host and user context)
 
-### STRICT — Impersonation
+### STRICT - Impersonation
 - Virtually none for explicit killer names
 - Legitimate security software should never run from Temp/AppData
 
-### STRICT — BYOVD invalid signature
+### STRICT - BYOVD invalid signature
 - Vendor drivers with recently expired certificates in non-standard paths (rare)
 - Development/lab environments testing driver signing
 
 ### Building block and correlation
 - Endpoint management or inventory tools legitimately enumerating processes (add to `filter_legit_sources`)
-- Security products inspecting one another — tune `filter_legit_sources` to your stack
+- Security products inspecting one another - tune `filter_legit_sources` to your stack
 
 ---
 
@@ -198,11 +198,11 @@ repacking, and tool renaming because it keys purely on killing behavior.
 
 ## SOC triage steps
 
-1. **Check ParentImage** on process termination alerts — EDR killers are launched from a dropper, not msiexec or management tools
-2. **Check IntegrityLevel** — BYOVD and kernel-level killers require High or System integrity
+1. **Check ParentImage** on process termination alerts - EDR killers are launched from a dropper, not msiexec or management tools
+2. **Check IntegrityLevel** - BYOVD and kernel-level killers require High or System integrity
 3. **Check image hash** against VirusTotal for impersonation and staging alerts
-4. **Check driver SignatureStatus** — revoked certificates can be verified via `sigcheck -tv` on the binary
-5. **Check SourceProcessId** on correlation alerts — if GentleKiller injected into a legitimate process (process hollowing), SourceImage shows a benign name but SourceProcessId reveals the actual malicious thread
+4. **Check driver SignatureStatus** - revoked certificates can be verified via `sigcheck -tv` on the binary
+5. **Check SourceProcessId** on correlation alerts - if GentleKiller injected into a legitimate process (process hollowing), SourceImage shows a benign name but SourceProcessId reveals the actual malicious thread
 6. **Isolate immediately** if BYOVD + staging (GentlemenCollection) + correlation fire together on the same host
 
 ---
