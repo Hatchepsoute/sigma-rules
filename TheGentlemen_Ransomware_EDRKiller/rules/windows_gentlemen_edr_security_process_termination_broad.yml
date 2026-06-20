@@ -1,12 +1,12 @@
-title: Gentlemen ransomware - EDR killer security process or service termination
+title: TheGentlemen ransomware - EDR killer security process or service termination
 id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
 status: experimental
 description: >
   Detects forced termination or disabling of known security product processes and services via
   taskkill, sc.exe, net.exe, WMIC or PowerShell Stop-Process, consistent with EDR killer
-  frameworks used by the Gentlemen ransomware operation.
+  frameworks used by the TheGentlemen ransomware operation.
 
-  Gentlemen RaaS deploys multiple EDR killer tools (GentleKiller, HexKiller, ThrottleBlood,
+  TheGentlemen RaaS deploys multiple EDR killer tools (GentleKiller, HexKiller, ThrottleBlood,
   HavocKiller) that collectively target 400+ processes across 48 security vendors.
 
   DETECTION BLIND SPOT: GentleKiller primarily terminates processes via direct Windows API calls
@@ -25,7 +25,7 @@ references:
 
 author: Adama ASSIONGBON
 date: 2026-06-19
-modified: 2026-06-19
+modified: 2026-06-20
 
 tags:
   - attack.defense-evasion
@@ -77,7 +77,7 @@ detection:
       - 'Stop-Process'
       - 'Set-Service'
 
-  # Security processes and services targeted by Gentlemen EDR killers
+  # Security processes and services targeted by TheGentlemen EDR killers
   selection_security_targets:
     CommandLine|contains:
       # Microsoft Defender / Windows Security

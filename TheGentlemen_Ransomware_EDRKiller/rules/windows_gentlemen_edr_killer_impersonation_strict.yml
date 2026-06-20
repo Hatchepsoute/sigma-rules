@@ -1,11 +1,11 @@
-title: Gentlemen ransomware - GentleKiller security tool impersonation from suspicious path
+title: TheGentlemen ransomware - GentleKiller security tool impersonation from suspicious path
 id: d5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091
 status: experimental
 description: >
   Detects execution of binaries impersonating known security product names (GentleKiller tactic)
   from user-writable or non-standard paths, indicating EDR killer staging or execution.
 
-  The Gentlemen ransomware operation deploys GentleKiller in at least eight variants that
+  The TheGentlemen ransomware operation deploys GentleKiller in at least eight variants that
   impersonate legitimate security products (Kaspersky, WatchDog, Javelin, ESET, Avast,
   Symantec, McAfee, Malwarebytes, Webroot, Trend Micro) and gaming/anti-cheat tools
   (Valorant/Vanguard, FACEIT, EA Anti-Cheat) to avoid suspicion. Binaries are packed with
@@ -36,7 +36,7 @@ references:
 
 author: Adama ASSIONGBON
 date: 2026-06-19
-modified: 2026-06-19
+modified: 2026-06-20
 
 tags:
   - attack.defense-evasion
@@ -116,61 +116,99 @@ detection:
       - '\Intel\'
       - '\Recovery\'
 
-  # Legitimate installation paths, exclude from impersonation branch
+  # Legitimate installation paths — cover both Program Files AND ProgramData,
+  # because selection_suspicious_path includes \ProgramData\ which many EDR vendors use.
   filter_legit_kaspersky:
     Image|startswith:
       - 'C:\Program Files (x86)\Kaspersky Lab\'
       - 'C:\Program Files\Kaspersky Lab\'
+      - 'C:\ProgramData\Kaspersky Lab\'
 
   filter_legit_sentinelone:
-    Image|startswith: 'C:\Program Files\SentinelOne\'
+    Image|startswith:
+      - 'C:\Program Files\SentinelOne\'
+      - 'C:\ProgramData\Sentinel\'
 
   filter_legit_crowdstrike:
-    Image|startswith: 'C:\Program Files\CrowdStrike\'
+    Image|startswith:
+      - 'C:\Program Files\CrowdStrike\'
+      - 'C:\ProgramData\CrowdStrike\'
 
   filter_legit_sophos:
     Image|startswith:
       - 'C:\Program Files\Sophos\'
       - 'C:\Program Files (x86)\Sophos\'
+      - 'C:\ProgramData\Sophos\'
 
   filter_legit_bitdefender:
     Image|startswith:
       - 'C:\Program Files\Bitdefender\'
       - 'C:\Program Files (x86)\Bitdefender\'
+      - 'C:\ProgramData\Bitdefender\'
 
   filter_legit_vanguard:
     Image|startswith:
       - 'C:\Program Files\Riot Vanguard\'
       - 'C:\Program Files (x86)\Riot Games\'
       - 'C:\Riot Games\'
+      - 'C:\ProgramData\Riot Games\'
 
   filter_legit_symantec:
     Image|startswith:
       - 'C:\Program Files\Symantec\'
       - 'C:\Program Files (x86)\Symantec\'
+      - 'C:\ProgramData\Symantec\'
 
   filter_legit_mcafee:
     Image|startswith:
       - 'C:\Program Files\McAfee\'
       - 'C:\Program Files (x86)\McAfee\'
       - 'C:\Program Files\Trellix\'
+      - 'C:\ProgramData\McAfee\'
+      - 'C:\ProgramData\Trellix\'
 
   filter_legit_eset:
     Image|startswith:
       - 'C:\Program Files\ESET\'
       - 'C:\Program Files (x86)\ESET\'
+      - 'C:\ProgramData\ESET\'
 
   filter_legit_trend:
     Image|startswith:
       - 'C:\Program Files\Trend Micro\'
       - 'C:\Program Files (x86)\Trend Micro\'
+      - 'C:\ProgramData\Trend Micro\'
 
   filter_legit_avast:
     Image|startswith:
       - 'C:\Program Files\Avast Software\'
       - 'C:\Program Files (x86)\Avast Software\'
+      - 'C:\ProgramData\Avast Software\'
 
-  condition: selection_explicit_edr_killer or (selection_impersonating_name and selection_suspicious_path and not (filter_legit_kaspersky or filter_legit_sentinelone or filter_legit_crowdstrike or filter_legit_sophos or filter_legit_bitdefender or filter_legit_vanguard or filter_legit_symantec or filter_legit_mcafee or filter_legit_eset or filter_legit_trend or filter_legit_avast))
+  filter_legit_malwarebytes:
+    Image|startswith:
+      - 'C:\Program Files\Malwarebytes\'
+      - 'C:\Program Files (x86)\Malwarebytes\'
+      - 'C:\ProgramData\Malwarebytes\'
+
+  filter_legit_webroot:
+    Image|startswith:
+      - 'C:\Program Files\Webroot\'
+      - 'C:\Program Files (x86)\Webroot\'
+      - 'C:\ProgramData\WRData\'
+
+  filter_legit_faceit:
+    Image|startswith:
+      - 'C:\Program Files\FACEIT\'
+      - 'C:\ProgramData\FACEIT\'
+
+  filter_legit_ea_anticheat:
+    Image|startswith:
+      - 'C:\Program Files\EA Anti-Cheat\'
+      - 'C:\Program Files (x86)\EA Games\'
+      - 'C:\Program Files\EA Games\'
+
+  condition: selection_explicit_edr_killer or (selection_impersonating_name and selection_suspicious_path and not (filter_legit_kaspersky or filter_legit_sentinelone or filter_legit_crowdstrike or filter_legit_sophos or filter_legit_bitdefender or filter_legit_vanguard or filter_legit_symantec or filter_legit_mcafee or filter_legit_eset or filter_legit_trend or filter_legit_avast or filter_legit_malwarebytes or filter_legit_webroot or filter_legit_faceit or filter_legit_ea_anticheat))
 
 fields:
   - Image
@@ -183,8 +221,8 @@ fields:
 
 falsepositives:
   - Explicit EDR killer names (GentleKiller, HexKiller, etc.): virtually no legitimate use, investigate immediately
-  - Impersonation + suspicious path: legitimate security software never runs from Temp/AppData, verify with vendor and change ticket
-  - Riot Vanguard anti-cheat may be present in AppData on gaming systems, partially filtered
-  - ESET, Avast or Sophos update processes may temporarily write to ProgramData, validate ParentImage against vendor updater
+  - Impersonation + suspicious path: legitimate security software never runs from Temp/AppData/Downloads, verify with vendor and change ticket
+  - EDR vendors writing helper binaries to ProgramData during updates — covered by ProgramData path entries in each filter; if a new vendor fires, add its ProgramData path to the relevant filter
+  - FaceIT or EA Anti-Cheat installers staging in ProgramData before setup completes, filtered; validate ParentImage against the vendor installer
 
 level: high

@@ -1,10 +1,10 @@
-title: Gentlemen ransomware - BYOVD driver load with invalid or missing signature
+title: TheGentlemen ransomware - BYOVD driver load with invalid or missing signature
 id: e6a7b8c9-d0e1-4f2a-3b4c-5d6e7f809102
 status: experimental
 description: >
   Detects loading of a kernel driver from a user-writable or non-standard path where the digital
   signature is absent, invalid, expired or revoked, characteristic of the BYOVD technique used
-  by all Gentlemen ransomware EDR killer variants.
+  by all TheGentlemen ransomware EDR killer variants.
 
   GentleKiller and companion tools (HexKiller, ThrottleBlood, HavocKiller) achieve kernel-level
   access via BYOVD. A key evasion feature is the use of STOLEN INVALID signatures from legitimate
@@ -38,7 +38,7 @@ references:
 
 author: Adama ASSIONGBON
 date: 2026-06-19
-modified: 2026-06-19
+modified: 2026-06-20
 
 tags:
   - attack.defense-evasion
@@ -66,7 +66,7 @@ detection:
   selection_programdata_path:
     ImageLoaded|startswith: 'C:\ProgramData\'
 
-  # Signed=true but certificate NOT valid, stolen/expired/revoked signature (Gentlemen primary pattern)
+  # Signed=true but certificate NOT valid, stolen/expired/revoked signature (TheGentlemen primary pattern)
   selection_invalid_signature:
     Signed: 'true'
     SignatureStatus:

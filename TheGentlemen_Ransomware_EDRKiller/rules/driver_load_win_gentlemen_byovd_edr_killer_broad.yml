@@ -1,9 +1,9 @@
-title: Gentlemen ransomware - BYOVD abused driver load (GentleKiller suite)
+title: TheGentlemen ransomware - BYOVD abused driver load (GentleKiller suite)
 id: a2f6c1e4-9b73-4d8a-8e51-6c2f0a3d7b94
 status: experimental
 description: |
-  Detects the load of vulnerable / malicious kernel drivers abused by the Gentlemen ransomware-as-a-service EDR-killer suite (GentleKiller and the integrated HexKiller / ThrottleBlood / HavocKiller). Per ESET research (June 2026), each GentleKiller variant drops and loads a different BYOVD driver to gain kernel privileges and disable security products. This BROAD rule combines driver-filename matching (hunting, false positives possible) with the known sample SHA-1 hashes (high confidence). Use for visibility and to corroborate the STRICT staging rule and the mass-kill correlation.
-  Telemetry: Sysmon Event ID 6 (Driver loaded). Some driver filenames (e.g. vgk.sys, GameDriverX64.sys, dmx.sys) also belong to legitimate software, so a name-only hit always requires triage; a hash hit is a confirmed Gentlemen sample.
+  Detects the load of vulnerable / malicious kernel drivers abused by the TheGentlemen ransomware-as-a-service EDR-killer suite (GentleKiller and the integrated HexKiller / ThrottleBlood / HavocKiller). Per ESET research (June 2026), each GentleKiller variant drops and loads a different BYOVD driver to gain kernel privileges and disable security products. This BROAD rule combines driver-filename matching (hunting, false positives possible) with the known sample SHA-1 hashes (high confidence). Use for visibility and to corroborate the STRICT staging rule and the mass-kill correlation.
+  Telemetry: Sysmon Event ID 6 (Driver loaded). Some driver filenames (e.g. vgk.sys, GameDriverX64.sys, dmx.sys) also belong to legitimate software, so a name-only hit always requires triage; a hash hit is a confirmed TheGentlemen sample.
   DETECTION BLIND SPOT: if the actor renames the driver and recompiles (changing the hash), both detection branches are evaded simultaneously. The behavioral correlation rule (process_access) is the only coverage that survives this evasion.
   IoC freshness: driver names and hashes may go stale as the actor swaps drivers between campaigns. See ioc/ioc_hashes.csv and ioc/ioc_driver_names.csv for last_verified dates.
 
@@ -17,7 +17,7 @@ references:
     - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
 author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026-06-19
-modified: 2026-06-19
+modified: 2026-06-20
 tags:
     - attack.defense-evasion
     - attack.t1562.001
@@ -78,7 +78,7 @@ fields:
     - User
 falsepositives:
     - vgk.sys on gaming endpoints (Riot Vanguard), filtered for legitimate install path; hash hits are NOT affected
-    - GameDriverX64.sys and dmx.sys from Program Files (no confirmed Gentlemen hash), filtered; any other path warrants triage
+    - GameDriverX64.sys and dmx.sys from Program Files (no confirmed TheGentlemen hash), filtered; any other path warrants triage
     - Authorized red-team / BYOVD research in a controlled lab
     - Security vendor testing of vulnerable-driver blocklists
 level: medium

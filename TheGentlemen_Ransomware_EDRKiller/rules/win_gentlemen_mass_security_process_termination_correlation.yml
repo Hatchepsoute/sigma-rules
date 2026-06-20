@@ -11,7 +11,7 @@ references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
 author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026-06-19
-modified: 2026-06-19
+modified: 2026-06-20
 tags:
     - attack.defense-evasion
     - attack.t1562.001
@@ -89,18 +89,18 @@ falsepositives:
     - Security products inspecting one another - tune filter_legit_sources to your stack
 level: informational
 ---
-title: Gentlemen ransomware - Mass security process termination by single process (EDR killer behavior)
+title: TheGentlemen ransomware - Mass security process termination by single process (EDR killer behavior)
 id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
 status: experimental
 description: |
-  Behavioral correlation that fires when a single source process accesses many distinct security/EDR product processes within a short window - the core behavior of an EDR killer such as Gentlemen's GentleKiller, which terminates 400+ security processes across ~48 vendors in a loop. This detection is resilient to tool renaming, repacking and new BYOVD drivers because it keys on the killing behavior, not on file artifacts. Pair it with the BYOVD driver-load BROAD rule and the GentlemenCollection STRICT rule for full-confidence attribution.
+  Behavioral correlation that fires when a single source process accesses many distinct security/EDR product processes within a short window - the core behavior of an EDR killer such as TheGentlemen's GentleKiller, which terminates 400+ security processes across ~48 vendors in a loop. This detection is resilient to tool renaming, repacking and new BYOVD drivers because it keys on the killing behavior, not on file artifacts. Pair it with the BYOVD driver-load BROAD rule and the GentlemenCollection STRICT rule for full-confidence attribution.
   THRESHOLD CALIBRATION: the default threshold of 8 assumes a reasonably instrumented endpoint. If your environment only runs 3-4 security tools, the threshold may never be reached even during an active attack. Set the threshold to 50-75% of the number of distinct security processes running in your environment. Conversely, lower it to 4-5 for minimal stacks.
   BLIND SPOT: if GentleKiller injects into a legitimate process (process hollowing), SourceImage will show the host process (e.g. explorer.exe). The correlation still fires correctly but analysts must check SourceProcessId to identify the actual malicious thread rather than dismissing the alert based on the legitimate SourceImage name.
 references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
 author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026-06-19
-modified: 2026-06-19
+modified: 2026-06-20
 tags:
     - attack.defense-evasion
     - attack.t1562.001
