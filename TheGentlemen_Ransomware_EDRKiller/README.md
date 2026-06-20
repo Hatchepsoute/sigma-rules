@@ -1,9 +1,9 @@
-# Gentlemen Ransomware, EDR Killer Detection Pack
+# TheGentlemen Ransomware, EDR Killer Detection Pack
 [👉🏾 **French version available here**](./README_FR.md)
 
 ## Threat summary
 
-**Gentlemen** is a Ransomware-as-a-Service (RaaS) operation that deploys multiple custom EDR killer
+**TheGentlemen** is a Ransomware-as-a-Service (RaaS) operation that deploys multiple custom EDR killer
 frameworks to blind security defenses before deploying ransomware. The group's primary tool,
 **GentleKiller**, exists in at least eight variants and impersonates legitimate security products
 (Kaspersky, WatchDog, Javelin) and gaming software (Valorant/Vanguard) to avoid suspicion.
@@ -42,7 +42,7 @@ Use for hunting and L1 triage. Correlate with STRICT rules for confirmation.
 ### BROAD - BYOVD driver load (name + hash)
 **File:** [`driver_load_win_gentlemen_byovd_edr_killer_broad.yml`](./rules/driver_load_win_gentlemen_byovd_edr_killer_broad.yml)
 
-Detects kernel driver loads matching known Gentlemen BYOVD filenames (eb.sys, nseckrnl.sys,
+Detects kernel driver loads matching known TheGentlemen BYOVD filenames (eb.sys, nseckrnl.sys,
 vgk.sys malicious sample, ThrottleBlood.sys, havoc.sys, etc.) or known SHA-1 hashes (12
 confirmed samples). Two detection branches:
 - **Name branch:** broad, filtered for known legitimate install paths (Riot Vanguard, Program Files)
@@ -54,13 +54,13 @@ confirmed samples). Two detection branches:
 ### STRICT - GentleKiller staging path and known hashes
 **File:** [`proc_creation_win_gentlemen_edr_killer_gentlemencollection_strict.yml`](./rules/proc_creation_win_gentlemen_edr_killer_gentlemencollection_strict.yml)
 
-Detects execution of Gentlemen EDR-killer binaries via two branches:
+Detects execution of TheGentlemen EDR-killer binaries via two branches:
 - **Staging path:** any image executed from `\GentlemenCollection\` - the actor's invariant staging
   directory observed consistently across unrelated intrusions
 - **Hash branch:** 13 known SHA-1 hashes (Kasps.exe, FaceIT1.exe, Valorant2.exe, Symantec.exe,
   Avast.exe / HexKiller, Sent.exe / ThrottleBlood, Sophos.exe / HavocKiller, etc.)
 
-If this fires, treat as active Gentlemen intrusion in the defense-evasion phase; ransomware
+If this fires, treat as active TheGentlemen intrusion in the defense-evasion phase; ransomware
 staging is imminent. Isolate the host immediately.
 
 > Note: the `Hashes` field is populated only by Sysmon Event 1, not by Windows Security Event
@@ -79,7 +79,7 @@ Legitimate vendor paths are filtered. Alert on this rule warrants immediate inve
 **File:** [`windows_gentlemen_byovd_invalid_signature_driver_strict.yml`](./rules/windows_gentlemen_byovd_invalid_signature_driver_strict.yml)
 
 Detects kernel drivers loaded from non-system paths that carry a valid-looking but invalid
-certificate (Expired, Revoked, NotTrusted). This covers all Gentlemen EDR killer variants
+certificate (Expired, Revoked, NotTrusted). This covers all TheGentlemen EDR killer variants
 regardless of the specific driver used - the stolen-signature pattern is consistent across
 the entire framework.
 
@@ -164,7 +164,7 @@ repacking, and tool renaming because it keys purely on killing behavior.
 
 ### BROAD - BYOVD driver load
 - `vgk.sys` on gaming endpoints (Riot Vanguard), filtered for legitimate install path; hash hits are not affected
-- `GameDriverX64.sys` and `dmx.sys` from Program Files (no confirmed Gentlemen hash), filtered
+- `GameDriverX64.sys` and `dmx.sys` from Program Files (no confirmed TheGentlemen hash), filtered
 - Authorized red-team or BYOVD research in a controlled lab
 
 ### STRICT - GentleKiller staging
@@ -192,7 +192,7 @@ repacking, and tool renaming because it keys purely on killing behavior.
 3. **Allowlist internal CA** for the BYOVD invalid-signature rule if your org uses an internal CA whose certs show as NotTrusted on endpoints
 4. **Enable Sysmon Event 6** for both BYOVD rules; verify with `sysmon -c` that `DriverLoad` events are captured
 5. **Configure Sysmon ProcessAccess** events for security product target images to activate the building block and correlation
-6. **Correlate** within a 10-minute window: BYOVD driver load + GentlemenCollection staging + mass termination correlation = highest-confidence Gentlemen attribution
+6. **Correlate** within a 10-minute window: BYOVD driver load + GentlemenCollection staging + mass termination correlation = highest-confidence TheGentlemen attribution
 
 ---
 
@@ -209,7 +209,7 @@ repacking, and tool renaming because it keys purely on killing behavior.
 
 ## References
 
-- [BleepingComputer, Gentlemen Ransomware EDR Killers](https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/)
+- [BleepingComputer, TheGentlemen Ransomware EDR Killers](https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/)
 - [MITRE T1562.001, Impair Defenses](https://attack.mitre.org/techniques/T1562/001/)
 - [MITRE T1068, Exploitation for Privilege Escalation](https://attack.mitre.org/techniques/T1068/)
 - [MITRE T1036.005, Masquerading: Match Legitimate Name](https://attack.mitre.org/techniques/T1036/005/)

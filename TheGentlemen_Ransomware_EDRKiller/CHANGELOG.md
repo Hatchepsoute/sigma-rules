@@ -14,4 +14,4 @@
 - `CHANGELOG.md`
 
 ### Intelligence source
-- BleepingComputer article on Gentlemen ransomware EDR killer operation (June 2026)
+- BleepingComputer article on TheGentlemen ransomware EDR killer operation (June 2026)

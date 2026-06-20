@@ -1,9 +1,9 @@
-# Gentlemen Ransomware, Pack de Détection EDR Killer
+# TheGentlemen Ransomware, Pack de Détection EDR Killer
 [👉🏾 **English version available here**](README.md)
 
 ## Résumé de la menace
 
-**Gentlemen** est une opération de Ransomware-as-a-Service (RaaS) qui déploie plusieurs frameworks
+**TheGentlemen** est une opération de Ransomware-as-a-Service (RaaS) qui déploie plusieurs frameworks
 EDR killer personnalisés pour aveugler les défenses de sécurité avant de lancer le chiffrement.
 L'outil principal, **GentleKiller**, existe en au moins huit variantes et se fait passer pour des
 logiciels de sécurité légitimes (Kaspersky, WatchDog, Javelin) ou des logiciels de jeu (Valorant/Vanguard).
@@ -42,7 +42,7 @@ la chasse aux menaces et le triage L1.
 **Fichier :** [`driver_load_win_gentlemen_byovd_edr_killer_broad.yml`](./rules/driver_load_win_gentlemen_byovd_edr_killer_broad.yml)
 
 Détecte les chargements de pilotes noyau correspondant aux noms de fichiers BYOVD connus de
-Gentlemen (eb.sys, nseckrnl.sys, vgk.sys échantillon malveillant, ThrottleBlood.sys, havoc.sys,
+TheGentlemen (eb.sys, nseckrnl.sys, vgk.sys échantillon malveillant, ThrottleBlood.sys, havoc.sys,
 etc.) ou aux hash SHA-1 connus (12 échantillons confirmés). Deux branches de détection :
 - **Branche nom :** large couverture, filtrée pour les chemins d'installation légitimes connus (Riot Vanguard, Program Files)
 - **Branche hash :** haute confiance, non affectée par les filtres de chemin
@@ -54,13 +54,13 @@ etc.) ou aux hash SHA-1 connus (12 échantillons confirmés). Deux branches de d
 ### STRICT - Staging GentleKiller et hash connus
 **Fichier :** [`proc_creation_win_gentlemen_edr_killer_gentlemencollection_strict.yml`](./rules/proc_creation_win_gentlemen_edr_killer_gentlemencollection_strict.yml)
 
-Détecte l'exécution de binaires EDR killer Gentlemen via deux branches :
+Détecte l'exécution de binaires EDR killer TheGentlemen via deux branches :
 - **Chemin de staging :** toute image exécutée depuis `\GentlemenCollection\` - le répertoire
   de staging invariant de l'acteur, observé de manière constante dans des intrusions non liées
 - **Branche hash :** 13 hash SHA-1 connus (Kasps.exe, FaceIT1.exe, Valorant2.exe, Symantec.exe,
   Avast.exe / HexKiller, Sent.exe / ThrottleBlood, Sophos.exe / HavocKiller, etc.)
 
-Si cette règle se déclenche, traiter comme une intrusion Gentlemen active en phase d'évasion ;
+Si cette règle se déclenche, traiter comme une intrusion TheGentlemen active en phase d'évasion ;
 le chiffrement est imminent. Isoler l'hôte immédiatement.
 
 > Note : le champ `Hashes` n'est peuplé que par Sysmon Event 1, pas par Windows Security Event
@@ -79,7 +79,7 @@ Les chemins légitimes des vendors sont filtrés. Une alerte sur cette règle do
 **Fichier :** [`windows_gentlemen_byovd_invalid_signature_driver_strict.yml`](./rules/windows_gentlemen_byovd_invalid_signature_driver_strict.yml)
 
 Détecte les pilotes chargés depuis des chemins non-système portant un certificat invalide
-(Expired, Revoked, NotTrusted). Couvre toutes les variantes Gentlemen indépendamment du pilote
+(Expired, Revoked, NotTrusted). Couvre toutes les variantes TheGentlemen indépendamment du pilote
 utilisé - le pattern de signature volée est constant dans l'ensemble du framework.
 
 ### Building block - Accès aux processus de sécurité (alimente la corrélation)
@@ -164,7 +164,7 @@ comportement de kill, pas les artefacts fichiers.
 
 ### BROAD - Chargement pilote BYOVD
 - `vgk.sys` sur endpoints de gaming (Riot Vanguard), filtré pour le chemin d'installation légitime ; les hits par hash ne sont pas affectés
-- `GameDriverX64.sys` et `dmx.sys` depuis Program Files (aucun hash Gentlemen confirmé), filtrés
+- `GameDriverX64.sys` et `dmx.sys` depuis Program Files (aucun hash TheGentlemen confirmé), filtrés
 - Red team autorisé ou recherche BYOVD en lab contrôlé
 
 ### STRICT - Staging GentleKiller
@@ -192,7 +192,7 @@ comportement de kill, pas les artefacts fichiers.
 3. **Allowlist de l'AC interne** pour la règle BYOVD signature invalide si l'org utilise une AC interne dont les certs apparaissent comme NotTrusted sur les endpoints
 4. **Activer Sysmon Event 6** pour les deux règles BYOVD ; vérifier avec `sysmon -c` que les événements `DriverLoad` sont capturés
 5. **Configurer Sysmon ProcessAccess** pour les images cibles des produits de sécurité afin d'activer le building block et la corrélation
-6. **Corréler** dans une fenêtre de 10 minutes : chargement pilote BYOVD + staging GentlemenCollection + corrélation terminaison massive = attribution Gentlemen haute confiance
+6. **Corréler** dans une fenêtre de 10 minutes : chargement pilote BYOVD + staging GentlemenCollection + corrélation terminaison massive = attribution TheGentlemen haute confiance
 
 ---
 
@@ -209,7 +209,7 @@ comportement de kill, pas les artefacts fichiers.
 
 ## Références
 
-- [BleepingComputer, Gentlemen Ransomware EDR Killers](https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/)
+- [BleepingComputer, TheGentlemen Ransomware EDR Killers](https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/)
 - [MITRE T1562.001, Compromettre les défenses](https://attack.mitre.org/techniques/T1562/001/)
 - [MITRE T1068, Exploitation pour élévation de privilèges](https://attack.mitre.org/techniques/T1068/)
 - [MITRE T1036.005, Mascarade : nom légitime](https://attack.mitre.org/techniques/T1036/005/)
