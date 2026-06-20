@@ -32,14 +32,14 @@ Lié à l'exploitation de credentials FortiGate issus de la fuite FortiBleed (74
 ## Stratégie de détection
 
 ### BROAD, Terminaison de processus de sécurité
-**Fichier :** `windows_gentlemen_edr_security_process_termination_broad.yml`
+**Fichier :** [`windows_gentlemen_edr_security_process_termination_broad.yml`](./rules/windows_gentlemen_edr_security_process_termination_broad.yml)
 
 Détecte `taskkill /F /IM`, `sc stop` ou `net stop` ciblant des processus et services de sécurité
 connus chez 48 vendors. Faux positifs attendus de l'administration IT légitime. À utiliser pour
 la chasse aux menaces et le triage L1.
 
 ### STRICT, impersonnation GentleKiller
-**Fichier :** `windows_gentlemen_edr_killer_impersonation_strict.yml`
+**Fichier :** [`windows_gentlemen_edr_killer_impersonation_strict.yml`](./rules/windows_gentlemen_edr_killer_impersonation_strict.yml)
 
 Détecte :
 - Les noms explicites d'outils EDR killer (GentleKiller, HexKiller, ThrottleBlood, HavocKiller, OxideHarvest), tout chemin
@@ -48,7 +48,7 @@ Détecte :
 Les chemins légitimes des vendors sont filtrés. Une alerte sur cette règle doit être investiguée immédiatement.
 
 ### STRICT, BYOVD avec signature invalide
-**Fichier :** `windows_gentlemen_byovd_invalid_signature_driver_strict.yml`
+**Fichier :** [`windows_gentlemen_byovd_invalid_signature_driver_strict.yml`](./rules/windows_gentlemen_byovd_invalid_signature_driver_strict.yml)
 
 Détecte les pilotes chargés depuis des chemins non-système portant un certificat invalide
 (Expired, Revoked, NotTrusted). Couvre toutes les variantes Gentlemen indépendamment du pilote
@@ -56,7 +56,7 @@ utilisé, le pattern de signature volée est constant dans le framework.
 
 ---
 
-## Règles Sigma
+## Règles sigma
 
 | Fichier | Niveau | Sévérité | Source de logs |
 |---|---|---|---|

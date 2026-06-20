@@ -33,14 +33,14 @@ Linked to exploitation of FortiGate credentials from the FortiBleed leak (74,000
 ## Detection strategy
 
 ### BROAD, Security process termination
-**File:** `windows_gentlemen_edr_security_process_termination_broad.yml`
+**File:**  [`windows_gentlemen_edr_security_process_termination_broad.yml`](./rules/windows_gentlemen_edr_security_process_termination_broad.yml)
 
 Detects `taskkill /F /IM`, `sc stop`, or `net stop` targeting known security product processes
 and services across 48 vendors. False positives are expected from legitimate IT administration.
 Use for hunting and L1 triage. Correlate with STRICT rules for confirmation.
 
 ### STRICT, GentleKiller impersonation
-**File:** `windows_gentlemen_edr_killer_impersonation_strict.yml`
+**File:** [`windows_gentlemen_edr_killer_impersonation_strict.yml`](./rules/windows_gentlemen_edr_killer_impersonation_strict.yml)
 
 Detects:
 - Explicit EDR killer tool names (GentleKiller, HexKiller, ThrottleBlood, HavocKiller, OxideHarvest), any path
@@ -49,7 +49,7 @@ Detects:
 Legitimate vendor paths are filtered. Alert on this rule warrants immediate investigation.
 
 ### STRICT, BYOVD with invalid signature
-**File:** `windows_gentlemen_byovd_invalid_signature_driver_strict.yml`
+**File:**  [`windows_gentlemen_byovd_invalid_signature_driver_strict.yml`](./rules/windows_gentlemen_byovd_invalid_signature_driver_strict.yml)
 
 Detects kernel drivers loaded from non-system paths that carry a valid-looking but invalid
 certificate (Expired, Revoked, NotTrusted). This covers all Gentlemen EDR killer variants
