@@ -23,7 +23,7 @@ references:
 
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-17
-modified: 2026-06-19
+modified: 2026-06-21
 
 tags:
   - attack.collection
@@ -50,6 +50,8 @@ detection:
       - 'MEMORY.md'
       - 'AGENTS.md'
 
+  # SECOND CHALLENGE 2026-06-21: added pythonw.exe (headless Python infostealer droppers)
+  # and node.exe (Node.js-based stealers, common in supply-chain attacks targeting dev environments).
   selection_suspicious_accessor:
     Image|endswith:
       - '\powershell.exe'
@@ -59,6 +61,8 @@ detection:
       - '\wscript.exe'
       - '\cscript.exe'
       - '\python.exe'
+      - '\pythonw.exe'
+      - '\node.exe'
       - '\curl.exe'
       - '\wget.exe'
 

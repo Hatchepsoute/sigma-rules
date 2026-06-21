@@ -23,7 +23,7 @@ references:
 
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-16
-modified: 2026-06-19
+modified: 2026-06-21
 
 tags:
   - attack.collection
@@ -56,6 +56,9 @@ detection:
       - 'device-auth.json'
 
   # Processes not expected to read AI agent config files
+  # SECOND CHALLENGE 2026-06-21: added pythonw.exe (headless Python, common in infostealer droppers),
+  # node.exe (Node.js runtime used by npm-based stealers), certutil.exe and bitsadmin.exe
+  # (LOLBins that can be used to read/exfiltrate files without spawning a shell window).
   selection_suspicious_accessor:
     Image|endswith:
       - '\powershell.exe'
@@ -68,6 +71,10 @@ detection:
       - '\curl.exe'
       - '\wget.exe'
       - '\python.exe'
+      - '\pythonw.exe'
+      - '\node.exe'
+      - '\certutil.exe'
+      - '\bitsadmin.exe'
 
   filter_legitimate:
     Image|endswith:

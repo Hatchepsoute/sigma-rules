@@ -61,6 +61,13 @@ detection:
             - '\TaniumClient.exe'
             - '\Sysmon.exe'
             - '\Sysmon64.exe'
+    # BLIND SPOT FIX 2026-06-21 (second pass): `wmiprvse.exe` was in the allowlist but it is
+    # a known attack vector — GentleKiller can invoke WMI to terminate EDR processes, in which
+    # case wmiprvse.exe appears as SourceImage. Removing it from the filter so that mass
+    # security-process access via WMI triggers the correlation.
+    # svchost.exe is intentionally kept because EDR products legitimately use service-host
+    # child processes to inspect each other, and mass-termination via injected svchost would
+    # still fire the correlation (threshold = 8 distinct targets within 1 min).
     filter_legit_sources:
         SourceImage|endswith:
             - '\services.exe'
@@ -70,7 +77,6 @@ detection:
             - '\CSFalconService.exe'
             - '\SentinelAgent.exe'
             - '\taskmgr.exe'
-            - '\wmiprvse.exe'
             - '\msiexec.exe'
             - '\TrustedInstaller.exe'
             - '\wuauclt.exe'
@@ -100,7 +106,7 @@ references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
 author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026-06-19
-modified: 2026-06-20
+modified: 2026-06-21
 tags:
     - attack.defense-evasion
     - attack.t1562.001

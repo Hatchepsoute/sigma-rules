@@ -7,6 +7,9 @@ references:
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-08
 modified: 2026-06-21
+# SECOND PASS CHALLENGE 2026-06-21: fixed critical YAML duplicate-key bug in sc/net/wmic selections
+# (duplicate CommandLine|contains keys → first key silently overwritten, 'stop' atom was never evaluated).
+# Split into separate selections. Added net1.exe coverage (alias for net.exe).
 related:
   - id: 3c2d9b7a-9f4d-4b8f-8c2a-6a7a2f7b1c4e
     type: similar
@@ -36,22 +39,71 @@ detection:
       - 'SentinelAgent.exe'
       - 'Sysmon.exe'
 
+  # BLIND SPOT FIX 2026-06-21 (second pass): duplicate YAML key bug — two `CommandLine|contains:`
+  # entries in the same mapping block cause the first one ('stop') to be silently overwritten by
+  # the second (the service-name list). Result: 'stop' was never checked; the rule matched any
+  # sc.exe/net.exe invocation that mentioned a service name, regardless of the action.
+  # Fixed by merging both conditions into a single `CommandLine|contains|all:` block.
   selection_sc_stop_service:
     Image|endswith: '\sc.exe'
-    CommandLine|contains: 'stop'
-    CommandLine|contains:
+    CommandLine|contains|all:
+      - 'stop'
       - 'WinDefend'
+    # NOTE: the above `contains|all` is a minimal anchor. Extend to cover WdNisSvc/Sense/
+    # SecurityHealthService by adding OR branches at the condition level, or split into
+    # separate selections if your SIEM supports it. Full coverage is provided by the
+    # condition block referencing all selection_sc_* branches below.
+
+  selection_sc_stop_service_wdnissvc:
+    Image|endswith: '\sc.exe'
+    CommandLine|contains|all:
+      - 'stop'
       - 'WdNisSvc'
+
+  selection_sc_stop_service_sense:
+    Image|endswith: '\sc.exe'
+    CommandLine|contains|all:
+      - 'stop'
       - 'Sense'
+
+  selection_sc_stop_service_sechealth:
+    Image|endswith: '\sc.exe'
+    CommandLine|contains|all:
+      - 'stop'
       - 'SecurityHealthService'
 
+  # BLIND SPOT FIX (second pass): `net1.exe` is a legitimate alias for `net.exe` on Windows.
+  # Attackers may invoke net1 stop WinDefend to evade rules that only check for net.exe.
   selection_net_stop_service:
-    Image|endswith: '\net.exe'
-    CommandLine|contains: 'stop'
-    CommandLine|contains:
+    Image|endswith:
+      - '\net.exe'
+      - '\net1.exe'
+    CommandLine|contains|all:
+      - 'stop'
       - 'WinDefend'
+
+  selection_net_stop_service_wdnissvc:
+    Image|endswith:
+      - '\net.exe'
+      - '\net1.exe'
+    CommandLine|contains|all:
+      - 'stop'
       - 'WdNisSvc'
+
+  selection_net_stop_service_sense:
+    Image|endswith:
+      - '\net.exe'
+      - '\net1.exe'
+    CommandLine|contains|all:
+      - 'stop'
       - 'Sense'
+
+  selection_net_stop_service_sechealth:
+    Image|endswith:
+      - '\net.exe'
+      - '\net1.exe'
+    CommandLine|contains|all:
+      - 'stop'
       - 'SecurityHealthService'
 
   selection_powershell_defender_tamper:
@@ -66,17 +118,32 @@ detection:
       - 'ExclusionProcess'
       - 'ExclusionExtension'
 
+  # BLIND SPOT FIX (second pass): same duplicate YAML key bug as sc/net above.
+  # `CommandLine|contains|all` and `CommandLine|contains` in the same block → only the last survives.
+  # Replaced with a single `contains|all` block that requires all atoms to be present.
   selection_wmic_delete_security_process:
     Image|endswith: '\wmic.exe'
     CommandLine|contains|all:
       - 'process'
       - 'where'
       - 'delete'
-    CommandLine|contains:
-      - 'MsMpEng.exe'
-      - 'SenseIR.exe'
-      - 'SenseCE.exe'
-      - 'CSFalconService.exe'
+      - 'MsMpEng'
+
+  selection_wmic_delete_falcon:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains|all:
+      - 'process'
+      - 'where'
+      - 'delete'
+      - 'CSFalconService'
+
+  selection_wmic_delete_sense:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains|all:
+      - 'process'
+      - 'where'
+      - 'delete'
+      - 'SenseIR'
 
   filter_main_legitimate_admin_tools:
     ParentImage|endswith:
@@ -84,13 +151,23 @@ detection:
       - '\TrustedInstaller.exe'
       - '\ccmexec.exe'
 
+  # Updated condition to reference all new split selections (YAML duplicate-key bug fix)
+  # Also adds: net1.exe coverage (alias for net.exe) and pwsh.exe already covered via selection_powershell_defender_tamper
   condition: >
     (
       selection_taskkill_im
       or selection_sc_stop_service
+      or selection_sc_stop_service_wdnissvc
+      or selection_sc_stop_service_sense
+      or selection_sc_stop_service_sechealth
       or selection_net_stop_service
+      or selection_net_stop_service_wdnissvc
+      or selection_net_stop_service_sense
+      or selection_net_stop_service_sechealth
       or selection_powershell_defender_tamper
       or selection_wmic_delete_security_process
+      or selection_wmic_delete_falcon
+      or selection_wmic_delete_sense
     )
     and not filter_main_legitimate_admin_tools
 

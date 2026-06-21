@@ -12,7 +12,7 @@ references:
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-08
-modified: 2026-06-19
+modified: 2026-06-21
 related:
   - id: a9f2b4c1-8d3e-45f6-92a7-12b345c6d789
     type: similar
@@ -28,17 +28,30 @@ logsource:
   product: linux
 
 detection:
+  # Campaign-specific paths observed in the FortiWeb Sliver intrusion (high confidence).
   selection_specific:
     TargetFilename|endswith:
       - '/.root/system-updater'
       - '/app/web/system-updater'
       - '/.root/cups-lpd'
 
+  # Hidden files in writable directories — common staging tactic.
   selection_generic:
     TargetFilename|contains:
       - '/bin/.root/'
       - '/var/tmp/.'
       - '/dev/shm/.'
+
+  # Angle mort: Sliver implants can be dropped in other locations not observed in FortiWeb campaign.
+  # These paths cover documented Sliver operator staging preferences from threat intelligence reports.
+  selection_extended_paths:
+    TargetFilename|contains:
+      - '/usr/local/bin/.'    # hidden file in a system binary path
+      - '/usr/share/.'        # hidden file under shared resources
+      - '/root/.config/'      # hidden config directory (XDG-style abuse)
+      - '/root/.cache/'
+      - '/home/nobody/'       # nobody home dir abuse (service account)
+      - '/var/lib/.'          # hidden files under var/lib (mimics service state data)
 
   condition: 1 of selection_*
 
@@ -50,6 +63,7 @@ fields:
   - CreationUtcTime
 
 falsepositives:
-  - Legitimate system update processes writing to these specific paths (no known case)
+  - Legitimate system update processes writing to campaign-specific paths (no known case)
+  - selection_extended_paths: package managers or configuration management tools (Ansible, Chef) writing hidden files under /usr/local/bin or /root/.config; verify the writing process (Image) against known admin tools
 
 level: critical

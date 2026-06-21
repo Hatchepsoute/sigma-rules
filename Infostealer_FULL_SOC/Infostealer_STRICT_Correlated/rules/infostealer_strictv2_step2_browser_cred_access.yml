@@ -10,7 +10,9 @@ references:
   - https://attack.mitre.org/techniques/T1555/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-06
-modified: 2026-06-19
+modified: 2026-06-21
+# SECOND PASS 2026-06-21: added DPAPI master key access coverage (offline DPAPI exfil blind spot).
+# A non-browser process reading DPAPI master keys from Protect\ is a strong infostealer signal.
 related:
   - id: 26090645-90c0-40ee-9aa9-5d0037b33ae7
     type: similar
@@ -48,6 +50,17 @@ detection:
       - '\\logins.json'
       - '\\cookies.sqlite'
 
+  # BLIND SPOT FIX 2026-06-21 (second pass): DPAPI offline exfiltration bypasses this rule.
+  # An attacker can copy NTUSER.DAT (contains DPAPI master keys) via Volume Shadow Copy, then
+  # decrypt browser secrets on an attacker-controlled machine — no direct access to Login Data
+  # or Cookies files is required. Coverage: add DPAPI master key store paths.
+  selection_dpapi_masterkey:
+    TargetFilename|contains:
+      - '\AppData\Roaming\Microsoft\Protect\'
+
+  selection_dpapi_files:
+    TargetFilename|re: '(?i)\\AppData\\Roaming\\Microsoft\\Protect\\[^\\]+\\[A-F0-9]{8}-[A-F0-9]{4}-'
+
   filter_known_browsers:
     Image|endswith:
       - '\chrome.exe'
@@ -60,7 +73,19 @@ detection:
       - '\librewolf.exe'
       - '\chromium.exe'
 
-  condition: (((selection_chromium_paths and selection_chromium_files) or (selection_firefox_paths and selection_firefox_files))) and not filter_known_browsers
+  # DPAPI master key files are legitimately accessed by lsass.exe and the user's session
+  filter_dpapi_legit:
+    Image|endswith:
+      - '\lsass.exe'
+      - '\svchost.exe'
+      - '\dpapimig.exe'
+      - '\dpmemory.exe'
+
+  condition: (
+    ((selection_chromium_paths and selection_chromium_files) or (selection_firefox_paths and selection_firefox_files)) and not filter_known_browsers
+    ) or (
+    selection_dpapi_masterkey and selection_dpapi_files and not filter_dpapi_legit
+    )
 
 fields:
   - UtcTime
@@ -71,7 +96,9 @@ fields:
   - CreationUtcTime
 
 falsepositives:
-  - Password managers and enterprise browser security tools
+  - Password managers and enterprise browser security tools accessing browser credential stores
   - Forensic/backup agents (should be signed and ticketed)
+  - Backup solutions accessing DPAPI master keys via VSS (validate Image signer and ticket)
+  - Enterprise credential sync tools reading Protect\ master key files (rare; add to filter_dpapi_legit by path)
 
 level: critical

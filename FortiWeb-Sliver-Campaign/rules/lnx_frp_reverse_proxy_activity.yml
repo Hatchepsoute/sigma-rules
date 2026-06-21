@@ -17,7 +17,7 @@ references:
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-08
-modified: 2026-06-19
+modified: 2026-06-21
 related:
   - id: 8f3c2e91-7b6a-4e77-9cfa-2a1e9d4cbe12
     type: similar
@@ -31,20 +31,47 @@ logsource:
   product: linux
 
 detection:
+  # Primary signal: exact binary name match (endswith prevents substring match on 'xfrpc').
   selection_frp_binary:
     Image|endswith:
       - '/frpc'
       - '/frps'
 
-  selection_frp_cli_invoke:
+  # FRP invoked by name in CLI with TOML config (new config format, FRP >= 0.52).
+  selection_frp_cli_toml:
     CommandLine|contains|all:
       - 'frpc'
       - '.toml'
 
-  selection_frps_cli_invoke:
+  selection_frps_cli_toml:
     CommandLine|contains|all:
       - 'frps'
       - '.toml'
+
+  # Angle mort: FRP versions prior to 0.52 use INI config files (.ini extension).
+  # An attacker using an older FRP build would escape detection with the .toml selectors.
+  selection_frp_cli_ini:
+    CommandLine|contains|all:
+      - 'frpc'
+      - '.ini'
+
+  selection_frps_cli_ini:
+    CommandLine|contains|all:
+      - 'frps'
+      - '.ini'
+
+  # Angle mort: FRP binary renamed (e.g. to 'sshd', 'systemd-network').
+  # If executed from /tmp, /dev/shm or /var/tmp it is always suspicious regardless of name.
+  # This branch generates more FP but catches masquerade scenarios.
+  selection_frp_from_tmp:
+    Image|contains:
+      - '/tmp/'
+      - '/dev/shm/'
+      - '/var/tmp/'
+    CommandLine|contains:
+      - 'server_addr'    # FRP TOML key present in frpc config
+      - 'server_port'    # FRP TOML/INI key present in frpc config
+      - 'remote_port'    # FRP tunnel definition key
 
   filter_authorized_vpn:
     Image|startswith:
@@ -52,7 +79,7 @@ detection:
       - '/usr/local/etc/frp/'
       - '/opt/frp/'
 
-  condition: (selection_frp_binary or selection_frp_cli_invoke or selection_frps_cli_invoke) and not filter_authorized_vpn
+  condition: (selection_frp_binary or selection_frp_cli_toml or selection_frps_cli_toml or selection_frp_cli_ini or selection_frps_cli_ini or selection_frp_from_tmp) and not filter_authorized_vpn
 
 fields:
   - Computer
@@ -65,8 +92,10 @@ fields:
   - ParentProcessId
 
 falsepositives:
-  - Authorized remote maintenance using FRP in enterprise VPN infrastructure
+  - Authorized remote maintenance using FRP in enterprise VPN infrastructure (filter by Image path via filter_authorized_vpn)
   - DevOps tunneling for SSH forwarding in approved CI/CD pipelines
-  - Corporate remote access solutions built on FRP (filter by Image path via filter_authorized_vpn)
+  - Corporate remote access solutions built on FRP (add install path to filter_authorized_vpn)
+  - Older FRP builds using .ini config format on authorized hosts (new branch may trigger)
+  - selection_frp_from_tmp: legitimate test or staging scripts using FRP from temp paths (verify Image hash and owner)
 
 level: medium
