@@ -3,8 +3,9 @@
 ![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-mapped-red?style=flat-square)
 
 # 🧠 AI Agent Context Theft - Sigma Detection Pack
+👉🏾 [French version available here](README_FR.md)
 
-👉🏾 [**French version available here**](README_FR.md)
+
 
 ## Overview
 This repository contains a Sigma detection pack designed to identify identity and context theft targeting local AI agents such as OpenClaw and similar frameworks.

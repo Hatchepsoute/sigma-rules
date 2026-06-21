@@ -4,7 +4,8 @@
 ![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
 
 # 📂 Index des Règles de Détection (Sigma)
-[👉🏾 English version available here: ](./README.md)
+👉🏾 [English version available here](README.md)
+
 
 Ce répertoire contient la logique de détection cœur pour la campagne **Sliver C2 ciblant FortiWeb**. Ces règles sont au format **Sigma**, permettant un déploiement sur n'importe quel SIEM (Splunk, Sentinel, ELK, etc.).
 

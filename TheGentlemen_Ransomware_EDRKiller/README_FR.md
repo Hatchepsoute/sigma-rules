@@ -1,5 +1,6 @@
 # TheGentlemen Ransomware, Pack de Détection EDR Killer
-[👉🏾 **English version available here**](README.md)
+👉🏾 [English version available here](README.md)
+
 
 ## Résumé de la menace
 

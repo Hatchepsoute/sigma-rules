@@ -6,8 +6,9 @@
 ![License](https://img.shields.io/badge/License-MIT-informational)
 
 # Sigma-Rules – Philosophie d’ingénierie de détection
+👉🏾 [English version available here](README.md)
 
-👉🏾  [**English version available here**](README.md)
+
 
 **Menace → Detecter → Repondre → Ameliorer**
 

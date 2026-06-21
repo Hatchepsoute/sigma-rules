@@ -4,7 +4,8 @@
 ![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
 
 # 🛡️ Détection de la Campagne Sliver C2 sur FortiWeb
-[👉🏾 English version available here: ](./README.md)
+👉🏾 [English version available here](README.md)
+
 
 ## 📝 Présentation
 Ce dépôt fournit un arsenal complet (règles Sigma, IoCs et Playbooks) conçu pour contrer les attaques sophistiquées ciblant les appliances **FortiWeb**. Il permet d'industrialiser la détection du framework **Sliver C2** et des techniques de masquage réseau.

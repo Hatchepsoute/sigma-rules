@@ -1,6 +1,7 @@
 # 📊 Table de Décision – Activité Infostealer Confirmée (STRICT)
+👉🏾 [English version available here](Decision_Table_Infostealer_STRICT_EN.md)
 
- [👉🏾  **English version available here**](Decision_Table_Infostealer_STRICT_EN.md)
+
  
 # 🛡️ Decision Table - Infostealer High-Confidence Credential Access and Exfiltration
 ---

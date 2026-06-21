@@ -1,6 +1,8 @@
 
 # Table de Décision – Détection Linux Sliver / FRP / LPD Masquerade 
-[👉🏾 English version available here: ](./README.md)
+
+👉🏾 [English version available here](README.md)
+
 ## Objectif
 Cette table de décision aide les analystes SOC à qualifier et traiter les alertes générées par les règles Linux liées aux implants Sliver, à l’utilisation de FRP et au masquage LPD.
 

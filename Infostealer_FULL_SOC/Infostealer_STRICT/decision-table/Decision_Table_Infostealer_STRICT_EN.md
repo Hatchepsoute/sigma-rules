@@ -1,6 +1,7 @@
 # 📊 Decision Table – Confirmed Infostealer Activity (STRICT)
+👉🏾 [French version available here](Decision_Table_Infostealer_STRICT_FR.md)
+
  
- [👉🏾  **French version available here**](Decision_Table_Infostealer_STRICT_FR.md)
  
 
 ## 🎯 Rule Logic

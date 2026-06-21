@@ -1,5 +1,7 @@
 # 🚨 TheHive Playbook - AI Agent Context Theft 
-[👉🏾 French version available here: ](./README_FR.md)
+
+👉🏾 [French version available here](README_FR.md)
+
 ## Objective
 Guide SOC and IR teams in responding to alerts indicating identity or context theft of a local AI agent (e.g., OpenClaw).
 

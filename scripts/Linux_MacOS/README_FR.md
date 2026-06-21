@@ -1,8 +1,9 @@
 # Validation des règles Sigma – Linux & macOS
+👉🏾 [English version available here](README.md)
+
 
 Ce document explique comment **valider toutes les règles Sigma** du dépôt sous **Linux et macOS** à l’aide du script Bash portable.
 
-👉🏾 [**English version available**](README.md)  
 👉🏾 [**Version Windows**](./scripts/Windows/README_FR.md)
 
 ---

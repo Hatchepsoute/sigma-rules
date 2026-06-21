@@ -1,5 +1,6 @@
 # TheGentlemen Ransomware, EDR Killer Detection Pack
-[👉🏾 **French version available here**](./README_FR.md)
+👉🏾 [French version available here](README_FR.md)
+
 
 ## Threat summary
 

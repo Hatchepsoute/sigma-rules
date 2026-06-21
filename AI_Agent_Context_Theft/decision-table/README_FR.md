@@ -1,6 +1,7 @@
 # 🧠 Table de Décision - Vol de Contexte d’Agent IA
+👉🏾 [English version available here](README.md)
 
-👉🏾 [**English version available here**](README.md)
+
 ## Objectif
 Aider les analystes SOC à qualifier les alertes liées au vol d’identité et de contexte d’agents IA locaux.
 

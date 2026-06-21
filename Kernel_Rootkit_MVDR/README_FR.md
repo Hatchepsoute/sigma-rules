@@ -1,7 +1,8 @@
 
 # Rootkit Kernel MVDR – Explication par scénario
+👉🏾 [English version available here](README.md)
 
-[👉🏾 **English version available here**](./README.md)
+
 
 ## 1. Scénario d’attaque (vision attaquant)
 

@@ -1,5 +1,7 @@
 # Infostealer STRICT v2 (Correlated) – SOC Pack
-[👉🏾  **French version available here**](README_FR.md)
+
+👉🏾 [French version available here](README_FR.md)
+
 🏗️ Detection Architecture (Step-by-Step)
 
 To minimize false positives and increase alert confidence, these rules are divided into three critical stages. Correlating these three events on a single host within a 10-minute window indicates a high-probability compromise.

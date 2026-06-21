@@ -1,5 +1,6 @@
 # 🛡️ Defense Evasion – Security Tool Impairment (Sigma Rules Pack)
-[👉🏾 **French version available here**](./README_FR.md)
+👉🏾 [French version available here](README_FR.md)
+
 
 This open-source Sigma pack detects attempts to **impair, disable, or terminate security tools** (EDR, AV, Microsoft Defender) on Windows systems.
 

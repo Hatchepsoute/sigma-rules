@@ -1,4 +1,7 @@
 # Microsoft Office → LOLBins Detection (Sigma Rules)
+
+👉🏾 [French version available here](README_FR.md)
+
 ➡️ **[French version available here](./README_FR.md)**
 ## Status
 - **Experimental**

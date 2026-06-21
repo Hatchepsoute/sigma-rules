@@ -3,8 +3,9 @@
 ![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-mapped-red?style=flat-square)
 
 # 🧠 Vol de Contexte d’Agent IA - Pack Sigma
+👉🏾 [English version available here](README.md)
 
-👉🏾 [**English version available here**](README.md)
+
 
 ## Présentation
 Ce pack Sigma permet de détecter le vol d’identité et de contexte d’agents IA locaux (OpenClaw et similaires).

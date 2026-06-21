@@ -1,5 +1,6 @@
 # 📊 BROAD vs STRICT – Security Tool Impairment 
-[👉🏾 **French version available here**](./README_FR.md)
+👉🏾 [French version available here](README_FR.md)
+
 
 ```mermaid
 flowchart TD

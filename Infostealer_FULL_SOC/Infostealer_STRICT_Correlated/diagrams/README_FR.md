@@ -1,4 +1,6 @@
 # 🛡️ Infostealer STRICT v2, Table de Décision
+👉🏾 [English version available here](README.md)
+
 
 ## 🎯 Objectif
 

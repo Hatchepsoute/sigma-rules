@@ -1,6 +1,7 @@
 # 🕵️‍♂️ Infostealer STRICT – Détection haute confiance d’accès aux identifiants et exfiltration
+👉🏾 [English version available here](README.md)
 
- [👉🏾  **English version available here**](README.md)
+
  
 ## 📌 Vue d’ensemble
 

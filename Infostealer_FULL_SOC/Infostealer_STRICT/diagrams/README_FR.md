@@ -1,6 +1,7 @@
 # 📊 Diagrams --- Infostealer STRICT High Confidence
+👉🏾 [English version available here](README.md)
 
- [👉🏾  **English version available here**](README.md)
+
 
 This directory contains styled Mermaid diagrams for the rule:
 

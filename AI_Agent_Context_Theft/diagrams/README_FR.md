@@ -1,5 +1,6 @@
 # 🧠 Vol de Contexte d’Agent IA – Schéma d’attaque 
-👉🏾 [**English version available here**](README.md)
+👉🏾 [English version available here](README.md)
+
 
 ```mermaid
 flowchart TD

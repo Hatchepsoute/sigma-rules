@@ -1,5 +1,6 @@
 # 🛡️ Évasion de Défense – Neutralisation des Outils de Sécurité (Pack Sigma)
-[👉🏾**English version available here**](README.md)
+👉🏾 [English version available here](README.md)
+
 
 Ce pack Sigma open-source détecte les tentatives visant à **neutraliser, désactiver ou arrêter** des outils de sécurité (EDR, antivirus, Microsoft Defender) sur des systèmes Windows.
 

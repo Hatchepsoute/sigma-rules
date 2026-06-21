@@ -1,5 +1,6 @@
 # 📊 Table de Décision - Neutralisation des Outils de Sécurité (Sigma)
-[👉🏾**English version available here**](README.md)
+👉🏾 [English version available here](README.md)
+
 
 Cette table de décision explique **quand et comment utiliser chaque règle Sigma** du pack *Évasion de Défense – Neutralisation des Outils de Sécurité*.
 

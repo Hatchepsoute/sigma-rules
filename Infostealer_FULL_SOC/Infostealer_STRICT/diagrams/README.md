@@ -1,6 +1,7 @@
 ## Diagram 
+👉🏾 [French version available here](README_FR.md)
 
-[👉🏾 French version available here: ](./README_FR.md)
+
 
 This directory contains styled Mermaid diagrams for the rule:
 

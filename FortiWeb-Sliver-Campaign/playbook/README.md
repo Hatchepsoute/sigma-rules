@@ -1,6 +1,8 @@
 
 # SOC Playbook – Linux Sliver / FRP / LPD Masquerade 
-[👉🏾 French version available here: ](./README_FR.md)
+
+👉🏾 [French version available here](README_FR.md)
+
 ## Scope
 This playbook guides SOC analysts through the investigation and response to alerts related to:
 - FRP reverse proxy activity

@@ -1,5 +1,6 @@
 # 🛡️ Infostealer Detection Strategy (STRICT v2) - Sigma Rules
- [👉🏾  **English version available here**](README.md)
+👉🏾 [English version available here](README.md)
+
  
 Ce répertoire contient une suite de 3 règles Sigma corrélées conçues pour détecter les activités d'Infostealers (type Arkanix, RedLine, Vidar) en suivant leur cycle de vie complet, de l'exécution à l'exfiltration.
 🏗️ Architecture de Détection (Step-by-Step)

@@ -1,5 +1,6 @@
 # 🧠 Decision Table - AI Agent Context Theft
-👉🏾 [**French version available here**](README_FR.md)
+👉🏾 [French version available here](README_FR.md)
+
 
 ## Purpose
 Guide SOC analysts in triaging alerts related to AI agent identity and context theft (OpenClaw and similar agents).

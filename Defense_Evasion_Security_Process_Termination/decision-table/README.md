@@ -1,5 +1,6 @@
 # 📊 Decision Table – Security Tool Impairment (Sigma Rules)
-[👉🏾 **French version available here**](./README_FR.md)
+👉🏾 [French version available here](README_FR.md)
+
 
 This decision table explains **how and when to use each Sigma rule** in the *Defense Evasion – Security Tool Impairment* pack.
 

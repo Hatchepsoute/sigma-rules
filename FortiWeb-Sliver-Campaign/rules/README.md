@@ -4,7 +4,8 @@
 ![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
 
 # 📂 Sigma Detection Rules Index
-[👉🏾 French version available here: ](./README_FR.md)
+👉🏾 [French version available here](README_FR.md)
+
 
 This directory contains the core detection logic for the **FortiWeb Sliver C2 Campaign**. Rules are provided in **Sigma** format for SIEM-agnostic deployment.
 

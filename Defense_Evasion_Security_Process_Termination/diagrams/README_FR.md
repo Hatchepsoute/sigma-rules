@@ -1,5 +1,6 @@
 # 📊 BROAD vs STRICT – Neutralisation des outils de sécurité
-[👉🏾**English version available here**](README.md)
+👉🏾 [English version available here](README.md)
+
 
 ```mermaid
 flowchart TD

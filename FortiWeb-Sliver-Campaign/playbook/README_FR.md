@@ -1,6 +1,8 @@
 
 # Playbook SOC – Linux Sliver / FRP / Masquage LPD 
-[👉🏾 English version available here: ](./README.md)
+
+👉🏾 [English version available here](README.md)
+
 ## Périmètre
 Ce playbook guide les analystes SOC dans l’investigation et la réponse aux alertes liées à :
 - L’utilisation de FRP comme reverse proxy

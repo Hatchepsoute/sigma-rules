@@ -4,8 +4,9 @@
 ![Infostealer](https://img.shields.io/badge/Infostealer-red)
 
 # 🛡️ Infostealers_FULL_SOC --- Pack de Détection
+👉🏾 [English version available here](README.md)
 
-👉🏾 [**English version available here**](README.md)
+
 
 ## 🎯 Présentation
 

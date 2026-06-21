@@ -1,7 +1,8 @@
 
 # SOC Decision Table – Kernel_Rootkit_MVDR
+👉🏾 [French version available here](README_FR.md)
 
- [👉🏾  **French version available here**](README_FR.md)
+
  
 ## Purpose
 Guide SOC analysts in decision-making when Kernel_Rootkit_MVDR rules trigger.

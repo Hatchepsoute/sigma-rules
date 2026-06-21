@@ -1,6 +1,7 @@
 # 🚨 Playbook TheHive - Vol de Contexte d’Agent IA 
+👉🏾 [English version available here](README.md)
 
-[👉🏾 English version available here: ](./README.md)
+
 
 ## Objectif
 Guider les équipes SOC et IR lors d’alertes indiquant un vol d’identité ou de contexte d’un agent IA local (ex : OpenClaw).

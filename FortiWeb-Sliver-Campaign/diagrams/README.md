@@ -1,5 +1,6 @@
 # Detection Decision Flow – Linux Sliver / FRP / LPD 
-[👉🏾 French version available here: ](./README_FR.md)
+👉🏾 [French version available here](README_FR.md)
+
 
 ```mermaid
 flowchart TD

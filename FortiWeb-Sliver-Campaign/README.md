@@ -4,7 +4,9 @@
 ![Fortinet](https://img.shields.io/badge/Fortinet-FortiWeb-red)
 
 # 🛡️ FortiWeb Sliver C2 Campaign Detection
-[👉🏾 French version available here: ](./README_FR.md)
+
+👉🏾 [French version available here](README_FR.md)
+
 ## 📝 Overview
 This repository provides a comprehensive detection suite (Sigma Rules, IoCs, and Playbooks) to mitigate sophisticated attack campaigns targeting **FortiWeb appliances**. It standardizes the detection of the **Sliver C2 framework** and network masquerading techniques.
 

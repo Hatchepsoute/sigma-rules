@@ -8,8 +8,9 @@
 ![Microsoft Security](https://img.shields.io/badge/Microsoft-Security-blue)
 
 # 🛡️ Framework de Détection Sigma pour les Opérations SOC
+👉🏾 [English version available here](README.md)
 
-[👉🏾 **Version anglaise disponible ici**](README.md)
+
 
 ![SOC Framework](diagrams/sigma_rules_vue_globale_soc_3D_FR.png)
 

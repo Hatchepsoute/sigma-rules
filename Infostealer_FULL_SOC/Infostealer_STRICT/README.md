@@ -5,8 +5,9 @@
 
 
 # 🕵️‍♂️ Infostealer STRICT – High-Confidence Credential Access & Exfiltration Detection
+👉🏾 [French version available here](README_FR.md)
 
-[👉🏾  **French version available here**](README_FR.md)
+
 
 ## 📌 Overview
 

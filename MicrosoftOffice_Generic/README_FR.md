@@ -1,4 +1,7 @@
 # Détection Microsoft Office → LOLBins (Règles Sigma)
+
+👉🏾 [English version available here](README.md)
+
 ➡️ **[English version available here](README.md)**
 ## Statut
 - **Expérimental**
