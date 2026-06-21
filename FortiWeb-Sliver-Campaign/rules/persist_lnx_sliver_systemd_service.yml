@@ -1,17 +1,23 @@
 title: Suspicious systemd service creation for Sliver persistence
 id: a9f2b4c1-8d3e-45f6-92a7-12b345c6d789
 status: experimental
-description: |
-  Detects the creation of a systemd service file matching the Sliver persistence pattern
-  observed in the FortiWeb campaign: service description "Updater Service", ExecStart pointing
-  to the implant binary, and Restart=on-failure for resilience.
+description: >
+  Detects systemd service file creation matching Sliver persistence pattern from FortiWeb campaign.
+custom:
+  description_fr: >
+    Détecte la création d'un fichier de service systemd correspondant au pattern de persistence
+    Sliver observé dans la campagne FortiWeb : description de service "Updater Service", ExecStart
+    pointant vers le binaire implanté, et Restart=on-failure pour la résilience. Le champ FileContent
+    n'est pas standard Sigma : il nécessite un pipeline d'ingestion avec logging du contenu de fichier.
+    ANGLE MORT : si FileContent n'est pas disponible, seule selection_filename_campaign déclenche
+    (noms système-updater/cups-lpd), pas selection_filename_systemd qui couvre tous les services.
 references:
   - https://bishopfox.com/blog/sliver-command-and-control-framework
   - https://attack.mitre.org/techniques/T1543/002/
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-08
-modified: 2026-06-19
+modified: 2026-06-21
 related:
   - id: 5b8c3a2d-7f1e-4e32-b1d9-64f9c8a1e3f2
     type: similar
@@ -23,14 +29,35 @@ logsource:
   product: linux
 
 detection:
-  selection_main:
+  # Primary signal: a .service file written to a systemd drop-in or unit directory.
+  # The campaign-specific service names (system-updater, cups-lpd) are anchored here.
+  # FileContent matching requires a SIEM pipeline that indexes file content (e.g. auditd
+  # with file-content logging, or a Sysmon-equivalent for Linux). If file content is not
+  # available, trigger on selection_filename_only and correlate manually with the known paths.
+  selection_filename_campaign:
+    TargetFilename|contains:
+      - 'system-updater'
+      - 'cups-lpd'
     TargetFilename|endswith: '.service'
+
+  # Broader: any .service file written under systemd paths by a non-package-manager process.
+  selection_filename_systemd:
+    TargetFilename|contains:
+      - '/etc/systemd/system/'
+      - '/lib/systemd/system/'
+      - '/usr/lib/systemd/system/'
+    TargetFilename|endswith: '.service'
+
+  # Optional enrichment when file content indexing is available in the SIEM pipeline.
+  # FileContent is NOT a standard Sigma field; it is backend-specific (requires content logging).
+  # Remove or comment this block if your pipeline does not index file content.
+  selection_content_indicators:
     FileContent|contains|all:
       - 'Description=Updater Service'
       - 'ExecStart='
       - 'Restart=on-failure'
 
-  condition: selection_main
+  condition: selection_filename_campaign or (selection_filename_systemd and selection_content_indicators)
 
 fields:
   - Computer
@@ -40,6 +67,10 @@ fields:
   - CreationUtcTime
 
 falsepositives:
-  - Custom administrator services using identical description and restart configuration (no known case)
+  - Custom administrator services named system-updater or cups-lpd with systemd (no known legitimate case)
+  - selection_filename_systemd alone will fire on every package-manager service install; pair with
+    selection_content_indicators or correlate with the writing process (non-package-manager parent)
+  - FileContent block requires pipeline-level file content indexing; if absent, only
+    selection_filename_campaign fires, which is campaign-specific and highly reliable
 
 level: high

@@ -1,10 +1,9 @@
 title: Microsoft Office spawning LOLBin or script engine
 id: f94eb6ef-dccf-481b-92c8-8a6c844b8355
 status: experimental
-description: >
-  Broad detection for Microsoft Office applications spawning common LOLBins or script engines.
-  Use for triage and hunting. This behavior is frequently observed in Office-based exploitation
-  chains (malicious documents, external content execution), including multiple Office CVEs.
+description: Broad detection for Office apps spawning LOLBins or script engines. Use for triage and hunting across Office-based exploitation chains.
+custom:
+  description_fr: "Détection large des applications Microsoft Office lançant des LOLBins communs ou des moteurs de script. Destinée au triage et au hunting. Comportement fréquemment observé dans les chaînes d'exploitation Office (documents malveillants, exécution de contenu externe), incluant plusieurs CVE Office."
 references:
   - https://attack.mitre.org/techniques/T1204/002/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
@@ -47,6 +46,12 @@ detection:
       - '\msiexec.exe'
       - '\bitsadmin.exe'
       - '\certutil.exe'
+      - '\schtasks.exe'
+      - '\forfiles.exe'
+      - '\pcalua.exe'
+      - '\odbcconf.exe'
+      - '\wmic.exe'
+      - '\curl.exe'
 
   # /automation, /pt, /embedding are standard COM/OLE invocation modes used by legitimate integrations
   filter_main_office_automation:

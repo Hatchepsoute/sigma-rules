@@ -1,17 +1,16 @@
 title: Fast reverse proxy (FRP) client or server execution on Linux
 id: 7d12a3b4-e9c8-4f51-b8d2-3a1b4c5d6e7f
 status: experimental
-description: |
-  Detects execution of the FRP (Fast Reverse Proxy) client (frpc) or server (frps) binary on Linux.
-  FRP is a legitimate open-source tunneling tool frequently abused in post-exploitation for
-  C2 traffic tunneling and firewall bypass.
-
-  Image-based detection anchored to the binary name avoids substring false positives (e.g., xfrpc,
-  ifrpc). frps (FRP server) is equally suspicious when deployed on a compromised host.
-  Standalone .toml CLI check is deliberately excluded — many Rust-based tools use .toml config
-  files; combine with Image-level detection for specificity.
-
-  Also missing: Chisel, Ligolo, and other tunnelers — see companion rules if available.
+description: >
+  Detects frpc or frps execution on Linux, post-exploitation C2 tunneling tool abused in Sliver campaign.
+custom:
+  description_fr: >
+    Détecte l'exécution du binaire FRP (Fast Reverse Proxy) client (frpc) ou serveur (frps) sur Linux.
+    FRP est un outil légitime open-source fréquemment abusé en post-exploitation pour le tunneling C2
+    et le contournement de firewall. La détection basée sur l'image évite les faux positifs de sous-chaîne
+    (xfrpc, ifrpc). frps est aussi suspect sur un hôte compromis. Le filtre filter_authorized_vpn exclut
+    les chemins d'installation légitimes connus. ANGLE MORT : si frpc est renommé ou exécuté depuis un
+    chemin personnalisé non couvert par filter_authorized_vpn, la règle déclenche (FP légitime possible).
 references:
   - https://github.com/fatedier/frp
   - https://attack.mitre.org/techniques/T1572/

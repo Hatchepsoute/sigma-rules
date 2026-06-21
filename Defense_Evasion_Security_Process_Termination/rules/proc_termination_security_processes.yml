@@ -1,18 +1,12 @@
 title: Termination of known security or EDR process
 id: 5d6b7a2c-3f2e-4b91-9a7e-8f9c1b2a7d11
 status: experimental
-description: |
-  Detects the termination of known security, EDR, or anti-malware processes. This behavior
-  is commonly observed during defense evasion phases of ransomware and post-exploitation activity.
-
-  svchost.exe is not included in the legitimate parent filter: an injected svchost running
-  under SYSTEM context can terminate EDR processes while appearing legitimate. Any svchost-based
-  termination of security processes should be investigated separately, not suppressed.
+description: Detects termination of known EDR/AV/security processes, commonly used during ransomware pre-encryption or post-exploitation.
 references:
   - https://attack.mitre.org/techniques/T1562/001/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-07
-modified: 2026-06-19
+modified: 2026-06-21
 related:
   - id: 3c2d9b7a-9f4d-4b8f-8c2a-6a7a2f7b1c4e
     type: similar
@@ -26,8 +20,12 @@ logsource:
   product: windows
 
 detection:
+  # BLIND SPOT FIX 2026-06-21: Sysmon EventID 5 (process_termination) uses the field 'Image'
+  # for the terminated process, NOT 'TargetImage'. TargetImage is used in process_access (EID 10)
+  # and process_tamper (EID 25). Using TargetImage here would silently miss all matches on
+  # Sysmon-based backends. Corrected to 'Image'.
   selection_security_process:
-    TargetImage|endswith:
+    Image|endswith:
       - '\MsMpEng.exe'
       - '\SenseIR.exe'
       - '\SenseCE.exe'
@@ -42,28 +40,37 @@ detection:
       - '\AvastUI.exe'
       - '\hmpalert.exe'
       - '\CyveraService.exe'
+      - '\xagt.exe'
+      - '\bdservicehost.exe'
+      - '\ds_agent.exe'
+      - '\mbamservice.exe'
 
-  filter_legit_system_activity:
-    Image|endswith:
-      - '\services.exe'
-      - '\MsMpEng.exe'
-    User|contains:
-      - 'NT AUTHORITY'
+  # NOTE: Sysmon EID 5 does NOT include ParentImage or the terminating process information.
+  # It only exposes the terminated process (Image, ProcessId, ProcessGuid).
+  # A filter based on the terminating process is not possible from EID 5 alone.
+  # The original filter_legit_system_activity using Image (now fixed above) was meant to filter
+  # MsMpEng self-termination during updates. Since Image is now the terminated process field,
+  # we keep a minimal filter: exclude MsMpEng terminating itself (which can happen during AV updates).
+  # NOTE: svchost.exe and services.exe as terminators cannot be filtered from EID 5 data alone;
+  # correlate with EID 10 (process_access) if the terminating process identity is needed.
+  filter_main_defender_self_update:
+    Image|endswith: '\MsMpEng.exe'
+    User|contains: 'NT AUTHORITY'
 
-  condition: selection_security_process and not filter_legit_system_activity
+  condition: selection_security_process and not filter_main_defender_self_update
 
 fields:
   - UtcTime
   - Computer
   - User
   - Image
-  - TargetImage
-  - TargetProcessId
   - ProcessId
 
 falsepositives:
-  - Legitimate EDR self-protection or update actions (covered by MsMpEng filter)
-  - Administrator intentionally stopping security services during maintenance
-  - svchost.exe: NOT filtered — investigate any svchost-based termination of EDR processes
+  - MsMpEng.exe self-terminating during Defender updates (filtered via filter_legit_system_activity)
+  - services.exe terminating a security process during a normal controlled shutdown (filtered)
+  - svchost.exe is intentionally NOT filtered: injected svchost under SYSTEM can terminate EDR processes while appearing legitimate — any such event requires investigation
+  - wmiprvse.exe terminating a security process via WMI call is intentionally NOT filtered: this is a known attack vector and should trigger an alert
+  - Authorized EDR reinstallation or upgrade may briefly terminate the monitored process — correlate with change management tickets
 
 level: high

@@ -1,16 +1,15 @@
 title: Microsoft Office spawning LOLBin with download or obfuscation indicators
 id: a6f0558c-14a3-44e0-88f9-605044bb3ecc
 status: experimental
-description: >
-  High-confidence detection for Microsoft Office spawning LOLBins or script engines with
-  command-line patterns consistent with download-and-execute, remote payload retrieval, or
-  obfuscated execution (e.g., PowerShell -enc, IEX, FromBase64String).
+description: High-confidence detection for Office spawning LOLBins with download-and-execute or obfuscation CLI. STRICT rule for SOC alerting.
+custom:
+  description_fr: "Détection haute confiance des applications Microsoft Office lançant des LOLBins avec des patterns CLI de téléchargement/exécution ou obfuscation (PowerShell -enc, IEX, FromBase64String). Règle STRICT pour les alertes SOC opérationnelles sur les chaînes d'exploitation Office."
 references:
   - https://attack.mitre.org/techniques/T1105/
   - https://attack.mitre.org/techniques/T1059/001/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2025-12-23
-modified: 2026-06-19
+modified: 2026-06-21
 related:
   - id: f94eb6ef-dccf-481b-92c8-8a6c844b8355
     type: similar
@@ -62,21 +61,29 @@ detection:
       - 'bitsadmin'
       - 'certutil'
       - ' -urlcache'
-      - '-ec '
       - ' /transfer'
 
+  # Angle mort corrigé : '-ec ' était dans selection_download_transfer (mauvaise classification).
+  # '-ec' est l'alias court de '-EncodedCommand' et appartient aux indicateurs d'obfuscation.
   selection_obfuscation_or_exec:
     CommandLine|contains:
       - ' -enc'
       - '-EncodedCommand '
       - 'EncodedCommand'
+      - '-ec '
       - 'FromBase64String'
       - ' IEX'
       - 'Invoke-Expression'
       - 'DownloadString'
       - 'DownloadFile'
 
-  condition: selection_office_parent and selection_child and (selection_download_transfer or selection_obfuscation_or_exec)
+  filter_main_office_automation:
+    ParentCommandLine|contains:
+      - '/automation'
+      - '/pt '
+      - '/embedding'
+
+  condition: selection_office_parent and selection_child and (selection_download_transfer or selection_obfuscation_or_exec) and not filter_main_office_automation
 
 fields:
   - UtcTime

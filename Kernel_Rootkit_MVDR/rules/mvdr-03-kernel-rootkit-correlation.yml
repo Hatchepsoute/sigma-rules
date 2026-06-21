@@ -30,8 +30,16 @@ logsource:
   product: windows
 
 detection:
+  # BLIND SPOT FIX 2026-06-21: EventID 6 without product/service constraint is ambiguous —
+  # other applications can emit EID 6 for unrelated reasons (e.g. Windows Filtering Platform logs).
+  # Added Sysmon provider context via Provider field. In environments without Sysmon, this rule will
+  # not fire; run mvdr-01 and mvdr-02 independently for full coverage.
+  # Note: the logsource is intentionally 'product: windows' (no service) to allow the SIEM to join
+  # events from both Sysmon (EID 6) and Windows System log (EID 7045). Add a Provider constraint
+  # if your SIEM allows cross-source field filtering.
   selection_driver_load:
     EventID: 6
+    Provider: 'Microsoft-Windows-Sysmon'
 
   selection_kernel_service:
     EventID: 7045

@@ -1,10 +1,18 @@
 title: Suspicious network listener on TCP 515 (LPD masquerade, non-CUPS)
 id: 8f3c2e91-7b6a-4e77-9cfa-2a1e9d4cbe12
 status: experimental
-description: |
-  Detects a process listening on TCP port 515 (LPD) that is not a legitimate CUPS printing service.
-  In the FortiWeb Sliver campaign, attackers deployed a SOCKS proxy (microsocks) renamed as
-  'cups-lpd' to masquerade as a printer daemon and expose remote access tunnels.
+description: >
+  Detects a non-CUPS process binding to TCP 515 (LPD), indicating microsocks masquerade (Sliver campaign).
+custom:
+  description_fr: >
+    Règle : détecte un processus non-CUPS qui établit une connexion ou écoute sur le port TCP 515
+    (LPD/Line Printer Daemon). Dans la campagne FortiWeb Sliver, les attaquants déploient microsocks
+    renommé en 'cups-lpd' pour se faire passer pour le daemon d'impression CUPS et exposer un tunnel
+    d'accès distant. ANGLE MORT : la logsource network_connection (Sysmon EventID 3) logue les
+    connexions initiées (Initiated=true) ET les connexions entrantes acceptées (Initiated=false).
+    Pour détecter un listener sur port 515, il faut chercher des événements où le processus LOCAL
+    reçoit des connexions (Initiated=false, DestinationPort=515) ou surveiller le port source
+    (SourcePort=515 pour les réponses). La règle couvre les deux scénarios via le filtre Image.
 references:
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
@@ -24,23 +32,33 @@ logsource:
   product: linux
 
 detection:
-  selection_port:
+  # Outbound connections TO port 515 (unusual, LPD is server-side)
+  selection_port_dst:
     DestinationPort: 515
 
+  # Responses FROM port 515 (process listening on 515 and responding)
+  # This catches the microsocks scenario where the malicious binary acts as a server
+  selection_port_src:
+    SourcePort: 515
+
+  # Filter legitimate CUPS/LPD implementations
   filter_legitimate:
     Image|contains:
       - 'cupsd'
       - 'lpd'
+      - 'cups-browsed'
 
-  condition: selection_port and not filter_legitimate
+  condition: (selection_port_dst or selection_port_src) and not filter_legitimate
 
 fields:
   - Computer
   - User
   - Image
+  - SourcePort
   - DestinationPort
   - SourceIp
   - DestinationIp
+  - Initiated
 
 falsepositives:
   - Legacy printing servers exposing LPD without CUPS (rare)

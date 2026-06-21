@@ -1,11 +1,16 @@
 title: Execution of masqueraded SOCKS5 proxy (microsocks as cups-lpd)
 id: c3e7f5a8-1b2d-4f9c-88a0-9d1e2f3a4b5c
 status: experimental
-description: |
-  Detects execution of a binary named cups-lpd with SOCKS5 proxy arguments characteristic of
-  microsocks. In the FortiWeb Sliver campaign, attackers renamed the microsocks binary to cups-lpd
-  to masquerade as the CUPS print daemon, then invoked it on TCP port 515 with microsocks-specific
-  flags (-p for port, -1 for single-use connections, -w for worker threads).
+description: >
+  Detects cups-lpd binary executed with microsocks SOCKS5 arguments (FortiWeb Sliver campaign masquerade).
+custom:
+  description_fr: >
+    Détecte l'exécution d'un binaire nommé cups-lpd avec des arguments de proxy SOCKS5 caractéristiques
+    de microsocks. Dans la campagne FortiWeb Sliver, les attaquants renomment microsocks en cups-lpd pour
+    se faire passer pour le daemon d'impression CUPS, puis l'invoquent sur TCP 515 avec les flags
+    microsocks-spécifiques (-p pour port, -1 pour connexions uniques, -w pour les threads workers).
+    ANGLE MORT : si le port est changé (-p 8080) ou si les flags sont omis, certaines sélections
+    ne déclenchent pas. Mais selection_image (Image|endswith: '/cups-lpd') reste actif.
 references:
   - https://github.com/rofl0r/microsocks
   - https://attack.mitre.org/techniques/T1090/

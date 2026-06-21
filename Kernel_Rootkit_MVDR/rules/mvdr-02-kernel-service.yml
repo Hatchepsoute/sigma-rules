@@ -1,15 +1,17 @@
-title: Kernel driver service creation (type 1)
+title: Kernel or filesystem driver service creation via EventID 7045
 id: 6778f01a-ed58-11f0-a580-aff152632512
 status: experimental
 description: >
-  Detects creation of a Windows kernel driver service (ServiceType=kernel driver), commonly
-  abused by kernel-mode rootkits for persistence via EventID 7045 in the Windows System log.
+  Detects creation of a kernel driver or file system driver service (EID 7045, Windows System
+  log). Covers rootkit persistence and BYOVD; adds file system driver type and user-writable
+  ImagePath to catch evasion variants missed by kernel driver type alone.
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
   - https://attack.mitre.org/techniques/T1547/
+  - https://attack.mitre.org/techniques/T1543/003/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-06-18
-modified: 2026-06-19
+modified: 2026-06-21
 related:
   - id: 7e2a6a12-9c6d-4c2a-8b2f-2e8bb6b2b6a1
     type: similar
@@ -19,16 +21,32 @@ tags:
   - attack.persistence
   - attack.t1547
   - attack.t1543.003
+  - attack.t1014
 logsource:
   product: windows
   service: system
 
 detection:
-  selection_main:
+  # Branch 1: any kernel or file system driver service creation (high signal)
+  selection_driver_service_type:
     EventID: 7045
-    ServiceType: kernel driver
+    ServiceType:
+      - 'kernel driver'
+      - 'file system driver'
 
-  condition: selection_main
+  # Branch 2: driver service with ImagePath in user-writable location (higher confidence)
+  # Covers cases where ServiceType is "kernel driver" but path is clearly suspect
+  selection_suspicious_imagepath:
+    EventID: 7045
+    ImagePath|contains:
+      - '\Temp\'
+      - '\AppData\'
+      - '\Users\Public\'
+      - '\ProgramData\'
+      - '\Downloads\'
+      - '\PerfLogs\'
+
+  condition: selection_driver_service_type or selection_suspicious_imagepath
 
 fields:
   - UtcTime
@@ -41,6 +59,8 @@ fields:
 
 falsepositives:
   - Legitimate kernel driver service registration by hardware vendors or security products
-  - Authorized deployment of signed drivers via system management tools
+  - File system filter driver registration by backup, AV or encryption software
+  - Authorized deployment of signed drivers via system management tools (SCCM, Intune)
+  - ProgramData paths used by some security vendors during driver installation (validate ServiceName and ImagePath)
 
 level: high

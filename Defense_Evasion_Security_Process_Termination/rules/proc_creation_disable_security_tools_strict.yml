@@ -1,15 +1,12 @@
 title: High-confidence security tool disable via command line
 id: 7f1a3c2e-0c9f-4e3a-9f45-1c4b2a9d6e3f
 status: experimental
-description: |
-  High-confidence detection of attempts to disable or stop security/EDR/AV tooling via explicit
-  command-line patterns (e.g., taskkill /F /IM <security_process>, sc stop <security_service>,
-  PowerShell Defender tampering). Designed to reduce false positives by requiring strong intent
-  combined with explicit target indicators.
+description: High-confidence detection of explicit CLI-based disabling of security/EDR/AV tools with named process or service targets.
 references:
   - https://attack.mitre.org/techniques/T1562/001/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-08
+modified: 2026-06-21
 related:
   - id: 3c2d9b7a-9f4d-4b8f-8c2a-6a7a2f7b1c4e
     type: similar
@@ -81,12 +78,21 @@ detection:
       - 'SenseCE.exe'
       - 'CSFalconService.exe'
 
+  filter_main_legitimate_admin_tools:
+    ParentImage|endswith:
+      - '\msiexec.exe'
+      - '\TrustedInstaller.exe'
+      - '\ccmexec.exe'
+
   condition: >
-    selection_taskkill_im
-    or selection_sc_stop_service
-    or selection_net_stop_service
-    or selection_powershell_defender_tamper
-    or selection_wmic_delete_security_process
+    (
+      selection_taskkill_im
+      or selection_sc_stop_service
+      or selection_net_stop_service
+      or selection_powershell_defender_tamper
+      or selection_wmic_delete_security_process
+    )
+    and not filter_main_legitimate_admin_tools
 
 fields:
   - UtcTime
@@ -101,8 +107,9 @@ fields:
   - ParentProcessId
 
 falsepositives:
-  - Rare: Security team or administrators intentionally disabling Microsoft Defender features during maintenance or troubleshooting
-  - Endpoint hardening / imaging scripts that explicitly set Defender exclusions (should be allowlisted)
-  - Incident response actions where defenders intentionally stop EDR/AV components for containment (documented change window)
+  - Security administrators explicitly disabling Defender features during documented maintenance windows
+  - Endpoint hardening or golden image scripts that set Defender exclusions (parent msiexec/TrustedInstaller — filtered)
+  - SCCM/ConfigMgr (ccmexec.exe) managed deployments that reconfigure AV settings (filtered)
+  - Incident response containment actions where defenders stop EDR components under a change ticket
 
-level: critical
+level: high
