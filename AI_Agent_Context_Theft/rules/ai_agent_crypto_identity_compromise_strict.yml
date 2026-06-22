@@ -26,7 +26,7 @@ references:
 
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-02-16
-modified: 2026-06-19
+modified: 2026-06-22
 
 tags:
   - attack.credential-access
@@ -55,6 +55,10 @@ detection:
       - '\Users\Public\'
 
   # Branch 2: processes that should never read cryptographic identity files.
+  # SECOND CHALLENGE 2026-06-22: added regsvcs.exe and regasm.exe (.NET COM registration utilities
+  # signed by Microsoft, abused as proxy-execution LOLBins to run arbitrary .NET assemblies without
+  # spawning a visible shell). Also added pythonw.exe (headless Python runtime used by infostealer
+  # droppers — was present in the BROAD rule's selection_suspicious_accessor but missing here).
   selection_suspicious_process:
     Image|endswith:
       - '\powershell.exe'
@@ -66,6 +70,9 @@ detection:
       - '\cscript.exe'
       - '\curl.exe'
       - '\wget.exe'
+      - '\pythonw.exe'
+      - '\regsvcs.exe'
+      - '\regasm.exe'
 
   filter_legitimate:
     Image|endswith:
@@ -88,5 +95,6 @@ falsepositives:
   - OpenSSL or developer tooling reading PEM files for legitimate TLS configuration (filtered via openssl.exe)
   - Authorized security audit scripts accessing device identity files with a documented change ticket
   - Python-based AI agent runtimes reading device.json at startup (filtered via python.exe)
+  - .NET COM registration tools (regsvcs.exe, regasm.exe) used for legitimate COM component registration unrelated to AI agents (validate by examining TargetFilename and process context)
 
 level: critical

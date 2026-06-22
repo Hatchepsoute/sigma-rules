@@ -17,7 +17,7 @@ references:
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
 date: 2026-01-08
-modified: 2026-06-21
+modified: 2026-06-22
 related:
   - id: 8f3c2e91-7b6a-4e77-9cfa-2a1e9d4cbe12
     type: similar
@@ -60,6 +60,19 @@ detection:
       - 'frps'
       - '.ini'
 
+  # ANGLE MORT CORRIGÉ (second challenge): FRP >= 0.56 supporte aussi le format YAML
+  # (.yaml / .yml). Un attaquant utilisant un build récent avec config YAML ne matche pas
+  # les sélections .toml ou .ini ci-dessus si le binaire est renommé.
+  selection_frp_cli_yaml:
+    CommandLine|contains|all:
+      - 'frpc'
+      - '.yaml'
+
+  selection_frps_cli_yaml:
+    CommandLine|contains|all:
+      - 'frps'
+      - '.yaml'
+
   # Angle mort: FRP binary renamed (e.g. to 'sshd', 'systemd-network').
   # If executed from /tmp, /dev/shm or /var/tmp it is always suspicious regardless of name.
   # This branch generates more FP but catches masquerade scenarios.
@@ -79,7 +92,7 @@ detection:
       - '/usr/local/etc/frp/'
       - '/opt/frp/'
 
-  condition: (selection_frp_binary or selection_frp_cli_toml or selection_frps_cli_toml or selection_frp_cli_ini or selection_frps_cli_ini or selection_frp_from_tmp) and not filter_authorized_vpn
+  condition: (selection_frp_binary or selection_frp_cli_toml or selection_frps_cli_toml or selection_frp_cli_ini or selection_frps_cli_ini or selection_frp_cli_yaml or selection_frps_cli_yaml or selection_frp_from_tmp) and not filter_authorized_vpn
 
 fields:
   - Computer
@@ -96,6 +109,7 @@ falsepositives:
   - DevOps tunneling for SSH forwarding in approved CI/CD pipelines
   - Corporate remote access solutions built on FRP (add install path to filter_authorized_vpn)
   - Older FRP builds using .ini config format on authorized hosts (new branch may trigger)
-  - selection_frp_from_tmp: legitimate test or staging scripts using FRP from temp paths (verify Image hash and owner)
+  - "selection_frp_from_tmp: legitimate test or staging scripts using FRP from temp paths (verify Image hash and owner)"
+  - "Second-pass challenge fix (2026-06-22): ajout de selection_frp_cli_yaml / selection_frps_cli_yaml pour couvrir FRP >= 0.56 avec config .yaml. FP additionnels si .yaml apparait dans une CLI legitime avec 'frpc' en sous-chaine."
 
 level: medium
