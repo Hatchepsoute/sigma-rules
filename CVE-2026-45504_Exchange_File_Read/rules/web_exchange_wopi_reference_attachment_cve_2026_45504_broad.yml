@@ -1,0 +1,231 @@
+title: Potential Exchange WOPI ReferenceAttachment Abuse For File Read - BROAD
+id: 3e8d1a9f-c887-495c-a5f3-d865c33a0348
+status: experimental
+description: Detects Exchange EWS requests creating WOPI ReferenceAttachment objects with external provider endpoints, consistent with CVE-2026-45504 exploitation staging.
+custom:
+  description_fr: >
+    Détecte les requêtes EWS Exchange créant des ReferenceAttachment WOPI avec endpoint fournisseur externe,
+    cohérentes avec le staging d'exploitation CVE-2026-45504. Règle BROAD dépendante des logs WAF/proxy
+    capables de journaliser le corps SOAP ou les paramètres applicatifs.
+
+references:
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-45504
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-45504
+  - https://www.cve.org/CVERecord?id=CVE-2026-45504
+  - https://hawktrace.com/blog/CVE-2026-45504/
+  - https://github.com/hawktrace/CVE-2026-45504
+
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-24
+
+tags:
+  - attack.initial-access
+  - attack.collection
+  - attack.t1190
+  - attack.t1005
+  - cve.2026-45504
+
+logsource:
+  category: webserver
+
+detection:
+  selection_exchange_ews_path:
+    cs-uri-stem|endswith:
+      - '/EWS/Exchange.asmx'
+      - '/ews/exchange.asmx'
+
+  selection_http_post:
+    cs-method: 'POST'
+
+  selection_body_reference_requestbody:
+    RequestBody|contains|all:
+      - 'ReferenceAttachment'
+      - 'ProviderEndpointUrl'
+
+  selection_body_reference_http:
+    http.request.body.content|contains|all:
+      - 'ReferenceAttachment'
+      - 'ProviderEndpointUrl'
+
+  selection_body_reference_postdata:
+    post_data|contains|all:
+      - 'ReferenceAttachment'
+      - 'ProviderEndpointUrl'
+
+  selection_body_reference_encoded:
+    RequestBody|contains|all:
+      - 'ReferenceAttachment'
+      - 'ProviderEndpointUrl%3E'
+
+  selection_body_reference_encoded_http:
+    http.request.body.content|contains|all:
+      - 'ReferenceAttachment'
+      - 'ProviderEndpointUrl%3E'
+
+  selection_body_reference_encoded_postdata:
+    post_data|contains|all:
+      - 'ReferenceAttachment'
+      - 'ProviderEndpointUrl%3E'
+
+  selection_wopi_or_attachment_api:
+    RequestBody|contains:
+      - 'CreateAttachment'
+      - 'GetAttachment'
+      - 'GetWacAttachmentInfo'
+      - 'WacAction'
+      - 'GetWacUrl'
+      - 'OneDrivePro'
+      - 'AttachLongPathName'
+      - 'ProviderType'
+
+  selection_wopi_or_attachment_api_http:
+    http.request.body.content|contains:
+      - 'CreateAttachment'
+      - 'GetAttachment'
+      - 'GetWacAttachmentInfo'
+      - 'WacAction'
+      - 'GetWacUrl'
+      - 'OneDrivePro'
+      - 'AttachLongPathName'
+      - 'ProviderType'
+
+  selection_wopi_or_attachment_api_postdata:
+    post_data|contains:
+      - 'CreateAttachment'
+      - 'GetAttachment'
+      - 'GetWacAttachmentInfo'
+      - 'WacAction'
+      - 'GetWacUrl'
+      - 'OneDrivePro'
+      - 'AttachLongPathName'
+      - 'ProviderType'
+
+  selection_external_provider_endpoint:
+    RequestBody|contains:
+      - 'ProviderEndpointUrl>http://'
+      - 'ProviderEndpointUrl>https://'
+      - 'ProviderEndpointUrl&gt;http'
+      - 'ProviderEndpointUrl=&quot;http'
+      - 'ProviderEndpointUrl="http'
+      - 'ProviderEndpointUrl=http'
+      - 'ProviderEndpointUrl%3Ehttp'
+      - 'ProviderEndpointUrl%253Ehttp'
+
+  selection_external_provider_endpoint_http:
+    http.request.body.content|contains:
+      - 'ProviderEndpointUrl>http://'
+      - 'ProviderEndpointUrl>https://'
+      - 'ProviderEndpointUrl&gt;http'
+      - 'ProviderEndpointUrl=&quot;http'
+      - 'ProviderEndpointUrl="http'
+      - 'ProviderEndpointUrl=http'
+      - 'ProviderEndpointUrl%3Ehttp'
+      - 'ProviderEndpointUrl%253Ehttp'
+
+  selection_external_provider_endpoint_postdata:
+    post_data|contains:
+      - 'ProviderEndpointUrl>http://'
+      - 'ProviderEndpointUrl>https://'
+      - 'ProviderEndpointUrl&gt;http'
+      - 'ProviderEndpointUrl=&quot;http'
+      - 'ProviderEndpointUrl="http'
+      - 'ProviderEndpointUrl=http'
+      - 'ProviderEndpointUrl%3Ehttp'
+      - 'ProviderEndpointUrl%253Ehttp'
+
+
+  selection_owa_preview_path:
+    cs-uri-stem|endswith:
+      - '/owa/service.svc'
+      - '/OWA/service.svc'
+
+  selection_owa_preview_action_query:
+    cs-uri-query|contains:
+      - 'action=GetAttachmentPreview'
+      - 'Action=GetAttachmentPreview'
+
+  selection_owa_preview_body_or_header:
+    RequestBody|contains:
+      - 'GetAttachmentPreview'
+      - 'X-OWA-CANARY'
+      - 'AttachmentPreview'
+
+  selection_owa_preview_body_or_header_http:
+    http.request.body.content|contains:
+      - 'GetAttachmentPreview'
+      - 'X-OWA-CANARY'
+      - 'AttachmentPreview'
+
+  selection_owa_preview_script_ua:
+    c-useragent|contains:
+      - 'python-requests'
+      - 'curl/'
+      - 'Go-http-client'
+
+  filter_main_approved_wopi_provider:
+    RequestBody|contains:
+      - 'ProviderEndpointUrl>https://sharepoint.'
+      - 'ProviderEndpointUrl>https://onedrive.'
+      - 'ProviderEndpointUrl>https://wopi.'
+      - 'ProviderEndpointUrl=https://sharepoint.'
+      - 'ProviderEndpointUrl=https://onedrive.'
+      - 'ProviderEndpointUrl=https://wopi.'
+
+  filter_main_approved_wopi_provider_http:
+    http.request.body.content|contains:
+      - 'ProviderEndpointUrl>https://sharepoint.'
+      - 'ProviderEndpointUrl>https://onedrive.'
+      - 'ProviderEndpointUrl>https://wopi.'
+      - 'ProviderEndpointUrl=https://sharepoint.'
+      - 'ProviderEndpointUrl=https://onedrive.'
+      - 'ProviderEndpointUrl=https://wopi.'
+
+  filter_main_approved_wopi_provider_postdata:
+    post_data|contains:
+      - 'ProviderEndpointUrl>https://sharepoint.'
+      - 'ProviderEndpointUrl>https://onedrive.'
+      - 'ProviderEndpointUrl>https://wopi.'
+      - 'ProviderEndpointUrl=https://sharepoint.'
+      - 'ProviderEndpointUrl=https://onedrive.'
+      - 'ProviderEndpointUrl=https://wopi.'
+
+  condition: >
+    (
+      (
+        selection_exchange_ews_path
+        and selection_http_post
+        and (selection_body_reference_requestbody or selection_body_reference_http or selection_body_reference_postdata or selection_body_reference_encoded or selection_body_reference_encoded_http or selection_body_reference_encoded_postdata)
+        and (selection_wopi_or_attachment_api or selection_wopi_or_attachment_api_http or selection_wopi_or_attachment_api_postdata)
+        and (selection_external_provider_endpoint or selection_external_provider_endpoint_http or selection_external_provider_endpoint_postdata)
+      )
+      or
+      (
+        selection_owa_preview_path
+        and selection_http_post
+        and selection_owa_preview_action_query
+        and (selection_owa_preview_body_or_header or selection_owa_preview_body_or_header_http or selection_owa_preview_script_ua)
+      )
+    )
+    and not 1 of filter_main_*
+
+fields:
+  - c-ip
+  - x-forwarded-for
+  - cs-username
+  - cs-method
+  - cs-uri-stem
+  - cs-uri-query
+  - c-useragent
+  - Action
+  - sc-status
+  - RequestBody
+  - http.request.body.content
+  - post_data
+  - time
+
+falsepositives:
+  - Legitimate third-party WOPI or document preview integrations using Exchange reference attachments (allowlist exact domains; do not filter only on internal IP or Outlook User-Agent)
+  - Authorized security testing of Exchange EWS attachment workflows
+  - Internal WOPI/SharePoint integrations not yet allowlisted
+
+level: medium

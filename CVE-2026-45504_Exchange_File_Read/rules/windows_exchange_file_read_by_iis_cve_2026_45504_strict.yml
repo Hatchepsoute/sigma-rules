@@ -1,0 +1,122 @@
+title: Exchange IIS Worker Reading Sensitive Local Files - STRICT
+id: 4c87ff6b-6109-4c6c-841d-87ebdba141e2
+status: experimental
+description: Detects Exchange IIS worker access to sensitive local files, consistent with CVE-2026-45504 arbitrary file read impact.
+custom:
+  description_fr: >
+    Détecte une lecture de fichiers locaux sensibles par le worker IIS/Exchange, cohérente avec l'impact
+    CVE-2026-45504. Cette règle STRICT nécessite une télémétrie EDR ou Windows file access/SACL capable
+    de journaliser les lectures de fichiers par processus.
+
+related:
+  - id: 3e8d1a9f-c887-495c-a5f3-d865c33a0348
+    type: derived
+
+references:
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-45504
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-45504
+  - https://www.cve.org/CVERecord?id=CVE-2026-45504
+  - https://hawktrace.com/blog/CVE-2026-45504/
+  - https://github.com/hawktrace/CVE-2026-45504
+
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-24
+
+tags:
+  - attack.collection
+  - attack.credential-access
+  - attack.t1005
+  - attack.t1552.001
+  - cve.2026-45504
+
+logsource:
+  product: windows
+  category: file_access
+
+detection:
+  selection_exchange_iis_process:
+    Image|endswith:
+      - '\w3wp.exe'
+
+  selection_exchange_app_pool_context:
+    User|contains:
+      - 'MSExchangeOWAAppPool'
+      - 'MSExchangeECPAppPool'
+      - 'MSExchangeServicesAppPool'
+      - 'MSExchangePowerShellAppPool'
+
+  selection_exchange_w3wp_commandline:
+    CommandLine|contains:
+      - 'MSExchangeOWAAppPool'
+      - 'MSExchangeECPAppPool'
+      - 'MSExchangeServicesAppPool'
+      - 'MSExchangePowerShellAppPool'
+
+  selection_sensitive_windows_files:
+    TargetFilename|contains:
+      - '\Windows\win.ini'
+      - '\Windows\System32\drivers\etc\hosts'
+      - '\Windows\System32\config\SAM'
+      - '\Windows\System32\config\SYSTEM'
+      - '\Windows\System32\config\SECURITY'
+      - '\Windows\System32\inetsrv\config\applicationHost.config'
+      - '\inetpub\wwwroot\web.config'
+      - '\Windows\System32\config\SOFTWARE'
+
+  selection_sensitive_exchange_files:
+    TargetFilename|contains:
+      - '\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\web.config'
+      - '\Microsoft\Exchange Server\V15\ClientAccess\Owa\web.config'
+      - '\Microsoft\Exchange Server\V15\ClientAccess\ecp\web.config'
+      - '\Microsoft\Exchange Server\V15\Bin\EdgeTransport.exe.config'
+      - '\Microsoft\Exchange Server\V15\Bin\Microsoft.Exchange.'
+
+  selection_read_access_name:
+    Accesses|contains:
+      - 'ReadData'
+      - 'ReadAttributes'
+
+  selection_read_access_mask:
+    AccessMask|contains:
+      - '0x1'
+      - '0x80'
+
+  filter_optional_win_ini_probe_only:
+    TargetFilename|endswith:
+      - '\Windows\win.ini'
+    Accesses|contains:
+      - 'ReadAttributes'
+
+  filter_main_exchange_expected_config_read:
+    TargetFilename|endswith:
+      - '\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\owa\web.config'
+      - '\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\ecp\web.config'
+    Image|endswith:
+      - '\w3wp.exe'
+
+  condition: >
+    selection_exchange_iis_process
+    and (selection_exchange_app_pool_context or selection_exchange_w3wp_commandline)
+    and (selection_sensitive_windows_files or selection_sensitive_exchange_files)
+    and (selection_read_access_name or selection_read_access_mask)
+    and not 1 of filter_main_*
+    and not filter_optional_win_ini_probe_only
+
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - Image
+  - TargetFilename
+  - Accesses
+  - AccessMask
+  - CommandLine
+  - ProcessId
+  - EventID
+
+falsepositives:
+  - Exchange health checks or maintenance reading known local configuration files
+  - EDR, backup, inventory, or compliance tooling running inside Exchange application pool context
+  - Explicitly authorized CVE-2026-45504 validation in a lab
+
+level: high
