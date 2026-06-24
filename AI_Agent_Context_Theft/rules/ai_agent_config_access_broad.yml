@@ -1,15 +1,7 @@
 title: Suspicious access to AI agent configuration or memory files
 id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
 status: experimental
-description: |
-  Detects access to local AI agent configuration or memory files (OpenClaw and similar agents)
-  by unexpected processes. These files may contain authentication tokens, cryptographic material,
-  or sensitive contextual data that infostealers harvest for credential theft or agent
-  impersonation.
-
-  BROAD rule: any suspicious process accessing the OpenClaw directory or known config filenames.
-  Expect some noise from developer tooling; tune filter_legitimate to the environment.
-
+description: "Detects suspicious access to AI agent configuration or memory files."
 related:
   - id: f59de936-0c3e-11f1-97ae-9704b79e784d
     type: similar

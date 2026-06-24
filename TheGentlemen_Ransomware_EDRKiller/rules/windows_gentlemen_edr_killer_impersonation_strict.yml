@@ -1,23 +1,7 @@
 title: TheGentlemen ransomware - GentleKiller security tool impersonation from suspicious path
 id: d5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091
 status: experimental
-description: >
-  Detects execution of binaries impersonating known security product names (GentleKiller tactic)
-  from user-writable or non-standard paths, indicating EDR killer staging or execution.
-
-  The TheGentlemen ransomware operation deploys GentleKiller in at least eight variants that
-  impersonate legitimate security products (Kaspersky, WatchDog, Javelin, ESET, Avast,
-  Symantec, McAfee, Malwarebytes, Webroot, Trend Micro) and gaming/anti-cheat tools
-  (Valorant/Vanguard, FACEIT, EA Anti-Cheat) to avoid suspicion. Binaries are packed with
-  Enigma or Themida and carry stolen invalid digital signatures.
-
-  DETECTION BLIND SPOT: any binary rename (WindowsUpdateHelper.exe, svchost32.exe) fully
-  evades this rule. This is a defense-in-depth signal, not a primary detection layer.
-  Combine with the BYOVD driver rule and the behavioral correlation rule.
-
-  STRICT rule: impersonation name AND suspicious path are both required for the impersonation
-  branch. Explicit killer tool names (GentleKiller, HexKiller…) fire on any path.
-
+description: "Detects security product impersonation from suspicious paths consistent with TheGentlemen EDR killer staging."
 related:
   - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
     type: similar

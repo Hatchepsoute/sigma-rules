@@ -1,12 +1,7 @@
 title: TheGentlemen ransomware - GentleKiller EDR-killer staging and execution
 id: b7d3e8f2-4a16-4c9b-9d27-5e8a1f0c3b62
 status: experimental
-description: |
-  Detects execution of TheGentlemen ransomware EDR-killer binaries, anchored on the actor's invariant staging directory "\GentlemenCollection\" (where GentleKiller, HexKiller, ThrottleBlood and HavocKiller are consistently dropped across unrelated intrusions) and corroborated with the known killer sample SHA-1 hashes. TheGentlemen binaries masquerade as legitimate security/anti-cheat vendors (Kaspersky, Valorant, FACEIT, Sophos, Avast, Symantec...) with fabricated version info and invalid copied signatures, so filename alone is unreliable - the staging path and the hashes are the high-confidence anchors.
-  STRICT rule: if it fires, treat as an active TheGentlemen intrusion in the defense-evasion phase that typically precedes encryption. Isolate the host, hunt for the dropped BYOVD driver (see the BROAD rule) and for mass security-process termination (see the correlation rule), and assume ransomware staging is imminent.
-  DETECTION BLIND SPOT: the hash branch (selection_known_killer_hash) requires Sysmon Event ID 1, the Hashes field is NOT present in Windows Security Event 4688. If the environment uses Security logs without Sysmon, only the staging path branch is active. Renaming the staging directory then fully evades the rule.
-  IoC freshness: hashes may go stale as the actor repacks binaries. The staging path \GentlemenCollection\ is more durable, it has been invariant across multiple unrelated intrusions. See ioc/ioc_hashes.csv for last_verified dates.
-
+description: "Detects TheGentlemen EDR-killer execution via GentlemenCollection staging path or known killer hashes."
 related:
     - id: a2f6c1e4-9b73-4d8a-8e51-6c2f0a3d7b94
       type: similar

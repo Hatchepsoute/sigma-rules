@@ -1,15 +1,7 @@
 title: AI agent cryptographic identity file access from suspicious context
 id: f59de936-0c3e-11f1-97ae-9704b79e784d
 status: experimental
-description: |
-  Detects access to AI agent device identity files containing private cryptographic keys (PEM)
-  or device binding files (device.json) by processes running from user-writable paths or by
-  processes that have no legitimate reason to read cryptographic material. A match indicates
-  potential full agent impersonation and persistent compromise of the AI agent identity.
-
-  STRICT rule: combine path-based context (process running from Temp/AppData) with suspicious
-  process names to cover both staged infostealers and LOLBin-based theft.
-
+description: "Detects suspicious access to AI agent cryptographic identity files."
 related:
   - id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
     type: similar

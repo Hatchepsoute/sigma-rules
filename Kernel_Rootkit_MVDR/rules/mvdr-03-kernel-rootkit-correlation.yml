@@ -1,14 +1,7 @@
 title: Kernel rootkit high-confidence correlation (driver load + service creation)
 id: 7998e5ca-ed58-11f0-b925-83f625c1804d
 status: experimental
-description: >
-  High-confidence detection of kernel-mode rootkits by correlating a Sysmon kernel driver load
-  event (EventID 6) with a Windows System log kernel service creation event (EventID 7045).
-  Both signals occurring close together strongly indicate a rootkit or BYOVD installation sequence.
-
-  Note: this rule requires a SIEM that ingests both Sysmon logs and Windows System logs in the
-  same event store, or a correlation engine that can join events across sources. In environments
-  with source separation, run mvdr-01 and mvdr-02 independently and correlate at the SIEM level.
+description: "Correlates Sysmon kernel driver load and kernel service creation for high-confidence rootkit detection."
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
   - https://attack.mitre.org/techniques/T1014/

@@ -1,15 +1,7 @@
 title: Single process accessing multiple critical AI agent files
 id: a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d
 status: experimental
-description: |
-  Detects access to critical AI agent files (authentication, cryptographic identity and memory)
-  by suspicious processes. Any single critical file access by an unexpected process is a strong
-  indicator of agent compromise or credential theft.
-
-  Note: file_event telemetry produces one event per file; multi-file correlation across events
-  requires a SIEM-level sequence rule (EQL, OpenSearch PPL) grouping by ProcessId within a
-  short time window. Use this rule as the building block for that correlation.
-
+description: "Detects one process accessing multiple critical AI agent files from suspicious context."
 related:
   - id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
     type: similar
