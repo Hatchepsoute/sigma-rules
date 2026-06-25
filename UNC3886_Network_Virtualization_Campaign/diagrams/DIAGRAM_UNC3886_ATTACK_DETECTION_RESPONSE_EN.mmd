@@ -1,0 +1,7 @@
+flowchart LR
+  A[External client] --> B[Management probe]
+  B --> C[BROAD match]
+  C --> D[Appliance activity]
+  D --> E[Shelling or log tamper]
+  E --> F[STRICT match]
+  F --> G[Isolate host and investigate]

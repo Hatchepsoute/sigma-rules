@@ -5,6 +5,18 @@
 # 🧠 Vol de Contexte d’Agent IA - Pack Sigma
 👉🏾 [English version available here](README.md)
 
+## En un coup d'oeil
+
+- Menace : vol d'identité et de contexte visant des agents IA locaux
+- Focus de détection : BROAD pour l'accès config/mémoire, STRICT/CRITICAL pour le vol de jetons et l'identité crypto
+- Artefacts SOC : `playbook/`, `decision-table/`, `diagrams/`
+- Fichiers de règles :
+  - [`ai_agent_config_access_broad.yml`](./rules/ai_agent_config_access_broad.yml)
+  - [`ai_agent_secrets_exfiltration_strict.yml`](./rules/ai_agent_secrets_exfiltration_strict.yml)
+  - [`ai_agent_crypto_identity_compromise_strict.yml`](./rules/ai_agent_crypto_identity_compromise_strict.yml)
+  - [`ai_agent_multifile_exfiltration_strict.yml`](./rules/ai_agent_multifile_exfiltration_strict.yml)
+
+
 
 
 ## Présentation

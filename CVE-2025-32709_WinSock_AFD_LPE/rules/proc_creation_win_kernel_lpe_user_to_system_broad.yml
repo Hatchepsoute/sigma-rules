@@ -1,0 +1,146 @@
+title: Windows Kernel LPE - Unexpected SYSTEM child process creation - BROAD
+id: e7201c0b-5e19-4971-9960-09939c8bb362
+status: experimental
+description: Detects suspicious SYSTEM child process creation from an unexpected parent consistent with Windows kernel LPE.
+custom:
+  description_fr: >
+    Détecte un enfant SYSTEM lancé par un parent inattendu sur Windows, en cohérence avec une phase post-exploitation ou une élévation de privilège noyau. Cette règle BROAD sert de signal de hunting et d'alerte précoce ; elle accepte plus de bruit que la règle STRICT. svchost.exe est filtré sauf quand son enfant est un shell ou LOLBin connu (mitigation du FP massif d'origine). Les CLI génériques (powershell, cmd /c) ont été remplacés par des patterns haute confiance.
+
+references:
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-32709
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-32709
+  - https://www.cve.org/CVERecord?id=CVE-2025-32709
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-29824
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-29824
+  - https://www.cve.org/CVERecord?id=CVE-2025-29824
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-25
+modified: 2026-06-25
+related:
+  - id: 3b8d0d19-f8ba-45cd-aa19-0dc945d2b493
+    type: derived
+tags:
+  - attack.privilege-escalation
+  - attack.execution
+  - attack.t1068
+  - attack.t1548
+  - attack.t1059
+  - cve.2025-32709
+  - cve.2025-29824
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_system_integrity:
+    IntegrityLevel: 'System'
+
+  selection_system_user:
+    User|contains: 'SYSTEM'
+
+  selection_shell_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+      - '\certutil.exe'
+      - '\wmic.exe'
+      - '\bitsadmin.exe'
+      - '\net.exe'
+      - '\net1.exe'
+      - '\msiexec.exe'
+
+  # Only high-confidence CLI patterns — generic patterns (powershell, cmd /c, certutil, curl)
+  # removed to reduce FP from legitimate admin/svchost operations
+  selection_suspicious_cli:
+    CommandLine|contains:
+      - 'whoami /all'
+      - 'net localgroup administrators'
+      - 'nltest '
+      - '-enc '
+      - '-EncodedCommand '
+      - 'FromBase64String'
+      - 'DownloadString'
+      - 'Invoke-WebRequest'
+      - 'IEX '
+      - 'Invoke-Expression'
+      - 'Net.WebClient'
+      - '-nop '
+      - '-w hidden'
+      - '-windowstyle hidden'
+
+  filter_main_known_system_parents:
+    ParentImage|endswith:
+      - '\services.exe'
+      - '\wininit.exe'
+      - '\winlogon.exe'
+      - '\smss.exe'
+      - '\csrss.exe'
+      - '\lsass.exe'
+      - '\taskhost.exe'
+      - '\taskhostw.exe'
+      - '\TrustedInstaller.exe'
+      - '\sppsvc.exe'
+      - '\WmiPrvSE.exe'
+      - '\SearchIndexer.exe'
+      - '\SecurityHealthService.exe'
+
+  filter_main_known_benign_system_images:
+    Image|endswith:
+      - '\conhost.exe'
+
+  filter_main_edr_agents:
+    ParentImage|contains:
+      - 'CrowdStrike'
+      - 'SentinelOne'
+      - 'CylanceSvc'
+      - 'MsMpEng'
+      - 'MsSense'
+
+  filter_main_windows_update:
+    ParentImage|endswith:
+      - '\TiWorker.exe'
+      - '\wuauclt.exe'
+      - '\UsoClient.exe'
+
+  filter_main_psexec_variants:
+    ParentImage|endswith:
+      - '\PSEXESVC.exe'
+      - '\psexec.exe'
+      - '\psexec64.exe'
+
+  filter_main_scheduled_tasks:
+    ParentImage|endswith:
+      - '\schtasks.exe'
+      - '\taskeng.exe'
+
+  # svchost filtered as parent UNLESS child is a known shell/LOLBin (mirrors STRICT logic)
+  filter_main_svchost_non_shell:
+    ParentImage|endswith: '\svchost.exe'
+
+  condition: (selection_system_integrity or selection_system_user) and not 1 of filter_main_known_system_parents and not filter_main_known_benign_system_images and not 1 of filter_main_edr_agents and not filter_main_windows_update and not filter_main_psexec_variants and not filter_main_scheduled_tasks and not (filter_main_svchost_non_shell and not selection_shell_child) and (selection_shell_child or selection_suspicious_cli)
+
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - IntegrityLevel
+  - ProcessId
+  - ParentProcessId
+
+falsepositives:
+  - Legitimate software installers performing kernel-level component installation
+  - EDR or AV agents spawning SYSTEM-level helper processes from non-standard parents
+  - PsExec-based administration workflows on known admin hosts
+  - Custom patching or inventory tools that escalate to SYSTEM for driver installation
+  - svchost-hosted services legitimately spawning cmd.exe or powershell.exe (tune via ParentCommandLine or Image path)
+
+level: medium

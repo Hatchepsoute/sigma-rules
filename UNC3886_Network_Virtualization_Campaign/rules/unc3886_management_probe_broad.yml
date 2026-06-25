@@ -1,0 +1,115 @@
+title: Suspicious management surface probing associated with UNC3886 - BROAD
+id: 20baa300-087b-43eb-adac-f1d01ae015e9
+status: experimental
+description: >
+  Detects suspicious external access to network appliance or virtualization management surfaces associated with UNC3886-style probing.
+  Variant 1 fires on appliance-specific URIs (VMware, Juniper, FortiGate, Cisco) regardless of user agent. Variant 2 fires on generic admin URIs when an automation user agent is present.
+custom:
+  description_fr: >
+    Détecte des accès externes suspects vers des surfaces d'administration d'appliances réseau ou de virtualisation, cohérents avec une phase de repérage de type UNC3886. Variante 1 : URIs spécifiques aux appliances (VMware, Juniper, FortiGate, Cisco) déclenchent sans condition sur le User-Agent. Variante 2 : URIs génériques nécessitent un UA d'automatisation.
+
+references:
+  - https://www.techradar.com/pro/security/singapore-says-its-four-largest-phone-companies-were-hit-by-chinese-hackers
+  - https://www.cve.org/CVERecord?id=CVE-2023-20867
+  - https://www.cve.org/CVERecord?id=CVE-2023-34048
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-25
+modified: 2026-06-25
+related:
+  - id: 920ac17c-7dea-49f1-aed3-a9a57fe1d89c
+    type: derived
+tags:
+  - attack.initial-access
+  - attack.reconnaissance
+  - attack.t1190
+  - attack.t1133
+  - attack.t1595.002
+logsource:
+  category: webserver
+detection:
+  # Variant 1: appliance-specific URIs trigger regardless of user agent
+  selection_appliance_uri:
+    Url|contains:
+      - '/vsphere-client/'
+      - '/vsphere/'
+      - '/vmrc/'
+      - '/ui/login'
+      - '/dana-na/'
+      - '/dana/'
+      - '/remote/login'
+      - '/remote/fgt_lang'
+      - '/+CSCOE+/'
+      - '/+CSCOL+'
+      - '/webvpn/'
+      - '/restconf/'
+      - '/junos/'
+      - '/rpc/api/'
+      - '/cgi-bin/php.cgi'
+
+  # Variant 2: generic admin URIs require an automation user agent
+  selection_admin_uri:
+    Url|contains:
+      - '/admin/'
+      - '/manage/'
+      - '/login'
+      - '/auth'
+      - '/console'
+      - '/webconsole'
+      - '/ui/'
+      - '/api/'
+      - '/cgi-bin/'
+
+  selection_automation_ua:
+    UserAgent|contains:
+      - 'curl'
+      - 'wget'
+      - 'python-requests'
+      - 'Go-http-client'
+      - 'httpx'
+      - 'nikto'
+      - 'nmap'
+      - 'ffuf'
+      - 'feroxbuster'
+      - 'nuclei'
+      - 'masscan'
+      - 'BurpSuite'
+      - 'ZAP'
+      - 'naabu'
+      - 'libwww-perl'
+      - 'Java/'
+      - 'Scrapy'
+
+  filter_main_legit_admin_clients:
+    UserAgent|contains:
+      - 'Citrix'
+      - 'Junos'
+      - 'VMware'
+      - 'Forti'
+
+  filter_main_internal_sources:
+    SourceIp|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+
+  condition: (selection_appliance_uri or (selection_admin_uri and selection_automation_ua)) and not 1 of filter_*
+
+fields:
+  - SourceIp
+  - DestinationIp
+  - DestinationPort
+  - HttpMethod
+  - Url
+  - UserAgent
+  - StatusCode
+  - ResponseBytes
+  - Referer
+  - Origin
+
+falsepositives:
+  - Authorized vulnerability scanning of exposed management interfaces
+  - Internal synthetic monitoring or admin jump hosts using scanner user agents
+  - Legitimate external access to appliance management URIs from known IPs (tune via filter_optional_known_sources)
+  - Security assessments using automation frameworks against vSphere or FortiGate
+
+level: medium

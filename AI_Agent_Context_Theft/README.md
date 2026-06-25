@@ -5,6 +5,18 @@
 # 🧠 AI Agent Context Theft - Sigma Detection Pack
 👉🏾 [French version available here](README_FR.md)
 
+## Quick reference
+
+- Threat: identity and context theft targeting local AI agents
+- Detection focus: BROAD for config and memory access, STRICT/CRITICAL for token and crypto identity compromise
+- SOC assets: `playbook/`, `decision-table/`, `diagrams/`
+- Rule files:
+  - [`ai_agent_config_access_broad.yml`](./rules/ai_agent_config_access_broad.yml)
+  - [`ai_agent_secrets_exfiltration_strict.yml`](./rules/ai_agent_secrets_exfiltration_strict.yml)
+  - [`ai_agent_crypto_identity_compromise_strict.yml`](./rules/ai_agent_crypto_identity_compromise_strict.yml)
+  - [`ai_agent_multifile_exfiltration_strict.yml`](./rules/ai_agent_multifile_exfiltration_strict.yml)
+
+
 
 
 ## Overview

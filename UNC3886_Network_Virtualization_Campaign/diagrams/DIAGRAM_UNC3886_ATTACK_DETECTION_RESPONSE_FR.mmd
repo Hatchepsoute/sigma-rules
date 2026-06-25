@@ -1,0 +1,7 @@
+flowchart LR
+  A[Client externe] --> B[Sondage d'administration]
+  B --> C[Déclenchement BROAD]
+  C --> D[Activité appliance]
+  D --> E[Shelling ou tampering]
+  E --> F[Déclenchement STRICT]
+  F --> G[Isoler l'hôte et investiguer]

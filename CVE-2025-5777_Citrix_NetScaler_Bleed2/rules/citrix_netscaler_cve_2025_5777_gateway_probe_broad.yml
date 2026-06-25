@@ -1,0 +1,109 @@
+title: Suspicious Citrix NetScaler Gateway access from external source - BROAD
+id: 3a2d5d8d-8d84-4f2a-bf7e-ea6b4f7bf7d1
+status: experimental
+description: >
+  Detects suspicious external access to Citrix NetScaler Gateway authentication surfaces
+  consistent with CVE-2025-5777 probing or exploitation. Covers scanner and automation
+  tool User-Agents on any Gateway endpoint, and POST requests to the specific exploit
+  endpoints regardless of User-Agent, catching attackers who spoof a legitimate browser UA.
+custom:
+  description_fr: >
+    Détecte des accès externes suspects vers les surfaces d'authentification Citrix NetScaler.
+    Couvre les outils de scan ou d'automatisation sur les endpoints Gateway, et les requêtes
+    POST vers les endpoints d'exploitation spécifiques indépendamment du User-Agent, pour
+    contrer les attaquants qui falsifient un UA navigateur.
+
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2025-5777
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-5777
+  - https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-25
+modified: 2026-06-25
+related:
+  - id: 6b1b2fb5-5a4e-4cdd-8f8b-9de3d2d3c5c2
+    type: derived
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.t1133
+  - cve.2025-5777
+logsource:
+  category: webserver
+detection:
+  # Variant 1: known scanner or automation UA on any sensitive Gateway endpoint
+  selection_v1_gateway_uri:
+    Url|contains:
+      - '/vpn/'
+      - '/vpns/'
+      - '/logon/'
+      - '/cgi/'
+      - '/nitro/'
+      - '/oauth/'
+      - '/nf/auth/'
+
+  selection_v1_scanner_ua:
+    UserAgent|contains:
+      - 'curl'
+      - 'wget'
+      - 'python-requests'
+      - 'Go-http-client'
+      - 'httpx'
+      - 'nikto'
+      - 'nmap'
+      - 'sqlmap'
+      - 'ffuf'
+      - 'feroxbuster'
+      - 'nuclei'
+      - 'masscan'
+      - 'BurpSuite'
+      - 'ZAP'
+      - 'Havij'
+      - 'python/'
+      - 'libwww-perl'
+      - 'Java/'
+
+  # Variant 2: POST to specific exploit endpoints, any User-Agent (catches browser-UA evasion)
+  selection_v2_method:
+    HttpMethod: POST
+
+  selection_v2_exploit_endpoint:
+    Url|contains:
+      - '/oauth/idp/login'
+      - '/nf/auth/getauthenticationrequirements'
+      - '/logon/LogonPoint/tmindex.html'
+      - '/vpns/portal/scripts/wpnbr.html'
+      - '/cgi/login'
+
+  filter_legit_citrix_clients:
+    UserAgent|contains:
+      - 'CitrixReceiver'
+      - 'Citrix Workspace'
+      - 'CitrixWorkspaceApp'
+
+  filter_expected_internal_healthcheck:
+    SourceIp|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+      - '127.0.0.0/8'
+
+  condition: ((selection_v1_gateway_uri and selection_v1_scanner_ua) or (selection_v2_method and selection_v2_exploit_endpoint)) and not 1 of filter_*
+
+fields:
+  - SourceIp
+  - DestinationIp
+  - DestinationPort
+  - HttpMethod
+  - Url
+  - UserAgent
+  - StatusCode
+  - ResponseBytes
+
+falsepositives:
+  - Authorized vulnerability scanning of Citrix Gateway and ADC appliances (allowlist scanner IP)
+  - Internal health checks or synthetic monitoring hitting public URLs from internal IPs (covered by filter)
+  - Legitimate POST-based automation to /cgi/login from known admin tools (add source IP to filter)
+  - CI/CD pipelines running Citrix API tests via /nitro/
+
+level: medium

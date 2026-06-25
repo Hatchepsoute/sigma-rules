@@ -1,0 +1,84 @@
+title: High confidence Citrix NetScaler CitrixBleed 2 memory leak indicator - STRICT
+id: 6b1b2fb5-5a4e-4cdd-8f8b-9de3d2d3c5c2
+status: experimental
+description: >
+  Detects high-confidence Citrix NetScaler responses on sensitive Gateway endpoints with
+  abnormally large response sizes from external sources consistent with CVE-2025-5777
+  memory disclosure. Threshold lowered to 10000 bytes. filter_known_admin_tools removed:
+  curl and python-requests are common exploit delivery tools and must not be excluded here.
+custom:
+  description_fr: >
+    Détecte une activité haute confiance sur Citrix NetScaler : réponses volumineuses
+    (>10 000 octets) sur des endpoints sensibles Gateway depuis des sources externes.
+    Cohérent avec la fuite mémoire CVE-2025-5777. Le filtre sur les outils admin (curl,
+    python-requests) a été supprimé car ces outils sont précisément utilisés pour exploiter
+    cette vulnérabilité.
+
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2025-5777
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-5777
+  - https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-25
+modified: 2026-06-25
+related:
+  - id: 3a2d5d8d-8d84-4f2a-bf7e-ea6b4f7bf7d1
+    type: derived
+tags:
+  - attack.initial-access
+  - attack.credential-access
+  - attack.t1190
+  - attack.t1550.004
+  - cve.2025-5777
+logsource:
+  category: webserver
+detection:
+  selection_sensitive_uri:
+    Url|contains:
+      - '/vpn/index.html'
+      - '/logon/LogonPoint/index.html'
+      - '/vpns/'
+      - '/cgi/login'
+      - '/oauth/idp/login'
+      - '/nf/auth/getauthenticationrequirements'
+
+  selection_success_status:
+    StatusCode:
+      - 200
+      - 302
+
+  selection_large_response:
+    ResponseBytes|gt: 10000
+
+  filter_legit_citrix_clients:
+    UserAgent|contains:
+      - 'CitrixReceiver'
+      - 'Citrix Workspace'
+      - 'CitrixWorkspaceApp'
+
+  filter_internal_source:
+    SourceIp|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+      - '127.0.0.0/8'
+
+  condition: selection_sensitive_uri and selection_success_status and selection_large_response and not 1 of filter_*
+
+fields:
+  - SourceIp
+  - DestinationIp
+  - DestinationPort
+  - HttpMethod
+  - Url
+  - UserAgent
+  - StatusCode
+  - ResponseBytes
+  - Cookie
+
+falsepositives:
+  - Large cached portal pages returned during normal user authentication peaks — tune by correlating with BROAD rule on same source IP
+  - Reverse-proxy health checks that return full pages (covered by filter_internal_source for internal probes)
+  - Portal pages with embedded large JavaScript bundles on first visit — add a ResponseBytes upper bound if needed (e.g. lt 200000 for expected maximum)
+
+level: high

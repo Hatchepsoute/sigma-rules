@@ -1,0 +1,98 @@
+title: Suspicious Motex Landscope management access from untrusted source - BROAD
+id: 8d75a429-e06e-45fb-ac2d-660b90569653
+status: experimental
+description: >
+  Detects suspicious external access to Motex Landscope management surfaces consistent with
+  CVE-2025-61932 probing. Two detection variants: specific Landscope URIs trigger regardless
+  of User-Agent; generic admin URIs require an automation or scanner User-Agent. Covers
+  browser-UA evasion for high-specificity paths.
+custom:
+  description_fr: >
+    Détecte des accès externes suspects vers les surfaces d'administration Motex Landscope.
+    Deux variantes : les URIs spécifiques à Landscope déclenchent quel que soit le User-Agent ;
+    les URIs admin génériques nécessitent un UA d'automatisation ou de scanner. Couvre
+    l'évasion par UA navigateur sur les chemins à haute spécificité.
+
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2025-61932
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-61932
+  - https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-25
+modified: 2026-06-25
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.t1133
+  - cve.2025-61932
+logsource:
+  category: webserver
+detection:
+  # Variant 1: URIs specific enough to Landscope/Motex — any UA, covers browser-UA evasion.
+  # These paths are unlikely to appear on non-Landscope servers.
+  selection_specific_landscope_uri:
+    Url|contains:
+      - '/mr/'
+      - '/da/'
+      - '/landscope'
+      - '/motex'
+
+  # Variant 2: Generic admin surfaces — require scanner/automation UA to reduce FP.
+  selection_generic_admin_uri:
+    Url|contains:
+      - '/api/'
+      - '/admin/'
+      - '/manage/'
+
+  selection_automation_ua:
+    UserAgent|contains:
+      - 'curl'
+      - 'wget'
+      - 'python-requests'
+      - 'python/'
+      - 'Go-http-client'
+      - 'httpx'
+      - 'nikto'
+      - 'nmap'
+      - 'ffuf'
+      - 'feroxbuster'
+      - 'nuclei'
+      - 'masscan'
+      - 'BurpSuite'
+      - 'ZAP'
+      - 'libwww-perl'
+      - 'Java/'
+      - 'Scrapy'
+
+  filter_legit_admin_clients:
+    UserAgent|contains:
+      - 'Landscope'
+      - 'Motex'
+      - 'Endpoint Manager'
+
+  filter_internal_assets:
+    SourceIp|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+
+  condition: (selection_specific_landscope_uri or (selection_generic_admin_uri and selection_automation_ua)) and not 1 of filter_*
+
+fields:
+  - SourceIp
+  - DestinationIp
+  - DestinationPort
+  - HttpMethod
+  - Url
+  - UserAgent
+  - StatusCode
+  - ResponseBytes
+  - Referer
+  - Origin
+
+falsepositives:
+  - Authorized vulnerability scanning of Motex Landscope management surfaces (allowlist scanner IP)
+  - Internal health checks or synthetic monitoring from internal IPs (covered by filter)
+  - External monitoring agents using automation UAs against /api/ or /admin/ paths on other applications sharing the same server
+
+level: medium

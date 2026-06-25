@@ -1,0 +1,128 @@
+title: High confidence Motex Landscope service spawning shell or LOLBin - STRICT
+id: a7514639-8918-46cf-8456-563bfb2d3ef6
+status: experimental
+description: >
+  Detects Landscope MR/DA service processes spawning shells or LOLBins after possible
+  CVE-2025-61932 compromise. Shell interpreters (cmd, powershell) require a suspicious CLI
+  indicator. High-risk LOLBins (mshta, rundll32, certutil, msiexec, etc.) trigger without
+  CLI requirement because being spawned from MR/DA is already high-confidence post-exploitation.
+custom:
+  description_fr: >
+    Détecte un signal post-compromission haute confiance sur Motex Landscope : les processus
+    MR.exe ou DA.exe lancent des shells ou des LOLBins. Les interpréteurs shell (cmd, powershell)
+    nécessitent un indicateur CLI suspect. Les LOLBins à haut risque (mshta, rundll32, certutil,
+    msiexec, etc.) déclenchent sans condition CLI car être spawné par MR/DA est déjà suffisant.
+    Correction : la condition précédente exigeait un indicateur CLI pour TOUS les enfants, ce
+    qui rendait invisible le post-exploitation via commandes simples ou LOLBins locaux.
+
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2025-61932
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-61932
+  - https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-25
+modified: 2026-06-25
+related:
+  - id: 8d75a429-e06e-45fb-ac2d-660b90569653
+    type: derived
+tags:
+  - attack.execution
+  - attack.privilege-escalation
+  - attack.defense-evasion
+  - attack.t1059
+  - attack.t1059.001
+  - attack.t1059.003
+  - attack.t1218
+  - attack.t1068
+  - cve.2025-61932
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_parent:
+    ParentImage|endswith:
+      - '\MR.exe'
+      - '\DA.exe'
+
+  # Shell interpreters: require a suspicious CLI indicator to reduce FP from legitimate
+  # endpoint management tasks that invoke cmd/powershell for deployment or patching.
+  selection_shell_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+
+  selection_suspicious_cli:
+    CommandLine|contains:
+      - ' -enc '
+      - ' -e '
+      - '-nop'
+      - '-w hidden'
+      - '-windowstyle hidden'
+      - 'FromBase64String'
+      - 'DownloadString'
+      - 'DownloadFile'
+      - 'Invoke-WebRequest'
+      - 'iwr '
+      - 'IEX'
+      - 'Invoke-Expression'
+      - 'WebClient'
+      - 'Net.WebClient'
+      - 'http://'
+      - 'https://'
+
+  # High-risk LOLBins: no CLI requirement. These binaries are almost never legitimately
+  # spawned by an endpoint management agent service context. Extend this list based on
+  # local environment knowledge.
+  selection_high_risk_lolbin:
+    Image|endswith:
+      - '\mshta.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+      - '\bitsadmin.exe'
+      - '\certutil.exe'
+      - '\msiexec.exe'
+      - '\curl.exe'
+      - '\odbcconf.exe'
+      - '\msbuild.exe'
+      - '\installutil.exe'
+      - '\regasm.exe'
+      - '\regsvcs.exe'
+
+  filter_main_legit_admin_task:
+    CommandLine|contains:
+      - 'vssadmin'
+      - 'wbadmin'
+      - 'net use'
+
+  # Filter for known-legitimate Landscope internal operations that use LOLBins.
+  # Tune this filter based on observed baseline behavior in your environment.
+  filter_optional_landscope_self:
+    CommandLine|contains:
+      - 'landscope'
+      - 'motex'
+      - 'LanScope'
+
+  condition: selection_parent and (selection_shell_child and selection_suspicious_cli or selection_high_risk_lolbin) and not 1 of filter_*
+
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - IntegrityLevel
+  - ProcessId
+  - ParentProcessId
+
+falsepositives:
+  - Legitimate administrative scripts launched from the Landscope service context via cmd or powershell (shell branch — tune filter_optional_landscope_self or add change window suppression)
+  - Software deployment tasks that invoke msiexec for legitimate package installation from the MR/DA service account (LOLBin branch — add known-good MSI paths to filter_optional_landscope_self)
+  - Remote assistance or software update jobs (tune by adding image paths to filter)
+  - certutil used to verify Motex/Landscope certificates (covered by filter_optional_landscope_self)
+
+level: high

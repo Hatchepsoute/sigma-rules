@@ -1,0 +1,147 @@
+title: Appliance log tampering or suspicious shelling associated with UNC3886 - STRICT
+id: 920ac17c-7dea-49f1-aed3-a9a57fe1d89c
+status: experimental
+description: >
+  Detects appliance-side log tampering, persistence or shell spawning behavior associated with UNC3886-style post-exploitation.
+  High-risk children (python3, nc, socat) spawned from service daemons fire without a CLI requirement. Shell and download tools require a suspicious CLI indicator.
+custom:
+  description_fr: >
+    Détecte des signaux post-compromission à forte confiance sur une appliance ou un hôte Linux de type réseau : désactivation des logs, modification de la persistance, shelling ou démarrage d'un interpréteur Python depuis un processus de service. Python3, nc et socat déclenchent sans condition sur le CommandLine car leur spawn depuis un démon de service est intrinsèquement suspect (VirtualPie, REPTILE). Les shells et outils de download nécessitent un indicateur CLI.
+
+references:
+  - https://www.techradar.com/pro/security/singapore-says-its-four-largest-phone-companies-were-hit-by-chinese-hackers
+  - https://www.cve.org/CVERecord?id=CVE-2023-20867
+  - https://www.cve.org/CVERecord?id=CVE-2023-34048
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-06-25
+modified: 2026-06-25
+related:
+  - id: 20baa300-087b-43eb-adac-f1d01ae015e9
+    type: derived
+tags:
+  - attack.execution
+  - attack.defense-evasion
+  - attack.persistence
+  - attack.t1059
+  - attack.t1059.004
+  - attack.t1070.004
+  - attack.t1562.001
+  - attack.t1543.002
+logsource:
+  product: linux
+  category: process_creation
+detection:
+  selection_parent:
+    ParentImage|endswith:
+      # Common service daemons (all appliance types)
+      - '/sshd'
+      - '/systemd'
+      - '/init'
+      - '/nginx'
+      - '/httpd'
+      - '/apache2'
+      # Juniper Junos
+      - '/junosd'
+      - '/mgd'
+      - '/dcd'
+      # FortiGate / Fortinet
+      - '/httpsd'
+      - '/sslvpnd'
+      # VMware ESXi
+      - '/hostd'
+      - '/vpxa'
+      - '/vmware-hostd'
+      - '/rhttpproxy'
+      - '/sfcbd'
+      # vCenter (Java service wrapper)
+      - '/jsvc'
+      - '/vmsyslogd'
+
+  # High-risk children: their spawn from a service daemon is suspicious by itself
+  selection_high_risk_child:
+    Image|endswith:
+      - '/python3'
+      - '/python3.9'
+      - '/python3.10'
+      - '/python3.11'
+      - '/python3.12'
+      - '/python2'
+      - '/python'
+      - '/perl'
+      - '/nc'
+      - '/ncat'
+      - '/socat'
+
+  # Shell and download tools: require a CLI indicator
+  selection_shell_or_download_child:
+    Image|endswith:
+      - '/sh'
+      - '/bash'
+      - '/dash'
+      - '/ksh'
+      - '/busybox'
+      - '/wget'
+      - '/curl'
+      - '/logger'
+
+  selection_cli:
+    CommandLine|contains:
+      # Log deletion / tampering
+      - 'rm -rf /var/log'
+      - 'truncate -s'
+      - 'shred -'
+      - 'dd if=/dev/null'
+      - 'killall syslogd'
+      - 'systemctl stop rsyslog'
+      - 'systemctl stop syslog'
+      - 'systemctl disable rsyslog'
+      - 'echo 0 > /proc/sys/kernel/printk'
+      # Persistence mechanisms
+      - 'touch /etc/rc.local'
+      - 'crontab '
+      - 'chmod 4755'
+      - 'setenforce 0'
+      - 'insmod '
+      - 'modprobe '
+      # Download / staging
+      - 'wget '
+      - 'curl '
+      - '/tmp/'
+      - '/dev/shm/'
+      - 'nohup '
+      # Base64 decoding / execution chain
+      - '| base64 -d'
+      - 'base64 -d |'
+      - '| bash'
+      - '| sh'
+      - 'bash -c "$(echo'
+      - 'sh -c "$(echo'
+
+  filter_main_legit_admin_task:
+    CommandLine|contains:
+      - 'backup'
+      - 'upgrade'
+      - 'maintenance'
+      - 'patch'
+
+  condition: selection_parent and (selection_high_risk_child or (selection_shell_or_download_child and selection_cli)) and not 1 of filter_*
+
+fields:
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - CurrentDirectory
+  - ProcessId
+  - ParentProcessId
+
+falsepositives:
+  - Authorized upgrade or maintenance jobs on network appliances during change windows
+  - Vendor support scripts executed via SSH by authorized administrators
+  - Legitimate Python automation or monitoring scripts launched by service accounts from service daemons
+  - cron-initiated backup jobs that write to or rotate log files in /var/log
+  - VMware vSphere automation frameworks using python3 via hostd context
+
+level: high
