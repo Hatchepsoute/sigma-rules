@@ -8,8 +8,6 @@
 - Destiné à la détection SOC, au triage et au threat hunting
 ---
 
-> Note lab et SIEM : /labs contient uniquement des PoC bénins en local et des logs synthétiques. Valider la normalisation des champs avant déploiement ; ces détections supposent un mapping des champs Sysmon, Security, proxy, DNS ou web selon le pack.
-
 Présentation
 
 Ce répertoire contient **deux règles Sigma corrélées** permettant de détecter des **comportements malveillants liés à l’exploitation de Microsoft Office** observés dans de nombreux CVE et campagnes réelles.

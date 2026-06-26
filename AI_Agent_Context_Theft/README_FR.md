@@ -5,8 +5,6 @@
 # 🧠 Vol de Contexte d’Agent IA - Pack Sigma
 👉🏾 [English version available here](README.md)
 
-> Note lab et SIEM : /labs contient uniquement des PoC bénins en local et des logs synthétiques. Valider la normalisation des champs avant déploiement ; ces détections supposent un mapping des champs Sysmon, Security, proxy, DNS ou web selon le pack.
-
 En un coup d'oeil
 
 - Menace : vol d'identité et de contexte visant des agents IA locaux

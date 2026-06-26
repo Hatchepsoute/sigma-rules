@@ -8,8 +8,6 @@
 
 
 
-> Note lab et SIEM : /labs contient uniquement des PoC bénins en local et des logs synthétiques. Valider la normalisation des champs avant déploiement ; ces détections supposent un mapping des champs Sysmon, Security, proxy, DNS ou web selon le pack.
-
 🎯 Présentation
 
 Ce dépôt contient **quatre règles de détection à haute confiance** permettant d'identifier des activités infostealer sur Windows via corrélation comportementale.

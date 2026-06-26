@@ -13,8 +13,6 @@ The rules are **behavioral**, **SIEM-agnostic**, and designed for **conversion t
 
 ---
 
-> Lab and SIEM note: /labs contains local-only benign PoCs and synthetic logs. Validate backend field normalization before deployment; the detections assume mapped Sysmon, Security, proxy, DNS, or web fields depending on the pack.
-
 📂 Included Sigma rules
 
 ### 1️⃣ Termination of security processes

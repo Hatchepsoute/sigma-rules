@@ -2,8 +2,6 @@
 👉🏾 [French version available here](README_FR.md)
 
 
-> Lab and SIEM note: /labs contains local-only benign PoCs and synthetic logs. Validate backend field normalization before deployment; the detections assume mapped Sysmon, Security, proxy, DNS, or web fields depending on the pack.
-
 Threat summary
 
 **TheGentlemen** is a Ransomware-as-a-Service (RaaS) operation that deploys multiple custom EDR killer

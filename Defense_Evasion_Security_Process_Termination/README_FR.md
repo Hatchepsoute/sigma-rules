@@ -13,8 +13,6 @@ Les règles sont **comportementales**, **indépendantes de tout SIEM** et conver
 
 ---
 
-> Note lab et SIEM : /labs contient uniquement des PoC bénins en local et des logs synthétiques. Valider la normalisation des champs avant déploiement ; ces détections supposent un mapping des champs Sysmon, Security, proxy, DNS ou web selon le pack.
-
 📂 Règles Sigma incluses
 
 ### 1️⃣ Arrêt de processus de sécurité

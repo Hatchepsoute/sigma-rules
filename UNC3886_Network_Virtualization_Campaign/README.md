@@ -9,8 +9,6 @@
 
 👉🏾 [French version available here](README_FR.md)
 
-> Lab and SIEM note: /labs contains local-only benign PoCs and synthetic logs. Validate backend field normalization before deployment; the detections assume mapped Sysmon, Security, proxy, DNS, or web fields depending on the pack.
-
 Quick reference
 
 - Threat: UNC3886-style espionage activity against network security appliances and virtualization infrastructure

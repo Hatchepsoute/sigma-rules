@@ -7,8 +7,6 @@
 👉🏾 [English version available here](README.md)
 
 
-> Note lab et SIEM : /labs contient uniquement des PoC bénins en local et des logs synthétiques. Valider la normalisation des champs avant déploiement ; ces détections supposent un mapping des champs Sysmon, Security, proxy, DNS ou web selon le pack.
-
 📝 Présentation
 Ce dépôt fournit un arsenal complet (règles Sigma, IoCs et Playbooks) conçu pour contrer les attaques sophistiquées ciblant les appliances **FortiWeb**. Il permet d'industrialiser la détection du framework **Sliver C2** et des techniques de masquage réseau.
 

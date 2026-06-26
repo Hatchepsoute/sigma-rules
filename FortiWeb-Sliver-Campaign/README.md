@@ -7,8 +7,6 @@
 
 👉🏾 [French version available here](README_FR.md)
 
-> Lab and SIEM note: /labs contains local-only benign PoCs and synthetic logs. Validate backend field normalization before deployment; the detections assume mapped Sysmon, Security, proxy, DNS, or web fields depending on the pack.
-
 📝 Overview
 This repository provides a comprehensive detection suite (Sigma Rules, IoCs, and Playbooks) to mitigate sophisticated attack campaigns targeting **FortiWeb appliances**. It standardizes the detection of the **Sliver C2 framework** and network masquerading techniques.
 

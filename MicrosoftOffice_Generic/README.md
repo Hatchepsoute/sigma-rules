@@ -8,8 +8,6 @@
 - Intended for SOC detection, triage, and threat hunting
 ---
 
-> Lab and SIEM note: /labs contains local-only benign PoCs and synthetic logs. Validate backend field normalization before deployment; the detections assume mapped Sysmon, Security, proxy, DNS, or web fields depending on the pack.
-
 Overview
 
 This directory contains **two correlated Sigma rules** designed to detect **malicious Microsoft Office exploitation behaviors** observed across multiple Office-related CVEs and real-world attack campaigns.
