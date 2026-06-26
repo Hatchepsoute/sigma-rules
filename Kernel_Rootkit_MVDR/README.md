@@ -4,7 +4,9 @@
 
 
 
-## 1. Attack scenario (attacker perspective)
+> Lab and SIEM note: /labs contains local-only benign PoCs and synthetic logs. Validate backend field normalization before deployment; the detections assume mapped Sysmon, Security, proxy, DNS, or web fields depending on the pack.
+
+1. Attack scenario (attacker perspective)
 
 This detection pack addresses kernel-mode rootkit attacks on Windows systems.
 

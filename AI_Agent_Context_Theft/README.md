@@ -5,7 +5,9 @@
 # 🧠 AI Agent Context Theft - Sigma Detection Pack
 👉🏾 [French version available here](README_FR.md)
 
-## Quick reference
+> Lab and SIEM note: /labs contains local-only benign PoCs and synthetic logs. Validate backend field normalization before deployment; the detections assume mapped Sysmon, Security, proxy, DNS, or web fields depending on the pack.
+
+Quick reference
 
 - Threat: identity and context theft targeting local AI agents
 - Detection focus: BROAD for config and memory access, STRICT/CRITICAL for token and crypto identity compromise

@@ -9,7 +9,9 @@
 
 👉🏾 [French version available here](README_FR.md)
 
-## Quick reference
+> Lab and SIEM note: /labs contains local-only benign PoCs and synthetic logs. Validate backend field normalization before deployment; the detections assume mapped Sysmon, Security, proxy, DNS, or web fields depending on the pack.
+
+Quick reference
 
 - Threat: UNC3886-style espionage activity against network security appliances and virtualization infrastructure
 - Detection focus: BROAD for external management probing, STRICT for log tampering and suspicious shelling on appliance hosts
@@ -35,6 +37,8 @@ UNC3886 has been publicly associated with long-running intrusions against critic
 - Linux process creation or audit logs from routers, hypervisors or appliance hosts
 - Syslog or EDR telemetry that exposes `ParentImage`, `Image`, `CommandLine` and service context
 
+> Note: the lab is local-only and ships with simulated logs and benign PoCs for SOC validation.
+
 > Note: field names vary by SIEM and parser. Map `Url`, `HttpMethod`, `UserAgent`, `SourceIp`, `ParentImage`, `Image` and `CommandLine` before production rollout.
 
 ## References
@@ -42,7 +46,6 @@ UNC3886 has been publicly associated with long-running intrusions against critic
 - https://www.cve.org/CVERecord?id=CVE-2023-20867
 - https://www.cve.org/CVERecord?id=CVE-2023-34048
 - https://www.techradar.com/pro/security/singapore-says-its-four-largest-phone-companies-were-hit-by-chinese-hackers
-- https://www.techradar.com/pro/security/cisa-warns-hackers-are-actively-exploiting-critical-citrixbleed-2
 
 ---
 

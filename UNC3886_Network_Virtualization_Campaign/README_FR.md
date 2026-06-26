@@ -9,7 +9,9 @@
 
 👉🏾 [English version available here](README.md)
 
-## En un coup d'oeil
+> Note lab et SIEM : /labs contient uniquement des PoC bénins en local et des logs synthétiques. Valider la normalisation des champs avant déploiement ; ces détections supposent un mapping des champs Sysmon, Security, proxy, DNS ou web selon le pack.
+
+En un coup d'oeil
 
 - Menace : activité de type UNC3886 contre des appliances réseau de sécurité et des infrastructures de virtualisation
 - Focus de détection : BROAD pour le sondage externe des surfaces d'administration, STRICT pour les comportements post-exploitation sur l'hôte/appliance
@@ -42,4 +44,3 @@ UNC3886 a été publiquement associé à des intrusions de longue durée contre 
 - https://www.cve.org/CVERecord?id=CVE-2023-20867
 - https://www.cve.org/CVERecord?id=CVE-2023-34048
 - https://www.techradar.com/pro/security/singapore-says-its-four-largest-phone-companies-were-hit-by-chinese-hackers
-- https://www.techradar.com/pro/security/cisa-warns-hackers-are-actively-exploiting-critical-citrixbleed-2
