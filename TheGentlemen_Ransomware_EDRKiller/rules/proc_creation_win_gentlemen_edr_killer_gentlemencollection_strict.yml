@@ -3,10 +3,12 @@ id: b7d3e8f2-4a16-4c9b-9d27-5e8a1f0c3b62
 status: experimental
 description: "Detects TheGentlemen EDR-killer execution via GentlemenCollection staging path or known killer hashes."
 related:
-    - id: a2f6c1e4-9b73-4d8a-8e51-6c2f0a3d7b94
-      type: similar
-    - id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
-      type: similar
+  - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
+    type: derived
+  - id: a2f6c1e4-9b73-4d8a-8e51-6c2f0a3d7b94
+    type: similar
+  - id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
+    type: similar
 references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
     - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/

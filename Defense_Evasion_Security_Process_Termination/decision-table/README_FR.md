@@ -72,6 +72,10 @@ Fenêtre temporelle recommandée :
 ## 📌 Remarques
 
 Ces règles sont indépendantes du SIEM et doivent être adaptées à chaque environnement.
+## Chaînage des règles et relations
+Quand un pack contient plusieurs détections, `related` relie les règles complémentaires pour permettre au SOC de passer du contexte à la confirmation.
+Utiliser l'alerte plus large comme signal de chasse et la règle plus stricte comme signal de confirmation quand les deux existent.
+
 ## Auteur
 
 ✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  

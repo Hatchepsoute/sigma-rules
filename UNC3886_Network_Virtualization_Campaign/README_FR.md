@@ -9,7 +9,7 @@
 
 👉🏾 [English version available here](README.md)
 
-En un coup d'oeil
+En un coup d'oeil
 
 - Menace : activité de type UNC3886 contre des appliances réseau de sécurité et des infrastructures de virtualisation
 - Focus de détection : BROAD pour le sondage externe des surfaces d'administration, STRICT pour les comportements post-exploitation sur l'hôte/appliance
@@ -36,6 +36,11 @@ UNC3886 a été publiquement associé à des intrusions de longue durée contre 
 - Syslog ou EDR exposant `ParentImage`, `Image`, `CommandLine` et le contexte de service
 
 > Note : les noms de champs varient selon le SIEM et le parser. Mapper `Url`, `HttpMethod`, `UserAgent`, `SourceIp`, `ParentImage`, `Image` et `CommandLine` avant le passage en production.
+
+## Chaînage des règles
+Quand un pack contient plusieurs règles, utiliser `related` pour relier les règles complémentaires.
+Traiter l'alerte plus large comme un signal de chasse et la règle plus stricte comme un signal de confirmation quand les deux existent.
+Corréler sur le même hôte, le même utilisateur ou dans une fenêtre de temps courte.
 
 ## Références
 

@@ -4,7 +4,7 @@
 
 
 
-1. Attack scenario (attacker perspective)
+## 1. Attack scenario (attacker perspective)
 
 This detection pack addresses kernel-mode rootkit attacks on Windows systems.
 
@@ -71,4 +71,8 @@ The operating system can no longer be trusted.
 ✍🏿 **Auteur :** Adama ASSIONGBON – SOC & CTI Consultant  
 [LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
+## Rule relationships
+When a pack contains more than one detection, use `related` metadata to link companion rules.
+Treat the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+Correlate on the same host, user, or short time window.
 

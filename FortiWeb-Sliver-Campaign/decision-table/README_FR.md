@@ -8,6 +8,9 @@ Cette table de décision aide les analystes SOC à qualifier et traiter les aler
 
 ---
 
+## Chaînage des règles et relations
+Le pack FortiWeb-Sliver-Campaign est construit comme une chaîne de règles complémentaires. Le champ `related` dans chaque règle Sigma relie les étapes pour aider le SOC à pivoter d'une alerte vers la suivante.
+
 ## Table de Décision de Détection
 
 | Étape | Alerte / Règle Déclenchée | Question Clé | Si OUI | Si NON |

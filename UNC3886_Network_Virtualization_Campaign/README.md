@@ -9,7 +9,12 @@
 
 👉🏾 [French version available here](README_FR.md)
 
-Quick reference
+## Rule relationships
+When a pack contains more than one detection, use `related` metadata to link companion rules.
+Treat the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+Correlate on the same host, user, or short time window.
+
+## Quick reference
 
 - Threat: UNC3886-style espionage activity against network security appliances and virtualization infrastructure
 - Detection focus: BROAD for external management probing, STRICT for log tampering and suspicious shelling on appliance hosts

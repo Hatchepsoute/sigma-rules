@@ -4,6 +4,7 @@
 CLAUDE.md
 CLAUDE_FR.md
 AGENTS.md
+update.md
 ####################################
 # Ignorer TOUS les dossiers "labs" (PoC offensifs, scripts d'évasion, logs simulés)
 # Quel que soit leur niveau de profondeur dans l'arborescence

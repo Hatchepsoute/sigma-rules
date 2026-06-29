@@ -2,7 +2,7 @@
 👉🏾 [English version available here](README.md)
 
 
-Résumé de la menace
+Résumé de la menace
 
 **TheGentlemen** est une opération de Ransomware-as-a-Service (RaaS) qui déploie plusieurs frameworks
 EDR killer personnalisés pour aveugler les défenses de sécurité avant de lancer le chiffrement.
@@ -155,6 +155,11 @@ comportement de kill, pas les artefacts fichiers.
 | Rootkit | T1014 | Chargement pilote BYOVD BROAD (capacité de dissimulation noyau) |
 
 ---
+
+## Chaînage des règles
+Quand un pack contient plusieurs règles, utiliser `related` pour relier les règles complémentaires.
+Traiter l'alerte plus large comme un signal de chasse et la règle plus stricte comme un signal de confirmation quand les deux existent.
+Corréler sur le même hôte, le même utilisateur ou dans une fenêtre de temps courte.
 
 ## Faux positifs
 

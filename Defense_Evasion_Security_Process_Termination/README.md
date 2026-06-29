@@ -13,7 +13,7 @@ The rules are **behavioral**, **SIEM-agnostic**, and designed for **conversion t
 
 ---
 
-📂 Included Sigma rules
+## 📂 Included Sigma rules
 
 ### 1️⃣ Termination of security processes
 **File:**  [`proc_termination_security_processes.yml`](./rules/proc_termination_security_processes.yml)
@@ -109,6 +109,11 @@ They are generic by design and must be adapted to each environment.
 ## 🤝 Contributions
 
 Improvements, additional vendors, and correlation ideas are welcome via pull requests.
+## Rule relationships
+When a pack contains more than one detection, use `related` metadata to link companion rules.
+Treat the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+Correlate on the same host, user, or short time window.
+
 ## Author
 
 ✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  

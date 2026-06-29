@@ -8,7 +8,7 @@
 
 
 
-🎯 Overview
+## 🎯 Overview
 
 This repository contains **four high-confidence detection rules** designed to identify Windows-based infostealer activity using behavioral correlation.
 

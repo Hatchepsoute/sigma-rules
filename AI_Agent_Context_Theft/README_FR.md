@@ -51,7 +51,12 @@ Si une règle STRICT ou CRITIQUE déclenche :
 4. Auditer l’activité
 5. Considérer l’agent compromis
 ---
-### Références
+### Chaînage des règles
+Quand un pack contient plusieurs règles, utiliser `related` pour relier les règles complémentaires.
+Traiter l'alerte plus large comme un signal de chasse et la règle plus stricte comme un signal de confirmation quand les deux existent.
+Corréler sur le même hôte, le même utilisateur ou dans une fenêtre de temps courte.
+
+## Références
 
 - https://www.infostealers.com/article/hudson-rock-identifies-real-world-infostealer-infection-targeting-openclaw-configurations/
 

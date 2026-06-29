@@ -13,7 +13,7 @@ Les règles sont **comportementales**, **indépendantes de tout SIEM** et conver
 
 ---
 
-📂 Règles Sigma incluses
+📂 Règles Sigma incluses
 
 ### 1️⃣ Arrêt de processus de sécurité
 **Fichier :**   [`proc_termination_security_processes.yml`](./rules/proc_termination_security_processes.yml)
@@ -109,6 +109,11 @@ Elles doivent être adaptées et testées dans chaque environnement.
 ## 🤝 Contributions
 
 Les contributions, améliorations et ajouts de vendors sont les bienvenus via pull request.
+## Chaînage des règles
+Quand un pack contient plusieurs règles, utiliser `related` pour relier les règles complémentaires.
+Traiter l'alerte plus large comme un signal de chasse et la règle plus stricte comme un signal de confirmation quand les deux existent.
+Corréler sur le même hôte, le même utilisateur ou dans une fenêtre de temps courte.
+
 ## Auteur
 
 ✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  

@@ -72,6 +72,10 @@ Time window recommendation:
 ## 📌 Notes
 
 These rules are SIEM-agnostic and must be adapted to local logging schemas.
+## Detection chain and rule relationships
+When a pack contains multiple detections, `related` links the companion rules so SOC analysts can pivot from context to confirmation.
+Use the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+
 ## Author
 
 ✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  

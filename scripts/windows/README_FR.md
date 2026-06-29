@@ -1,110 +1,96 @@
-# Validation des règles Sigma – Windows
+# Validation des règles Sigma — Windows
 
-👉🏾 [English version available here](README.md)
+[English version](README.md)
 
-Ce document explique comment **valider toutes les règles Sigma** du dépôt sous **Windows** à l’aide du script PowerShell fourni.
+Ce document explique comment valider toutes les règles Sigma du dépôt sous Windows à l'aide du script PowerShell fourni.
 
 ---
 
-## 🎯 Objectif
+## Objectif
 
 Le script `validate_all_rules.ps1` permet aux équipes SOC et aux contributeurs de :
 
-- Valider **toutes les règles Sigma** situées dans `**/rules/*.yml` et `**/rules/*.yaml`
-- Éviter les erreurs liéeses aux prérequis manquants
-- Lancer la validation depuis **n’importe quel répertoire** du dépôt
-- Offrir une expérience **clone → run** fluide à la communauté
+- valider toutes les règles Sigma situées dans `**\rules\*.yml` et `**\rules\*.yaml`
+- gérer automatiquement les prérequis manquants
+- lancer la validation depuis n'importe quel répertoire du dépôt
 
 ---
 
-## 📦 Fonctionnement du script
+## Fonctionnement du script
 
-Le script effectue automatiquement :
-
-1. La détection de la **racine Git** (`.git`)
-2. La vérification de **Python (3.9+)**
-3. La vérification de **pip**
-4. La vérification de **pipx** (recommandé)
-5. L’installation de **sigma-cli** si absent
-6. La collecte de toutes les règles sous `*/rules/`
-7. L’exécution de `sigma check` sur l’ensemble des règles (par lots)
+1. Détection de la racine Git (`.git`)
+2. Vérification de Python 3.9+
+3. Vérification de pip et pipx
+4. Installation de sigma-cli via pipx si absent (espace utilisateur, sans droits administrateur)
+5. Collecte de toutes les règles sous `*\rules\`
+6. Exécution de `sigma check` sur l'ensemble des règles par lots de 200
 
 ---
 
-## 🖥️ Prérequis
+## Prérequis
 
-- Windows 10 / Windows 11
+- Windows 10 ou Windows 11
 - PowerShell 5.1+ ou PowerShell 7+
 - Python 3.9 ou supérieur (recommandé : 3.10+)
 
-> ⚠️ Les outils sont installés **dans l’espace utilisateur** (aucun droit administrateur requis).
+Les outils sont installés dans l'espace utilisateur. Aucun droit administrateur requis.
 
 ---
 
-## ▶️ Utilisation
+## Utilisation
 
-### 1️⃣ Ouvrir PowerShell
+Ouvrir un terminal PowerShell et se placer dans le dépôt ou un sous-dossier.
 
-Ouvrez un terminal PowerShell et placez-vous dans le dépôt (ou un sous-dossier).
-
-### 2️⃣ Lancer le script
+Lancer le script :
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\Windows\validate_all_rules.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\validate_all_rules.ps1
 ```
-
-### 3️⃣ Paramètres optionnels
 
 Exécuter sans installer les outils manquants :
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\Windows\validate_all_rules.ps1 -InstallIfMissing:$false
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\validate_all_rules.ps1 -InstallIfMissing:$false
 ```
 
 Forcer manuellement la racine du dépôt :
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\Windows\validate_all_rules.ps1 -RepoRoot "C:\chemin\vers\sigma-rules"
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\validate_all_rules.ps1 -RepoRoot "C:\chemin\vers\sigma-rules"
 ```
 
 ---
 
-## ✅ Résultat attendu
-
-- Nombre de règles Sigma détectées
-- Progression de la validation par lots
-- Messages d’erreur clairs en cas de règle invalide
-
-Exemple :
+## Résultat attendu
 
 ```
-[*] Found 268 Sigma rule files under **\rules\
+[*] Repo root: C:\chemin\vers\sigma-rules
+[*] sigma already installed.
+[*] Found 152 Sigma rule files under **\rules\
 [*] Running: sigma check (batch size=200)
 [*] Done.
 ```
 
----
-
-## 🧠 Bonnes pratiques
-
-- Lancer le script **avant chaque commit**
-- Ne pas exécuter en administrateur
-- Utiliser ce script en local et en CI
+sigma-cli peut remonter des avertissements de sévérité MEDIUM (`InvalidATTACKTagIssue`) pour certaines techniques MITRE ATT&CK. Ces avertissements sont non bloquants.
 
 ---
 
-## 📁 Emplacement du script
+## Installation manuelle
 
-```
-scripts/
-└── Windows/
-    └── validate_all_rules.ps1
+Pour installer sigma-cli manuellement avant de lancer le script :
+
+```powershell
+pip install pipx
+pipx install sigma-cli
+sigma version
+sigma plugin list
 ```
 
 ---
 
-## Auteur
+## Documentation associée
 
-✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  
-[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
-
+- [scripts/README_FR.md](../README_FR.md) — vue d'ensemble de tous les scripts
+- [scripts/Linux_MacOS/README_FR.md](../Linux_MacOS/README_FR.md) — équivalent Linux / macOS
+- [scripts/GUIDE_WAZUH.md](../GUIDE_WAZUH.md) — guide de conversion Wazuh
+- [scripts/GUIDE_QRADAR.md](../GUIDE_QRADAR.md) — guide de conversion QRadar

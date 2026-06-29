@@ -33,3 +33,7 @@ Guide SOC analysts in decision-making when Kernel_Rootkit_MVDR rules trigger.
 ✍🏿 **Author :** Adama ASSIONGBON – SOC & CTI Consultant  
 [LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
+## Detection chain and rule relationships
+When a pack contains multiple detections, `related` links the companion rules so SOC analysts can pivot from context to confirmation.
+Use the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+

@@ -1,143 +1,169 @@
-# 📘 Sigma Rules Repository - SOC & CTI Automation
-👉🏾 [French version available here](README_FR.md)
+# Scripts — sigma rules automation
 
+[Version française](README_FR.md)
 
-This repository provides **enterprise-grade Sigma rules** and **automation scripts** for SOC and CTI teams. Its goal is to standardize **validation**, **conversion**, and **deployment** of detection rules across multiple SIEM platforms.
-
----
-
-## 🛠️ Sigma Automation Scripts
-
-Two Bash scripts are provided and must be executed from the `scripts/` directory.
-
-### 1️⃣ `validate_all_rules.sh` – Sigma Quality Gate
-
-**Purpose**
-- Validate all Sigma rules in the repository
-- Detect:
-  - syntax errors
-  - invalid detection conditions
-  - invalid tags (MITRE ATT&CK, custom tags)
-
-**Behavior**
-- Recursively scans all `**/rules/*.yml`
-- Executes `sigma check`
-- Returns a **non‑zero exit code** if issues are detected
-- Designed to be used as a **CI/CD blocking gate**
+This directory contains automation scripts for validating and converting the Sigma rules in this repository.
 
 ---
 
-### 2️⃣ `convert_all_rules.sh` – Multi‑SIEM Conversion
+## Scripts overview
 
-**Purpose**
-- Convert validated Sigma rules into **SIEM‑specific queries**
-- Produce copy/paste‑ready detection queries for SOC analysts
-
-**Supported SIEM targets**
-- OpenSearch / Lucene
-- Splunk
-- Elastic / ElastAlert (legacy)
-- Elastic EQL
-- RSA NetWitness
-- Microsoft Sentinel (KQL)
-
-**Output structure**
-```text
-scripts/conversions/<SIEM>/
-├── raw/
-└── one-line/
-```
+| Script | Platform | Purpose |
+| :--- | :--- | :--- |
+| [`validate_all_rules.sh`](validate_all_rules.sh) | Linux / macOS | Fast CI gate: validates all rules with `sigma check` |
+| [`Linux_MacOS/validate_all_rules_portable.sh`](Linux_MacOS/validate_all_rules_portable.sh) | Linux / macOS | Portable version: auto-installs sigma-cli if missing |
+| [`windows/validate_all_rules.ps1`](windows/validate_all_rules.ps1) | Windows (PowerShell) | Same as portable, for Windows environments |
+| [`convert_all_rules.sh`](convert_all_rules.sh) | Linux / macOS | Converts all rules to 7 SIEM targets |
+| [`convert_to_wazuh.sh`](convert_to_wazuh.sh) | Linux / macOS | Wazuh-specific conversion with logsource classification |
+| [`convert_to_qradar.sh`](convert_to_qradar.sh) | Linux / macOS | QRadar conversion (Lucene fallback; see note below) |
 
 ---
 
-## ▶️ Execution
+## Requirements
+
+sigma-cli 3.x, installed via pipx (recommended):
 
 ```bash
-cd scripts
-chmod +x validate_all_rules.sh convert_all_rules.sh
-./validate_all_rules.sh
-./convert_all_rules.sh
+pipx install sigma-cli
 ```
 
----
+Verify:
 
-## 📂 Understanding `raw/` vs `one-line/`
-
-### `raw/` – Native Sigma Output (default)
-- Exact output from `sigma convert`
-- Preserves original formatting
-- Often already single‑line depending on backend
-- Recommended for:
-  - Splunk
-  - Microsoft Sentinel (KQL)
-  - Elastic EQL
-  - RSA NetWitness
-
-### `one-line/` – Single‑Line Safety Variant
-- All line breaks collapsed into spaces
-- Required by engines enforcing strict single‑line queries
-- Typical use cases:
-  - OpenSearch / Elasticsearch `query_string`
-  - Lucene‑only engines
-  - Custom or legacy SIEM parsers
-
-**Note**
-For many backends, `raw/` and `one-line/` may be identical.
-This is expected and reflects Sigma’s native output.
-
-**SOC Rule of Thumb**
-- SIEM accepts multi‑line → use `raw/`
-- SIEM requires single‑line → use `one-line/`
-
----
-
-## 💻 Supported Environments
-
-- Linux - **recommended**
-- macOS (limited testing)
-- Windows via **WSL only**
-
-**Requirements**
-- Bash 4+
-- Python 3.9+
-- `sigma-cli`
-
-Install:
 ```bash
-pip install sigma-cli
+sigma version
+sigma plugin list
 ```
 
+The Bash scripts require Bash 4+ and Python 3.9+. The portable scripts (`validate_all_rules_portable.sh`, `validate_all_rules.ps1`) handle installation automatically.
+
 ---
-## 🧪 Portable & Cross-Platform Validation (Recommended for Contributors)
 
-In addition to the legacy CI scripts, this repository provides
-portable validation scripts for local usage on different platforms:
+## Validation
 
-### Linux / macOS
-- `scripts/Linux_MacOS/validate_all_rules_portable.sh`
-- Documentation:
-  - `scripts/Linux_MacOS/README.md`
-  - `scripts/Linux_MacOS/README_FR.md`
+### `validate_all_rules.sh` — CI gate
 
-### Windows
-- `scripts/windows/validate_all_rules.ps1`
-- Documentation:
-  - `scripts/windows/README.md`
-  - `scripts/windows/README_FR.md`
+Scans all `**/rules/*.yml` and `**/rules/*.yaml` files recursively and runs `sigma check` on them. Returns a non-zero exit code on failure. Designed for CI/CD pipelines.
 
-These scripts automatically:
-- detect the Git repository root
-- install missing prerequisites (user space)
-- validate all `**/rules/*.yml(yaml)` files
+```bash
+bash scripts/validate_all_rules.sh
+```
 
-They are recommended for:
-- local development
-- contributors
-- non-CI environments
+On success, sigma-cli may report MEDIUM-severity warnings (`InvalidATTACKTagIssue`) for some MITRE ATT&CK tags. These are non-blocking and expected for rules using custom or draft techniques.
 
-## 🧠 SOC Best Practices
+### `Linux_MacOS/validate_all_rules_portable.sh` — local use
 
-- Always run validation before conversion
-- Never deploy rules with Sigma issues
-- Use `validate_all_rules.sh` as a CI (Continuous Integration) quality gate
-- Treat conversion outputs as **production artifacts**
+Same validation with automatic sigma-cli installation if missing. Run from anywhere inside the repository.
+
+```bash
+bash scripts/Linux_MacOS/validate_all_rules_portable.sh
+```
+
+See [`Linux_MacOS/README.md`](Linux_MacOS/README.md) for details.
+
+### `windows/validate_all_rules.ps1` — Windows
+
+PowerShell equivalent. Run from any directory inside the repository.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\validate_all_rules.ps1
+```
+
+See [`windows/README.md`](windows/README.md) for details.
+
+---
+
+## Conversion
+
+### `convert_all_rules.sh` — multi-SIEM
+
+Converts all rules to 7 SIEM targets in a single run. Always run validation first.
+
+```bash
+bash scripts/validate_all_rules.sh
+bash scripts/convert_all_rules.sh
+```
+
+Output is written to `scripts/conversions/<SIEM>/raw/` and `scripts/conversions/<SIEM>/one-line/`.
+
+#### Conversion targets and pipelines
+
+| Label | Target | Windows pipeline | Scope | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| `OpenSearch_ECS` | `opensearch_lucene` | `sysmon` | all rules | Required by backend |
+| `Lucene_Sysmon` | `lucene` | `sysmon` | all rules | Required by backend |
+| `Splunk_Windows` | `splunk` | `splunk_windows` | all rules | Required by backend |
+| `Elastic_ElastAlert` | `elastalert` | `windows-logsources` | all rules | Required by backend |
+| `Elastic_EQL` | `eql` | `sysmon` | all rules | Required by backend |
+| `RSA_NetWitness` | `net_witness` | `sysmon` | Windows rules only | Pipeline optional |
+| `Microsoft_Sentinel_KQL` | `kusto` | `sentinel_asim` | all rules | Fallback to `--without-pipeline` for web rules |
+
+Backends marked "all rules" require a pipeline for every conversion regardless of logsource. The pipeline has no effect on Linux and web rules and simply satisfies the backend requirement.
+
+For the `kusto` target, Windows and Linux rules produce proper ASIM KQL (table `imProcessCreate`, field `TargetProcessName`, etc.). Web rules that use field names not yet mapped in ASIM are retried automatically with `--without-pipeline`.
+
+#### Output structure
+
+```
+scripts/conversions/
+├── OpenSearch_ECS/
+│   ├── raw/          <- exact sigma convert output
+│   └── one-line/     <- same query collapsed to a single line
+├── Lucene_Sysmon/
+├── Splunk_Windows/
+├── Elastic_ElastAlert/
+├── Elastic_EQL/
+├── RSA_NetWitness/
+└── Microsoft_Sentinel_KQL/
+```
+
+One `.txt` file per Sigma rule. The filename encodes the rule path:
+
+```
+CVE-2025-21298_Windows_OLE_RTF_RCE__rules__proc_creation_win_office_rtf_ole_lolbin_strict.txt
+```
+
+Use `raw/` by default. Use `one-line/` only if your SIEM requires a single-line query string (some OpenSearch and Lucene-only parsers).
+
+---
+
+### `convert_to_wazuh.sh` — Wazuh / OpenSearch
+
+Dedicated script for Wazuh. Classifies each rule by logsource before applying a pipeline, which avoids incorrect field mappings on Linux and web rules.
+
+```bash
+bash scripts/convert_to_wazuh.sh
+bash scripts/convert_to_wazuh.sh --windows-pipeline windows   # Security log fields (EventID 4688)
+bash scripts/convert_to_wazuh.sh --input CVE-2025-21298_Windows_OLE_RTF_RCE
+bash scripts/convert_to_wazuh.sh --show
+```
+
+Output: `scripts/conversions/Wazuh/Windows_Sysmon/`, `Web_Network/`, `Linux/`, `Other/`.
+
+See [`GUIDE_WAZUH_EN.md`](GUIDE_WAZUH_EN.md) for field mapping and Wazuh integration details.
+
+---
+
+### `convert_to_qradar.sh` — QRadar
+
+Attempts to produce QRadar AQL queries. The `qradar` and `ibm-qradar-aql` plugins are currently marked `Compatible = no` with sigma-cli 3.x, so the script falls back to Lucene output, which can be used via QRadar on Cloud or via an Elasticsearch integration.
+
+```bash
+bash scripts/convert_to_qradar.sh
+bash scripts/convert_to_qradar.sh --force-lucene
+bash scripts/convert_to_qradar.sh --input CVE-2025-21298_Windows_OLE_RTF_RCE
+bash scripts/convert_to_qradar.sh --upgrade      # print plugin status and exit
+```
+
+Output: `scripts/conversions/QRadar_Lucene_Fallback/` (current) or `scripts/conversions/QRadar_AQL/` (when plugins become compatible).
+
+See [`GUIDE_QRADAR_EN.md`](GUIDE_QRADAR_EN.md) for QRadar integration details.
+
+---
+
+## SOC best practices
+
+- Always validate before converting.
+- Do not deploy rules that fail `sigma check`.
+- Use `validate_all_rules.sh` as a blocking CI gate.
+- Treat conversion outputs as production artifacts: review field name mappings before deployment.
+- Run `sigma plugin list` after any sigma-cli upgrade to verify plugin compatibility.

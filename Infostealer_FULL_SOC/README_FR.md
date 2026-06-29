@@ -8,7 +8,7 @@
 
 
 
-🎯 Présentation
+🎯 Présentation
 
 Ce dépôt contient **quatre règles de détection à haute confiance** permettant d'identifier des activités infostealer sur Windows via corrélation comportementale.
 

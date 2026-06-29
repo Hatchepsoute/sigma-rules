@@ -1,109 +1,96 @@
-# Sigma Rules Validation – Windows
-👉🏾 [French version available here](README_FR.md)
+# Sigma rules validation — Windows
 
+[Version française](README_FR.md)
 
-This document explains how to **validate all Sigma rules** in the repository on **Windows** using the provided PowerShell script.
-
+This document explains how to validate all Sigma rules in the repository on Windows using the provided PowerShell script.
 
 ---
 
-## 🎯 Purpose
+## Purpose
 
 The script `validate_all_rules.ps1` allows SOC teams and contributors to:
 
-- Validate **all Sigma rules** located in `**/rules/*.yml` and `**/rules/*.yaml`
-- Avoid common errors related to missing prerequisites
-- Run validation from **any directory** inside the repository
-- Ensure a smooth **clone → run** experience for the community
+- validate all Sigma rules located in `**\rules\*.yml` and `**\rules\*.yaml`
+- handle missing prerequisites automatically
+- run validation from any directory inside the repository
 
 ---
 
-## 📦 What the script does
+## What the script does
 
-The script automatically:
-
-1. Detects the **Git repository root** (`.git`)
-2. Checks for **Python (3.9+)**
-3. Checks for **pip**
-4. Checks for **pipx** (recommended)
-5. Installs **sigma-cli** if missing
-6. Collects all Sigma rules under `*/rules/`
-7. Runs `sigma check` on all rules (in batches)
+1. Detects the Git repository root (`.git`)
+2. Checks for Python 3.9+
+3. Checks for pip and pipx
+4. Installs sigma-cli via pipx if missing (user space, no administrator rights required)
+5. Collects all Sigma rules under `*\rules\`
+6. Runs `sigma check` on all rules in batches of 200
 
 ---
 
-## 🖥️ Prerequisites
+## Prerequisites
 
-- Windows 10 / Windows 11
+- Windows 10 or Windows 11
 - PowerShell 5.1+ or PowerShell 7+
 - Python 3.9 or later (recommended: 3.10+)
 
-> ⚠️ The script installs tools **in user space** (no administrator rights required).
+Tools are installed in user space. No administrator rights required.
 
 ---
 
-## ▶️ How to use
-
-### 1️⃣ Open PowerShell
+## How to use
 
 Open a PowerShell terminal and navigate to the repository root or any subdirectory.
 
-### 2️⃣ Run the script
+Run the script:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\Windows\validate_all_rules.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\validate_all_rules.ps1
 ```
-
-### 3️⃣ Optional parameters
 
 Run without installing missing tools:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\Windows\validate_all_rules.ps1 -InstallIfMissing:$false
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\validate_all_rules.ps1 -InstallIfMissing:$false
 ```
 
 Specify the repository root manually:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\Windows\validate_all_rules.ps1 -RepoRoot "C:\path\to\sigma-rules"
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\validate_all_rules.ps1 -RepoRoot "C:\path\to\sigma-rules"
 ```
 
 ---
 
-## ✅ Expected output
-
-- Number of Sigma rules detected
-- Validation progress per batch
-- Clear error messages if a rule is invalid
-
-Example:
+## Expected output
 
 ```
-[*] Found 268 Sigma rule files under **\rules\
+[*] Repo root: C:\path\to\sigma-rules
+[*] sigma already installed.
+[*] Found 152 Sigma rule files under **\rules\
 [*] Running: sigma check (batch size=200)
 [*] Done.
 ```
 
----
-
-## 🧠 Best practices
-
-- Run the script **before committing** changes
-- Do not run as Administrator (to avoid environment mismatch)
-- Use this script locally and in CI pipelines
+sigma-cli may report MEDIUM-severity warnings (`InvalidATTACKTagIssue`) for certain MITRE ATT&CK tags. These are non-blocking.
 
 ---
 
-## 📁 Script location
+## Manual installation
 
-```
-scripts/
-└── Windows/
-    └── validate_all_rules.ps1
+If you prefer to install sigma-cli yourself before running the script:
+
+```powershell
+pip install pipx
+pipx install sigma-cli
+sigma version
+sigma plugin list
 ```
 
 ---
-## Author
-✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  
-[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
+## Related documentation
+
+- [scripts/README.md](../README.md) — full scripts overview
+- [scripts/Linux_MacOS/README.md](../Linux_MacOS/README.md) — Linux / macOS equivalent
+- [scripts/GUIDE_WAZUH_EN.md](../GUIDE_WAZUH_EN.md) — Wazuh conversion guide
+- [scripts/GUIDE_QRADAR_EN.md](../GUIDE_QRADAR_EN.md) — QRadar conversion guide

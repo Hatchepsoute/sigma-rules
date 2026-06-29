@@ -5,7 +5,7 @@
 # 🧠 AI Agent Context Theft - Sigma Detection Pack
 👉🏾 [French version available here](README_FR.md)
 
-Quick reference
+## Quick reference
 
 - Threat: identity and context theft targeting local AI agents
 - Detection focus: BROAD for config and memory access, STRICT/CRITICAL for token and crypto identity compromise
@@ -18,6 +18,11 @@
 
 
 
+
+## Rule relationships
+When a pack contains more than one detection, use `related` metadata to link companion rules.
+Treat the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+Correlate on the same host, user, or short time window.
 
 ## Overview
 This repository contains a Sigma detection pack designed to identify identity and context theft targeting local AI agents such as OpenClaw and similar frameworks.

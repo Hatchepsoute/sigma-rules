@@ -132,3 +132,9 @@ This approach:
 ---
 ✍🏿  Author: **Adama ASSIONGBON** - SOC & CTI Consultant  
 **Contact:** [LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+
+## Rule relationships
+When a pack contains more than one detection, use `related` metadata to link companion rules.
+Treat the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+Correlate on the same host, user, or short time window.
+

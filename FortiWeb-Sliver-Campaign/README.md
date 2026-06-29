@@ -7,7 +7,7 @@
 
 👉🏾 [French version available here](README_FR.md)
 
-📝 Overview
+## 📝 Overview
 This repository provides a comprehensive detection suite (Sigma Rules, IoCs, and Playbooks) to mitigate sophisticated attack campaigns targeting **FortiWeb appliances**. It standardizes the detection of the **Sliver C2 framework** and network masquerading techniques.
 
 ## 🚀 Key features
@@ -20,8 +20,11 @@ This repository provides a comprehensive detection suite (Sigma Rules, IoCs, and
 1.  **Implant Deployment** ([lnx_sliver_implant_deployment.yml](./rules/lnx_sliver_implant_deployment.yml)): Targets hidden binary drops in `/.root/`.
 2.  **Systemd Persistence** ([persist_lnx_sliver_systemd_service.yml](./rules/persist_lnx_sliver_systemd_service.yml)): Detects malicious service configurations.
 3.  **Proxy Masquerading** ([proc_lnx_microsocks_lpd_masquerade.yml](./rules/proc_lnx_microsocks_lpd_masquerade.yml)): Spots disguised proxies via command-line flags.
-4.  **FRP Tunneling** ( [lnx_frp_reverse_proxy_activity.yml ](./rules/lnx_frp_reverse_proxy_activity.yml)): Monitors reverse proxy client activity.
+4.  **FRP Tunneling** ([lnx_frp_reverse_proxy_activity.yml](./rules/lnx_frp_reverse_proxy_activity.yml)): Monitors reverse proxy client activity.
 5.  **Network Listener** ([lnx_lpd_listener_printer_service_masquerade.yml](./rules/lnx_lpd_listener_printer_service_masquerade.yml)): Detects unauthorized listeners on **TCP port 515**.
+
+## 🔗 Rule chaining and correlation
+The pack is structured as a detection chain rather than a single BROAD/STRICT pair. Each rule covers one observable stage of the campaign and the `related` metadata links companion rules together. SOC analysts should treat an implant drop or masquerading alert as context, then use the persistence, FRP, and listener rules to confirm the campaign.
 
 ## 🛡️ Future-Proofing & Resilience
 These rules focus on **Behavioral Indicators** (CLI arguments, network ports, and restricted paths) to ensure detection even if attackers rename their binaries or modify their "V2" payloads.
@@ -62,4 +65,9 @@ These rules focus on **Behavioral Indicators** (CLI arguments, network ports, an
 ```
 ## ✍🏿 Author
 [Adama ASSIONGBON – SOC & CTI Consultant](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
+
+## Rule relationships
+When a pack contains more than one detection, use `related` metadata to link companion rules.
+Treat the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+Correlate on the same host, user, or short time window.
 

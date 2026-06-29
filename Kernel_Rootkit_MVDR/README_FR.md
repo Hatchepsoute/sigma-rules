@@ -4,7 +4,7 @@
 
 
 
-1. Scénario d’attaque (vision attaquant)
+1. Scénario d’attaque (vision attaquant)
 
 Ce pack détecte les attaques par rootkit en mode noyau sur Windows.
 
@@ -68,4 +68,8 @@ Une alerte kernel signifie une compromission majeure du système.
 ✍🏿 **Auteur :** Adama ASSIONGBON – SOC & CTI Consultant  
 [LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
 
+## Chaînage des règles
+Quand un pack contient plusieurs règles, utiliser `related` pour relier les règles complémentaires.
+Traiter l'alerte plus large comme un signal de chasse et la règle plus stricte comme un signal de confirmation quand les deux existent.
+Corréler sur le même hôte, le même utilisateur ou dans une fenêtre de temps courte.
 

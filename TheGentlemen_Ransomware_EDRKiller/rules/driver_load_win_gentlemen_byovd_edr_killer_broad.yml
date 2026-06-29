@@ -8,10 +8,14 @@ description: |
   IoC freshness: driver names and hashes may go stale as the actor swaps drivers between campaigns. See ioc/ioc_hashes.csv and ioc/ioc_driver_names.csv for last_verified dates.
 
 related:
-    - id: b7d3e8f2-4a16-4c9b-9d27-5e8a1f0c3b62
-      type: similar
-    - id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
-      type: similar
+  - id: d5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091
+    type: derived
+  - id: e6a7b8c9-d0e1-4f2a-3b4c-5d6e7f809102
+    type: derived
+  - id: b7d3e8f2-4a16-4c9b-9d27-5e8a1f0c3b62
+    type: similar
+  - id: d4b8f2a1-6c95-4e3d-9f08-2a7e1b5c8d63
+    type: similar
 references:
     - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
     - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/

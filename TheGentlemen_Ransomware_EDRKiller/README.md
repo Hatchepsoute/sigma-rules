@@ -2,7 +2,7 @@
 👉🏾 [French version available here](README_FR.md)
 
 
-Threat summary
+## Threat summary
 
 **TheGentlemen** is a Ransomware-as-a-Service (RaaS) operation that deploys multiple custom EDR killer
 frameworks to blind security defenses before deploying ransomware. The group's primary tool,
@@ -30,6 +30,11 @@ stealer).
 Linked to exploitation of FortiGate credentials from the FortiBleed leak (74,000 VPN credentials).
 
 ---
+
+## Rule relationships
+When a pack contains more than one detection, use `related` metadata to link companion rules.
+Treat the broader alert as the hunt signal and the stricter alert as the confirmation signal when both exist.
+Correlate on the same host, user, or short time window.
 
 ## Detection strategy
 

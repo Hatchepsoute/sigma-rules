@@ -1,104 +1,86 @@
-# Validation des règles Sigma – Linux & macOS
-👉🏾 [English version available here](README.md)
+# Validation des règles Sigma — Linux et macOS
 
+[English version](README.md)
 
-Ce document explique comment **valider toutes les règles Sigma** du dépôt sous **Linux et macOS** à l’aide du script Bash portable.
-
-👉🏾 [**Version Windows**](./scripts/Windows/README_FR.md)
+Ce document explique comment valider toutes les règles Sigma du dépôt sous Linux et macOS à l'aide du script Bash portable.
 
 ---
 
-## 🎯 Objectif
+## Objectif
 
 Le script `validate_all_rules_portable.sh` permet aux équipes SOC et aux contributeurs de :
 
-- Valider **toutes les règles Sigma** situées dans `**/rules/*.yml` et `**/rules/*.yaml`
-- Gérer automatiquement les prérequis manquants
-- Lancer la validation depuis **n’importe quel répertoire** du dépôt
-- Harmoniser la validation entre Linux, macOS et Windows
+- valider toutes les règles Sigma situées dans `**/rules/*.yml` et `**/rules/*.yaml`
+- gérer automatiquement les prérequis manquants
+- lancer la validation depuis n'importe quel répertoire du dépôt
 
 ---
 
-## 📦 Fonctionnement du script
+## Fonctionnement du script
 
-Le script effectue automatiquement :
-
-1. La détection de la **racine Git** (`.git`)
-2. La vérification de **Python 3**
-3. La vérification de **pip / pipx**
-4. L’installation de **sigma-cli** si absent (espace utilisateur)
-5. La collecte de toutes les règles sous `*/rules/`
-6. L’exécution de `sigma check` sur l’ensemble des règles
+1. Détection de la racine Git (`.git`)
+2. Vérification de Python 3
+3. Vérification de pip et pipx
+4. Installation de sigma-cli via pipx si absent (espace utilisateur, sans root)
+5. Collecte de toutes les règles sous `*/rules/`
+6. Exécution de `sigma check` sur l'ensemble des règles
 
 ---
 
-## 🖥️ Prérequis
+## Prérequis
 
 - Linux ou macOS
 - Bash 4+
 - Python 3.9 ou supérieur (recommandé : 3.10+)
 
-> ⚠️ Aucun privilège root requis.  
-> Ne pas exécuter le script avec `sudo`.
+Aucun privilège root requis. Ne pas exécuter le script avec `sudo`.
 
 ---
 
-## ▶️ Utilisation
+## Utilisation
 
-### 1️⃣ Rendre le script exécutable
+Rendre le script exécutable (première fois uniquement) :
 
 ```bash
 chmod +x scripts/Linux_MacOS/validate_all_rules_portable.sh
 ```
 
-### 2️⃣ Lancer le script
-
-Depuis n’importe quel répertoire du dépôt :
+Lancer depuis n'importe quel répertoire du dépôt :
 
 ```bash
-./scripts/Linux_MacOS/validate_all_rules_portable.sh
+bash scripts/Linux_MacOS/validate_all_rules_portable.sh
 ```
 
 ---
 
-## ✅ Résultat attendu
-
-- Nombre total de règles Sigma détectées
-- Progression de la validation
-- Messages d’erreur explicites en cas de règle invalide
-
-Exemple :
+## Résultat attendu
 
 ```
-[*] Found 268 Sigma rule files under */rules/
-[*] Running: sigma check <all rules>
+[*] sigma already installed: 3.0.2
+[*] Found 152 Sigma rule files under */rules/ (repo: /chemin/vers/sigma-rules)
+[*] Running: sigma check <all rule files>
 [*] Done.
 ```
 
----
-
-## 🧠 Bonnes pratiques
-
-- Lancer le script **avant chaque commit**
-- Maintenir la conformité Sigma des règles
-- Combiner avec une validation CI/CD
+sigma-cli peut remonter des avertissements de sévérité MEDIUM (`InvalidATTACKTagIssue`) pour certaines techniques MITRE ATT&CK. Ces avertissements sont non bloquants.
 
 ---
 
-## 📁 Emplacement du script
+## Installation manuelle
 
-```
-scripts/
-└── Linux_MacOS/
-    ├── validate_all_rules_portable.sh
-    ├── README.md
-    └── README_FR.md
+Pour installer sigma-cli manuellement avant de lancer le script :
+
+```bash
+pipx install sigma-cli
+sigma version
+sigma plugin list
 ```
 
 ---
 
-## 👤 Auteur
+## Documentation associée
 
-✍🏿  Adama ASSIONGBON - SOC & CTI Consultant  
-[LinkedIn Profile](https://www.linkedin.com/in/adama-assiongbon-9029893a/)
-
+- [scripts/README_FR.md](../README_FR.md) — vue d'ensemble de tous les scripts
+- [scripts/windows/README_FR.md](../windows/README_FR.md) — équivalent Windows
+- [scripts/GUIDE_WAZUH.md](../GUIDE_WAZUH.md) — guide de conversion Wazuh
+- [scripts/GUIDE_QRADAR.md](../GUIDE_QRADAR.md) — guide de conversion QRadar
