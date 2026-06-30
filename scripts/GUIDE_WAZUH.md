@@ -63,11 +63,11 @@ Le script classe chaque règle par logsource avant d'appliquer un pipeline :
 | Type de règle | Pipeline appliqué | Dossier de sortie |
 | :--- | :--- | :--- |
 | `product: windows` | `sysmon` (ou `windows` avec `--windows-pipeline windows`) | `Windows_Sysmon/` ou `Windows_Windows/` |
-| `product: linux` | aucun | `Linux/` |
-| `category: webserver`, `firewall`, `proxy`, `dns` | aucun | `Web_Network/` |
-| Autre | aucun | `Other/` |
+| `product: linux` | `sysmon` (pass-through) | `Linux/` |
+| `category: webserver`, `firewall`, `proxy`, `dns` | `sysmon` (pass-through) | `Web_Network/` |
+| Autre | `sysmon` (pass-through) | `Other/` |
 
-Ce mécanisme évite les mauvais mappings de champs sur les règles Linux et web.
+Le backend `opensearch_lucene` exige au moins un pipeline (`Processing Pipeline Required = yes`). Le pipeline `sysmon` n'effectue aucune transformation de champ pour les logsources non-Windows : il satisfait l'exigence du backend sans modifier aucun nom de champ. Les règles Linux et web sont converties correctement.
 
 ---
 
