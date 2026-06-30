@@ -50,19 +50,19 @@ similar, adapt the field path prefix:
 
 ## How to use these queries in Wazuh
 
-### Option 1 — OpenSearch Dashboards Discover
+### Option 1 - OpenSearch Dashboards Discover
 1. Open Wazuh → Threat Intelligence → Dashboards → Discover
 2. Select the `wazuh-alerts-*` index pattern
 3. Paste the Lucene query from `raw/` into the search bar
 4. Adapt field names according to the mapping table above
 
-### Option 2 — OpenSearch Alerting monitor
+### Option 2 - OpenSearch Alerting monitor
 1. In OpenSearch Dashboards, go to Alerting → Monitors → Create monitor
 2. Select "Per query monitor" and "Extraction query editor"
 3. Use the query from `raw/` as the `query.query_string.query` value
 4. Set the index to `wazuh-alerts-*`
 
-### Option 3 — Wazuh custom rules (XML)
+### Option 3 - Wazuh custom rules (XML)
 Sigma cannot generate Wazuh XML rules directly. The Lucene queries
 in this folder serve as the detection logic reference. To write a
 native Wazuh XML rule, use the query fields as `<field>` conditions

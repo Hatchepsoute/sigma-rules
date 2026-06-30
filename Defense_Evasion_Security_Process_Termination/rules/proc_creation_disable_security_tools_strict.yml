@@ -39,7 +39,7 @@ detection:
       - 'SentinelAgent.exe'
       - 'Sysmon.exe'
 
-  # BLIND SPOT FIX 2026-06-21 (second pass): duplicate YAML key bug — two `CommandLine|contains:`
+  # BLIND SPOT FIX 2026-06-21 (second pass): duplicate YAML key bug - two `CommandLine|contains:`
   # entries in the same mapping block cause the first one ('stop') to be silently overwritten by
   # the second (the service-name list). Result: 'stop' was never checked; the rule matched any
   # sc.exe/net.exe invocation that mentioned a service name, regardless of the action.
@@ -185,7 +185,7 @@ fields:
 
 falsepositives:
   - Security administrators explicitly disabling Defender features during documented maintenance windows
-  - Endpoint hardening or golden image scripts that set Defender exclusions (parent msiexec/TrustedInstaller — filtered)
+  - Endpoint hardening or golden image scripts that set Defender exclusions (parent msiexec/TrustedInstaller - filtered)
   - SCCM/ConfigMgr (ccmexec.exe) managed deployments that reconfigure AV settings (filtered)
   - Incident response containment actions where defenders stop EDR components under a change ticket
 

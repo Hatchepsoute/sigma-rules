@@ -5,7 +5,7 @@
 #
 # Native AQL output requires sigma-cli 2.x + qradar plugin.
 # Both QRadar plugins (qradar, ibm-qradar-aql) are Compatible=no
-# with sigma-cli 3.x — they were written for the 2.x API.
+# with sigma-cli 3.x - they were written for the 2.x API.
 #
 # This script:
 #   1. Checks the installed sigma-cli version.
@@ -79,7 +79,7 @@ print_aql_notice() {
   │                                                              │
   │  Options to get native AQL output:                           │
   │                                                              │
-  │  Option A — Use sigma-cli 2.x in a separate virtualenv:      │
+  │  Option A - Use sigma-cli 2.x in a separate virtualenv:      │
   │                                                              │
   │       python3 -m venv .venv-sigma2                           │
   │       source .venv-sigma2/bin/activate                       │
@@ -87,7 +87,7 @@ print_aql_notice() {
   │       sigma plugin install qradar                           │
   │       sigma convert -t qradar <rule.yml>                    │
   │                                                              │
-  │  Option B — Wait for IBM to release a sigma 3.x-compatible   │
+  │  Option B - Wait for IBM to release a sigma 3.x-compatible   │
   │  plugin. Check: sigma plugin list | grep -i qradar           │
   │  When Compatible = yes, re-run this script.                  │
   │                                                              │
@@ -118,7 +118,7 @@ fi
 SIGMA_VER=$(sigma version 2>/dev/null | awk '{print $1}')
 SIGMA_MAJOR=$(echo "$SIGMA_VER" | cut -d. -f1)
 
-echo "[*] convert_to_qradar.sh — sigma-cli $SIGMA_VER"
+echo "[*] convert_to_qradar.sh - sigma-cli $SIGMA_VER"
 
 AQL_TARGET=""
 if [[ "$FORCE_LUCENE" -eq 1 ]]; then
@@ -174,12 +174,12 @@ if [[ "$BACKEND_MODE" == "aql" ]]; then
   OUTROOT="$SCRIPT_DIR/conversions/QRadar_AQL"
   TARGET="$AQL_TARGET"
   WIN_PIPELINE="sysmon"
-  echo "[*] Mode: AQL — output → $OUTROOT"
+  echo "[*] Mode: AQL - output → $OUTROOT"
 else
   OUTROOT="$SCRIPT_DIR/conversions/QRadar_Lucene_Fallback"
   TARGET="opensearch_lucene"
   WIN_PIPELINE="sysmon"
-  echo "[*] Mode: Lucene fallback — output → $OUTROOT"
+  echo "[*] Mode: Lucene fallback - output → $OUTROOT"
 fi
 
 mkdir -p "$OUTROOT"
@@ -282,17 +282,17 @@ Run `./convert_to_qradar.sh --upgrade` to see the options.
 
 ## Using Lucene queries in QRadar
 
-### Option 1 — QRadar on Cloud (QRoC)
+### Option 1 - QRadar on Cloud (QRoC)
 QRadar on Cloud uses an Elasticsearch backend. Lucene queries
 can be used directly in the QRoC search interface.
 
-### Option 2 — QRadar + Elasticsearch/OpenSearch integration
+### Option 2 - QRadar + Elasticsearch/OpenSearch integration
 If you forward events to an OpenSearch or Elasticsearch cluster
 alongside QRadar (common with Wazuh or Logstash):
 1. Use the Lucene queries from `raw/` in OpenSearch Dashboards.
 2. Correlate with QRadar offenses via source IP or host name.
 
-### Option 3 — Manual AQL translation
+### Option 3 - Manual AQL translation
 The Lucene query syntax translates approximately to AQL as follows:
 
 | Lucene                                     | QRadar AQL                                      |
@@ -314,7 +314,7 @@ SELECT * FROM events WHERE
 
 ## To get native AQL output
 
-Option A — sigma-cli 2.x in a separate virtualenv:
+Option A - sigma-cli 2.x in a separate virtualenv:
 ```bash
 python3 -m venv .venv-sigma2
 source .venv-sigma2/bin/activate
@@ -323,7 +323,7 @@ sigma plugin install qradar
 sigma convert -t qradar <rule.yml>
 ```
 
-Option B — wait for IBM to publish a sigma 3.x-compatible plugin:
+Option B - wait for IBM to publish a sigma 3.x-compatible plugin:
 ```bash
 sigma plugin list | grep -i qradar   # watch for Compatible = yes
 ```
@@ -337,18 +337,18 @@ formatted as IBM QRadar AQL (Ariel Query Language).
 
 ## Import into QRadar
 
-### Option 1 — Log Activity search
+### Option 1 - Log Activity search
 1. Open QRadar → Log Activity → Advanced Search
 2. Paste the AQL query from `raw/`
 3. Adjust the time range (START / STOP clauses)
 
-### Option 2 — Custom Rule Engine (CRE)
+### Option 2 - Custom Rule Engine (CRE)
 1. QRadar → Offenses → Rules → Add Rule
 2. Choose "Event" rule type
 3. In the test condition, use "when an event matches" and build a
    Filter from the AQL WHERE clause.
 
-### Option 3 — Reference Set rule
+### Option 3 - Reference Set rule
 For rules that match on a list of values (contains), consider
 populating a QRadar Reference Set and using "when an event matches
 a reference set" rule condition.
@@ -381,7 +381,7 @@ total_err=$(( ${ERRORS[windows]} + ${ERRORS[web]} + ${ERRORS[linux]} + ${ERRORS[
 
 echo
 echo "────────────────────────────────────────────────────"
-echo "  QRadar conversion — summary (mode: $BACKEND_MODE)"
+echo "  QRadar conversion - summary (mode: $BACKEND_MODE)"
 echo "────────────────────────────────────────────────────"
 printf "  %-30s %4d OK  %4d skipped\n" "Windows (pipeline: $WIN_PIPELINE)" "${COUNTERS[windows]}" "${ERRORS[windows]}"
 printf "  %-30s %4d OK  %4d skipped\n" "Web / Network" "${COUNTERS[web]}" "${ERRORS[web]}"
@@ -395,7 +395,7 @@ echo "  Guide  : $OUTROOT/QRADAR_USAGE.md"
 
 if [[ "$BACKEND_MODE" == "lucene" ]]; then
   echo
-  echo "  [!] Lucene fallback — to get real AQL output:"
+  echo "  [!] Lucene fallback - to get real AQL output:"
   echo "      ./scripts/convert_to_qradar.sh --upgrade"
 fi
 

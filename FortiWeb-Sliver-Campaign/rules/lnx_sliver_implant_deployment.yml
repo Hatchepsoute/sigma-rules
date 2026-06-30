@@ -35,7 +35,7 @@ detection:
       - '/app/web/system-updater'
       - '/.root/cups-lpd'
 
-  # Hidden files in writable directories — common staging tactic.
+  # Hidden files in writable directories - common staging tactic.
   selection_generic:
     TargetFilename|contains:
       - '/bin/.root/'

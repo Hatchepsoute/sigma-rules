@@ -101,7 +101,7 @@ if [[ ${#RULES[@]} -eq 0 ]]; then
   exit 1
 fi
 
-echo "[*] convert_to_wazuh.sh — sigma-cli $(sigma version 2>/dev/null | awk '{print $1}')"
+echo "[*] convert_to_wazuh.sh - sigma-cli $(sigma version 2>/dev/null | awk '{print $1}')"
 echo "[*] Windows pipeline : $WIN_PIPELINE"
 echo "[*] Rules found      : ${#RULES[@]}"
 echo "[*] Output           : $OUTROOT"
@@ -253,19 +253,19 @@ similar, adapt the field path prefix:
 
 ## How to use these queries in Wazuh
 
-### Option 1 — OpenSearch Dashboards Discover
+### Option 1 - OpenSearch Dashboards Discover
 1. Open Wazuh → Threat Intelligence → Dashboards → Discover
 2. Select the `wazuh-alerts-*` index pattern
 3. Paste the Lucene query from `raw/` into the search bar
 4. Adapt field names according to the mapping table above
 
-### Option 2 — OpenSearch Alerting monitor
+### Option 2 - OpenSearch Alerting monitor
 1. In OpenSearch Dashboards, go to Alerting → Monitors → Create monitor
 2. Select "Per query monitor" and "Extraction query editor"
 3. Use the query from `raw/` as the `query.query_string.query` value
 4. Set the index to `wazuh-alerts-*`
 
-### Option 3 — Wazuh custom rules (XML)
+### Option 3 - Wazuh custom rules (XML)
 Sigma cannot generate Wazuh XML rules directly. The Lucene queries
 in this folder serve as the detection logic reference. To write a
 native Wazuh XML rule, use the query fields as `<field>` conditions
@@ -291,7 +291,7 @@ total_err=$(( ${ERRORS[windows]} + ${ERRORS[web]} + ${ERRORS[linux]} + ${ERRORS[
 
 echo
 echo "────────────────────────────────────────────────────"
-echo "  Wazuh conversion — summary"
+echo "  Wazuh conversion - summary"
 echo "────────────────────────────────────────────────────"
 printf "  %-30s %4d OK  %4d skipped\n" "Windows (pipeline: $WIN_PIPELINE)" "${COUNTERS[windows]}" "${ERRORS[windows]}"
 printf "  %-30s %4d OK  %4d skipped\n" "Web / Network" "${COUNTERS[web]}" "${ERRORS[web]}"

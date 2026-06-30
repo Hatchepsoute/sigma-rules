@@ -1,26 +1,26 @@
 type,value,context,source,date_added,last_verified,status,confidence,notes
-hash_sha1,BA914FE77B177B45799403B16DD14765C510A074,BYOVD driver eb.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — BYOVD driver
-hash_sha1,B0B912A3FD1C05D72080848EC4C92880004021A1,BYOVD driver nseckrnl.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — BYOVD driver
-hash_sha1,7556AE58C215B8245A43F764F0676C7A8F0FDD1A,BYOVD driver vgk.sys (Riot Vanguard abused),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Legitimate vgk.sys also exists — hash required for confirmation
-hash_sha1,711EF221526997039E804A18DB9647C91680BBE2,BYOVD driver stpm_old.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — BYOVD driver
-hash_sha1,68FEC379F2AE76C3D2CE913F7BE650CEA1D06990,BYOVD driver stpm_new.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — BYOVD driver
-hash_sha1,96F0DBF52AED0AFD43E44500116B04B674F7358E,BYOVD driver dmx.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — BYOVD driver
-hash_sha1,9AD51AD97C01E97AB59214116740785E0F6320A8,BYOVD driver 360netmon_wfp.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — BYOVD driver
-hash_sha1,12500F6C87CE62712A0ED6652C57468D15C14223,BYOVD driver IMFForceDelete.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — filename lacks .sys extension in original report
-hash_sha1,56BEE9DF5833A637F5C54D5911DF98B0812FE643,BYOVD driver G11.sys (PoisonX toolset),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — linked to PoisonX
-hash_sha1,EC296F9501AD71E430810CB5CDC38D954D4BA536,BYOVD driver googleApiUtil64.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework — BYOVD driver
-hash_sha1,82ED942A52CDCF120A8919730E00BA37619661A3,BYOVD driver ThrottleBlood.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,ThrottleBlood EDR killer — linked to MesudaLocker / DragonForce
+hash_sha1,BA914FE77B177B45799403B16DD14765C510A074,BYOVD driver eb.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - BYOVD driver
+hash_sha1,B0B912A3FD1C05D72080848EC4C92880004021A1,BYOVD driver nseckrnl.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - BYOVD driver
+hash_sha1,7556AE58C215B8245A43F764F0676C7A8F0FDD1A,BYOVD driver vgk.sys (Riot Vanguard abused),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Legitimate vgk.sys also exists - hash required for confirmation
+hash_sha1,711EF221526997039E804A18DB9647C91680BBE2,BYOVD driver stpm_old.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - BYOVD driver
+hash_sha1,68FEC379F2AE76C3D2CE913F7BE650CEA1D06990,BYOVD driver stpm_new.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - BYOVD driver
+hash_sha1,96F0DBF52AED0AFD43E44500116B04B674F7358E,BYOVD driver dmx.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - BYOVD driver
+hash_sha1,9AD51AD97C01E97AB59214116740785E0F6320A8,BYOVD driver 360netmon_wfp.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - BYOVD driver
+hash_sha1,12500F6C87CE62712A0ED6652C57468D15C14223,BYOVD driver IMFForceDelete.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - filename lacks .sys extension in original report
+hash_sha1,56BEE9DF5833A637F5C54D5911DF98B0812FE643,BYOVD driver G11.sys (PoisonX toolset),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - linked to PoisonX
+hash_sha1,EC296F9501AD71E430810CB5CDC38D954D4BA536,BYOVD driver googleApiUtil64.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,GentleKiller framework - BYOVD driver
+hash_sha1,82ED942A52CDCF120A8919730E00BA37619661A3,BYOVD driver ThrottleBlood.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,ThrottleBlood EDR killer - linked to MesudaLocker / DragonForce
 hash_sha1,1FA071303FB846308571E64727501FB98B1C2BE6,BYOVD driver havoc.sys,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,HavocKiller EDR killer framework
-hash_sha1,8AE6BD18B129061F63642531F1B684CF0383C75D,GentleKiller binary Kasps.exe (Kaspersky impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — Enigma/Themida packed
-hash_sha1,D605994FC72A2BB59B5CFB1624A1B9170ECA73A2,GentleKiller binary FaceIT1.exe (FACEIT impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — Enigma/Themida packed
-hash_sha1,5AA3124E5C4921E5EDFC60133B5D71DA21B07DA3,GentleKiller binary Valorant2.exe (Valorant impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — Enigma/Themida packed
-hash_sha1,331879F5EEC8892BBD896F90BDBB1BAD0BF63BD6,GentleKiller binary EASolo2Light.exe (EA impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — Enigma/Themida packed
-hash_sha1,F11AEBCCB9A86A7E2E653F90BAEC697F233C255F,GentleKiller binary EASOLO1clear.exe (EA impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — Enigma/Themida packed
-hash_sha1,EF9CD06683159397F099CAA244E94E6EAAD96EBA,GentleKiller binary EAAntiCheatLight.exe (EA impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — Enigma/Themida packed
-hash_sha1,A11EE9CDC59E5CAA59AEFD27B30D104F3AD68E62,GentleKiller binary BitD1.exe (WatchDog impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — Enigma/Themida packed
+hash_sha1,8AE6BD18B129061F63642531F1B684CF0383C75D,GentleKiller binary Kasps.exe (Kaspersky impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - Enigma/Themida packed
+hash_sha1,D605994FC72A2BB59B5CFB1624A1B9170ECA73A2,GentleKiller binary FaceIT1.exe (FACEIT impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - Enigma/Themida packed
+hash_sha1,5AA3124E5C4921E5EDFC60133B5D71DA21B07DA3,GentleKiller binary Valorant2.exe (Valorant impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - Enigma/Themida packed
+hash_sha1,331879F5EEC8892BBD896F90BDBB1BAD0BF63BD6,GentleKiller binary EASolo2Light.exe (EA impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - Enigma/Themida packed
+hash_sha1,F11AEBCCB9A86A7E2E653F90BAEC697F233C255F,GentleKiller binary EASOLO1clear.exe (EA impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - Enigma/Themida packed
+hash_sha1,EF9CD06683159397F099CAA244E94E6EAAD96EBA,GentleKiller binary EAAntiCheatLight.exe (EA impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - Enigma/Themida packed
+hash_sha1,A11EE9CDC59E5CAA59AEFD27B30D104F3AD68E62,GentleKiller binary BitD1.exe (WatchDog impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - Enigma/Themida packed
 hash_sha1,2F86898528C6CAB3540C486A9BFAA0C029B73950,GentleKiller binary MB2.exe (Network Blocker variant),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\
-hash_sha1,A19117175DBC9BA4D23B5DCE8415E299A2E32192,GentleKiller binary Deletor.exe (Cleaner/wiper variant),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — evidence cleanup tool
-hash_sha1,D29670E684E40DDC89B47010C37CBC96737035B6,GentleKiller binary Symantec.exe (G11 variant),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ — linked to PoisonX
-hash_sha1,CF4D74DF17A91B4A36A2911B22AFEC5D8FA93A01,HexKiller binary Avast.exe (Avast impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,HexKiller — linked to Warlock gang
-hash_sha1,7131B377E96016DC1911020C9F95B1B4D042D7B4,ThrottleBlood binary Sent.exe (SentinelOne impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,ThrottleBlood — linked to MesudaLocker / DragonForce
+hash_sha1,A19117175DBC9BA4D23B5DCE8415E299A2E32192,GentleKiller binary Deletor.exe (Cleaner/wiper variant),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - evidence cleanup tool
+hash_sha1,D29670E684E40DDC89B47010C37CBC96737035B6,GentleKiller binary Symantec.exe (G11 variant),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Staged in \GentlemenCollection\ - linked to PoisonX
+hash_sha1,CF4D74DF17A91B4A36A2911B22AFEC5D8FA93A01,HexKiller binary Avast.exe (Avast impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,HexKiller - linked to Warlock gang
+hash_sha1,7131B377E96016DC1911020C9F95B1B4D042D7B4,ThrottleBlood binary Sent.exe (SentinelOne impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,ThrottleBlood - linked to MesudaLocker / DragonForce
 hash_sha1,F0537CBB773AE12100B36731E7C39F5A9D852B14,HavocKiller binary Sophos.exe (Sophos impersonation),ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,HavocKiller EDR killer framework

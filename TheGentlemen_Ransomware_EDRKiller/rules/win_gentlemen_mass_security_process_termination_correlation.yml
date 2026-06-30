@@ -62,7 +62,7 @@ detection:
             - '\Sysmon.exe'
             - '\Sysmon64.exe'
     # BLIND SPOT FIX 2026-06-21 (second pass): `wmiprvse.exe` was in the allowlist but it is
-    # a known attack vector — GentleKiller can invoke WMI to terminate EDR processes, in which
+    # a known attack vector - GentleKiller can invoke WMI to terminate EDR processes, in which
     # case wmiprvse.exe appears as SourceImage. Removing it from the filter so that mass
     # security-process access via WMI triggers the correlation.
     # svchost.exe is intentionally kept because EDR products legitimately use service-host

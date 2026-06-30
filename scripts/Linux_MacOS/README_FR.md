@@ -1,18 +1,83 @@
-# Validation des règles Sigma — Linux et macOS
+# Validation des règles Sigma - Linux et macOS
 
 [English version](README.md)
 
-Ce document explique comment valider toutes les règles Sigma du dépôt sous Linux et macOS à l'aide du script Bash portable.
+---
+
+## Prérequis
+
+Avant de lancer un script de ce dépôt, effectuer les étapes d'installation ci-dessous.
+
+### Python 3.9 ou supérieur
+
+```bash
+python3 --version   # doit afficher 3.9 ou supérieur
+```
+
+Installer via le gestionnaire de paquets si absent :
+
+```bash
+# Debian / Ubuntu
+sudo apt install python3 python3-pip
+
+# macOS
+brew install python3
+```
+
+### pipx
+
+```bash
+pip install pipx
+pipx ensurepath
+```
+
+Redémarrer le terminal après `pipx ensurepath`.
+
+### sigma-cli 3.x
+
+```bash
+pipx install sigma-cli
+sigma version        # doit afficher 3.x.x
+```
+
+### Plugins sigma (requis pour les scripts de conversion)
+
+```bash
+sigma plugin install opensearch       # backend OpenSearch / Wazuh
+sigma plugin install elasticsearch    # backends Elasticsearch / EQL / ES|QL / ElastAlert
+sigma plugin install splunk           # backends Splunk SPL et SPL2
+sigma plugin install sysmon           # pipeline sysmon (utilisé par presque toutes les conversions)
+sigma plugin install windows          # pipelines logsources Windows
+sigma plugin install kusto            # backend Kusto/KQL + pipelines Sentinel, Defender XDR, Azure Monitor
+sigma plugin install netwitness       # backend RSA NetWitness
+```
+
+Vérifier :
+
+```bash
+sigma plugin list
+sigma list targets
+```
+
+### QRadar AQL (optionnel, nécessite sigma 2.x)
+
+Les deux plugins QRadar sont Compatible = no avec sigma-cli 3.x. Pour obtenir de l'AQL natif, créer un virtualenv séparé :
+
+```bash
+python3 -m venv .venv-sigma2
+source .venv-sigma2/bin/activate
+pip install "sigma-cli<3"
+sigma plugin install qradar
+deactivate
+```
+
+Voir [scripts/GUIDE_QRADAR.md](../GUIDE_QRADAR.md) pour les détails.
 
 ---
 
 ## Objectif
 
-Le script `validate_all_rules_portable.sh` permet aux équipes SOC et aux contributeurs de :
-
-- valider toutes les règles Sigma situées dans `**/rules/*.yml` et `**/rules/*.yaml`
-- gérer automatiquement les prérequis manquants
-- lancer la validation depuis n'importe quel répertoire du dépôt
+Le script `validate_all_rules_portable.sh` valide toutes les règles Sigma du dépôt. Il installe automatiquement sigma-cli via pipx si absent, ce qui le rend adapté à une première utilisation sans configuration préalable.
 
 ---
 
@@ -24,16 +89,6 @@ Le script `validate_all_rules_portable.sh` permet aux équipes SOC et aux contri
 4. Installation de sigma-cli via pipx si absent (espace utilisateur, sans root)
 5. Collecte de toutes les règles sous `*/rules/`
 6. Exécution de `sigma check` sur l'ensemble des règles
-
----
-
-## Prérequis
-
-- Linux ou macOS
-- Bash 4+
-- Python 3.9 ou supérieur (recommandé : 3.10+)
-
-Aucun privilège root requis. Ne pas exécuter le script avec `sudo`.
 
 ---
 
@@ -66,21 +121,9 @@ sigma-cli peut remonter des avertissements de sévérité MEDIUM (`InvalidATTACK
 
 ---
 
-## Installation manuelle
-
-Pour installer sigma-cli manuellement avant de lancer le script :
-
-```bash
-pipx install sigma-cli
-sigma version
-sigma plugin list
-```
-
----
-
 ## Documentation associée
 
-- [scripts/README_FR.md](../README_FR.md) — vue d'ensemble de tous les scripts
-- [scripts/windows/README_FR.md](../windows/README_FR.md) — équivalent Windows
-- [scripts/GUIDE_WAZUH.md](../GUIDE_WAZUH.md) — guide de conversion Wazuh
-- [scripts/GUIDE_QRADAR.md](../GUIDE_QRADAR.md) — guide de conversion QRadar
+- [scripts/README_FR.md](../README_FR.md) - vue d'ensemble complète et guide d'installation
+- [scripts/windows/README_FR.md](../windows/README_FR.md) - équivalent Windows
+- [scripts/GUIDE_WAZUH.md](../GUIDE_WAZUH.md) - guide de conversion Wazuh
+- [scripts/GUIDE_QRADAR.md](../GUIDE_QRADAR.md) - guide de conversion QRadar

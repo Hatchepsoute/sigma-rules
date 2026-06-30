@@ -2,16 +2,18 @@
 
 [Version française](GUIDE_QRADAR.md)
 
-## Current situation
+---
 
-sigma-cli 3.0.2 is installed. Both QRadar backends are currently marked **Compatible = no**:
+## Situation overview
 
-| Backend | State | Compatible with sigma-cli 3.x |
+sigma-cli 3.x is installed. Both QRadar plugins are **Compatible = no** with sigma-cli 3.x:
+
+| Plugin | Compatible with sigma-cli 3.x | Notes |
 | :--- | :--- | :--- |
-| `qradar` | stable | no |
-| `ibm-qradar-aql` | stable | no |
+| `qradar` | no | Written for sigma-cli 2.x API |
+| `ibm-qradar-aql` | no | Written for sigma-cli 2.x API |
 
-The `convert_to_qradar.sh` script detects this automatically and falls back to Lucene output. The fallback is fully usable today via QRadar on Cloud or via an Elasticsearch/OpenSearch integration.
+IBM has not yet released a sigma-cli 3.x-compatible version of these plugins.
 
 To check the current status at any time:
 
@@ -19,31 +21,82 @@ To check the current status at any time:
 sigma plugin list | grep -i qradar
 ```
 
-When one of these plugins becomes compatible, the script will switch to native AQL automatically without any code change.
-
 ---
 
-## Running the conversion
+## Option A - Lucene fallback (sigma 3.x, works now)
 
-From the repository root:
+The `convert_to_qradar.sh` script automatically uses `opensearch_lucene` as a fallback when the QRadar plugins are not available. The Lucene queries can be used immediately via:
+
+- **QRadar on Cloud (QRoC):** uses an Elasticsearch backend natively
+- **QRadar + Elasticsearch/OpenSearch integration:** forward events to OpenSearch or Elasticsearch alongside QRadar (common with Wazuh or Logstash), then use the Lucene queries in OpenSearch Dashboards
+- **Manual AQL translation:** see the translation table below
 
 ```bash
 bash scripts/convert_to_qradar.sh
 ```
 
-Available options:
+Output: `scripts/conversions/QRadar_Lucene_Fallback/`
+
+---
+
+## Option B - Native AQL (sigma 2.x virtualenv)
+
+### Installation
+
+Create a separate virtualenv so sigma 2.x and sigma 3.x coexist on the same machine without conflict:
 
 ```bash
-# Entire repository (default)
+python3 -m venv .venv-sigma2
+source .venv-sigma2/bin/activate
+
+pip install "sigma-cli<3"
+sigma version                   # confirm: 2.x.x
+
+sigma plugin install qradar
+sigma plugin list | grep qradar # confirm: Compatible = yes
+
+deactivate
+```
+
+### Running the conversion
+
+```bash
+source .venv-sigma2/bin/activate
+bash scripts/convert_to_qradar.sh
+deactivate
+```
+
+The script detects the active sigma-cli version. Under sigma 2.x with the qradar plugin it generates native AQL output automatically.
+
+Output: `scripts/conversions/QRadar_AQL/`
+
+### Manual conversion (single rule)
+
+```bash
+source .venv-sigma2/bin/activate
+sigma convert -t qradar CVE-2025-21298_Windows_OLE_RTF_RCE/rules/proc_creation_win_office_rtf_ole_lolbin_strict.yml
+deactivate
+```
+
+### Switching back to sigma 3.x
+
+The `deactivate` command restores your shell to sigma 3.x automatically. The two versions never interfere because they live in separate environments.
+
+---
+
+## Running the conversion script
+
+```bash
+# Auto-detect version (Lucene with sigma 3.x, AQL with sigma 2.x)
 bash scripts/convert_to_qradar.sh
 
-# Print plugin status and exit
+# Print version status and available options, then exit
 bash scripts/convert_to_qradar.sh --upgrade
 
-# Force Lucene fallback even if a QRadar plugin becomes compatible
+# Always produce Lucene regardless of sigma version
 bash scripts/convert_to_qradar.sh --force-lucene
 
-# Single CVE pack only
+# Convert a single CVE pack only
 bash scripts/convert_to_qradar.sh --input CVE-2025-21298_Windows_OLE_RTF_RCE
 
 # Print the list of generated files at the end
@@ -52,32 +105,22 @@ bash scripts/convert_to_qradar.sh --show
 
 ---
 
-## Conversion output
-
-### Current output (Lucene fallback)
+## Output structure
 
 ```
-scripts/conversions/QRadar_Lucene_Fallback/
+scripts/conversions/QRadar_Lucene_Fallback/   <- sigma 3.x (current default)
 ├── Windows/
-│   ├── raw/
-│   └── one-line/
+│   ├── raw/         <- Lucene query, exact sigma output
+│   └── one-line/    <- same, collapsed to a single line
 ├── Web_Network/
-│   ├── raw/
-│   └── one-line/
 ├── Linux/
-│   ├── raw/
-│   └── one-line/
 ├── Other/
-│   ├── raw/
-│   └── one-line/
 └── QRADAR_USAGE.md
-```
 
-### Future output (native AQL, when plugin becomes compatible)
-
-```
-scripts/conversions/QRadar_AQL/
+scripts/conversions/QRadar_AQL/               <- sigma 2.x + qradar plugin
 ├── Windows/
+│   ├── raw/         <- AQL query
+│   └── one-line/
 ├── Web_Network/
 ├── Linux/
 ├── Other/
@@ -86,22 +129,40 @@ scripts/conversions/QRadar_AQL/
 
 ---
 
-## Using Lucene queries in QRadar
+## Using the queries in QRadar
 
-### Option 1 — QRadar on Cloud (QRoC)
+### Lucene queries - QRadar on Cloud
 
-QRadar on Cloud uses a native Elasticsearch backend. The Lucene queries from `raw/` can be used directly in the QRoC search interface.
+1. Open QRadar on Cloud → Log Activity → Search
+2. Paste the Lucene query from `raw/` into the search bar
+3. Adjust the time range
 
-### Option 2 — QRadar + Elasticsearch / OpenSearch integration
+### AQL queries - QRadar Log Activity
 
-If your organisation forwards logs to an Elasticsearch or OpenSearch cluster alongside QRadar (common architecture with Wazuh, Elastic SIEM, or Logstash):
+1. QRadar → Log Activity → Advanced Search
+2. Paste the AQL query from `raw/`
+3. Adjust `START` and `STOP` time range
+4. Click Search
 
-1. Use the queries from `raw/` in OpenSearch Dashboards or Kibana
-2. Correlate with QRadar offenses using source IP or host identifier
+### AQL queries - Custom Rule Engine (CRE)
 
-### Option 3 — Manual Lucene to AQL translation
+1. QRadar → Offenses → Rules → Actions → Add Rule
+2. Rule type: **Event**
+3. Condition: "when an event matches"
+4. Build a filter from the `WHERE` clause of the AQL query
+5. Set severity and action (create offense, send email, etc.)
 
-To manually convert a Lucene query to AQL:
+### AQL queries - Saved searches
+
+1. Log Activity → Advanced Search → enter the AQL query
+2. Actions → Save Criteria
+3. Schedule automatic execution if needed
+
+---
+
+## Lucene to AQL translation reference
+
+When translating Lucene fallback queries to AQL manually:
 
 | Lucene | AQL |
 | :--- | :--- |
@@ -113,48 +174,22 @@ To manually convert a Lucene query to AQL:
 | `NOT A` | `NOT A` |
 | `field:(val1 OR val2)` | `"field" ILIKE '%val1%' OR "field" ILIKE '%val2%'` |
 
-Typical AQL structure:
+AQL query structure:
 
 ```sql
-SELECT *
-FROM events
+SELECT * FROM events
 WHERE
-    <conditions translated from Lucene>
+    <conditions>
     START '%s' STOP '%s'
 ```
 
 ---
 
-## Using AQL queries in QRadar (when available)
-
-### Option 1 — Log Activity (manual search)
-
-1. QRadar → Log Activity → Advanced Search
-2. Paste the AQL query from `raw/`
-3. Adjust the `START` / `STOP` time range
-4. Run and analyse results
-
-### Option 2 — Custom Rule Engine (CRE)
-
-1. QRadar → Offenses → Rules → Actions → Add Rule
-2. Rule type: **Event**
-3. Condition: "when an event matches"
-4. Build a filter from the `WHERE` clause of the AQL query
-5. Set severity level and action (create offense, send email, etc.)
-
-### Option 3 — Saved searches
-
-1. Log Activity → Advanced Search → enter the AQL query
-2. Actions → Save Criteria
-3. Schedule automatic execution if needed
-
----
-
 ## Field mapping in QRadar
 
-Field names depend on the DSM (Device Support Module) used to parse the logs. Adapt to your configuration.
+Field names depend on the DSM (Device Support Module) and custom properties configured in your environment.
 
-### Windows (Wazuh agent → QRadar via syslog or Universal DSM)
+### Windows (via Wazuh agent or syslog forwarding)
 
 | Sigma / ECS field | Likely QRadar field |
 | :--- | :--- |
@@ -175,20 +210,20 @@ Field names depend on the DSM (Device Support Module) used to parse the logs. Ad
 | `c-ip` | Source IP |
 | `UserAgent` | User Agent (custom property) |
 
-Exact QRadar field names depend on the DSM and custom properties defined in your environment. Check Administration → System Configuration → Custom Properties for available names.
+Check Administration → System Configuration → Custom Properties for the exact names in your environment.
 
 ---
 
 ## Verify installation
 
 ```bash
+# sigma 3.x (current environment)
 sigma version
-sigma plugin list | grep -i qradar
-```
+sigma plugin list | grep -i qradar    # should show Compatible = no
 
-To upgrade sigma-cli:
-
-```bash
-pipx upgrade sigma-cli
-sigma plugin list | grep -i qradar
+# sigma 2.x virtualenv
+source .venv-sigma2/bin/activate
+sigma version                          # should show 2.x.x
+sigma plugin list | grep -i qradar    # should show Compatible = yes
+deactivate
 ```

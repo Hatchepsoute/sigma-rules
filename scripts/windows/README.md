@@ -1,18 +1,81 @@
-# Sigma rules validation — Windows
+# Sigma rules validation - Windows
 
 [Version française](README_FR.md)
 
-This document explains how to validate all Sigma rules in the repository on Windows using the provided PowerShell script.
+---
+
+## Prerequisites
+
+Before running any script in this repository, complete the installation steps below.
+
+### Python 3.9+
+
+Download from [python.org](https://www.python.org/downloads/) or install via `winget`:
+
+```powershell
+winget install Python.Python.3.12
+```
+
+Verify:
+
+```powershell
+python --version   # should be 3.9 or later
+```
+
+### pipx
+
+```powershell
+pip install pipx
+pipx ensurepath
+```
+
+Restart your PowerShell terminal after running `pipx ensurepath`.
+
+### sigma-cli 3.x
+
+```powershell
+pipx install sigma-cli
+sigma version        # should print 3.x.x
+```
+
+### Sigma plugins (required for conversion scripts)
+
+```powershell
+sigma plugin install opensearch       # OpenSearch / Wazuh backend
+sigma plugin install elasticsearch    # Elasticsearch / EQL / ES|QL / ElastAlert backends
+sigma plugin install splunk           # Splunk SPL and SPL2 backends
+sigma plugin install sysmon           # Sysmon pipeline (used by almost all conversions)
+sigma plugin install windows          # Windows log source pipelines
+sigma plugin install kusto            # Kusto/KQL + Sentinel, Defender XDR, Azure Monitor
+sigma plugin install netwitness       # RSA NetWitness backend
+```
+
+Verify:
+
+```powershell
+sigma plugin list
+sigma list targets
+```
+
+### QRadar AQL (optional, requires sigma 2.x)
+
+Both QRadar plugins are Compatible = no with sigma-cli 3.x. Native AQL requires sigma-cli 2.x. On Windows, set up a separate virtualenv:
+
+```powershell
+python -m venv .venv-sigma2
+.venv-sigma2\Scripts\Activate.ps1
+pip install "sigma-cli<3"
+sigma plugin install qradar
+deactivate
+```
+
+See [scripts/GUIDE_QRADAR_EN.md](../GUIDE_QRADAR_EN.md) for details. The conversion scripts (`convert_to_qradar.sh`) are Bash-only; run them under WSL or Git Bash on Windows.
 
 ---
 
 ## Purpose
 
-The script `validate_all_rules.ps1` allows SOC teams and contributors to:
-
-- validate all Sigma rules located in `**\rules\*.yml` and `**\rules\*.yaml`
-- handle missing prerequisites automatically
-- run validation from any directory inside the repository
+The script `validate_all_rules.ps1` validates all Sigma rules in the repository on Windows. It auto-installs sigma-cli via pipx if missing, and processes rules in batches of 200 to stay within PowerShell argument limits.
 
 ---
 
@@ -27,19 +90,7 @@ The script `validate_all_rules.ps1` allows SOC teams and contributors to:
 
 ---
 
-## Prerequisites
-
-- Windows 10 or Windows 11
-- PowerShell 5.1+ or PowerShell 7+
-- Python 3.9 or later (recommended: 3.10+)
-
-Tools are installed in user space. No administrator rights required.
-
----
-
 ## How to use
-
-Open a PowerShell terminal and navigate to the repository root or any subdirectory.
 
 Run the script:
 
@@ -75,22 +126,9 @@ sigma-cli may report MEDIUM-severity warnings (`InvalidATTACKTagIssue`) for cert
 
 ---
 
-## Manual installation
-
-If you prefer to install sigma-cli yourself before running the script:
-
-```powershell
-pip install pipx
-pipx install sigma-cli
-sigma version
-sigma plugin list
-```
-
----
-
 ## Related documentation
 
-- [scripts/README.md](../README.md) — full scripts overview
-- [scripts/Linux_MacOS/README.md](../Linux_MacOS/README.md) — Linux / macOS equivalent
-- [scripts/GUIDE_WAZUH_EN.md](../GUIDE_WAZUH_EN.md) — Wazuh conversion guide
-- [scripts/GUIDE_QRADAR_EN.md](../GUIDE_QRADAR_EN.md) — QRadar conversion guide
+- [scripts/README.md](../README.md) - full scripts overview and installation guide
+- [scripts/Linux_MacOS/README.md](../Linux_MacOS/README.md) - Linux / macOS equivalent
+- [scripts/GUIDE_WAZUH_EN.md](../GUIDE_WAZUH_EN.md) - Wazuh conversion guide
+- [scripts/GUIDE_QRADAR_EN.md](../GUIDE_QRADAR_EN.md) - QRadar conversion guide

@@ -50,7 +50,7 @@ detection:
   # SECOND CHALLENGE 2026-06-22: added regsvcs.exe and regasm.exe (.NET COM registration utilities
   # signed by Microsoft, abused as proxy-execution LOLBins to run arbitrary .NET assemblies without
   # spawning a visible shell). Also added pythonw.exe (headless Python runtime used by infostealer
-  # droppers — was present in the BROAD rule's selection_suspicious_accessor but missing here).
+  # droppers - was present in the BROAD rule's selection_suspicious_accessor but missing here).
   selection_suspicious_process:
     Image|endswith:
       - '\powershell.exe'

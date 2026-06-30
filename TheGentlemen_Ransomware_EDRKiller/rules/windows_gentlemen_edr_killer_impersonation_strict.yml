@@ -100,7 +100,7 @@ detection:
       - '\Intel\'
       - '\Recovery\'
 
-  # Legitimate installation paths — cover both Program Files AND ProgramData,
+  # Legitimate installation paths - cover both Program Files AND ProgramData,
   # because selection_suspicious_path includes \ProgramData\ which many EDR vendors use.
   filter_legit_kaspersky:
     Image|startswith:
@@ -206,7 +206,7 @@ fields:
 falsepositives:
   - Explicit EDR killer names (GentleKiller, HexKiller, etc.): virtually no legitimate use, investigate immediately
   - Impersonation + suspicious path: legitimate security software never runs from Temp/AppData/Downloads, verify with vendor and change ticket
-  - EDR vendors writing helper binaries to ProgramData during updates — covered by ProgramData path entries in each filter; if a new vendor fires, add its ProgramData path to the relevant filter
+  - EDR vendors writing helper binaries to ProgramData during updates - covered by ProgramData path entries in each filter; if a new vendor fires, add its ProgramData path to the relevant filter
   - FaceIT or EA Anti-Cheat installers staging in ProgramData before setup completes, filtered; validate ParentImage against the vendor installer
 
 level: high

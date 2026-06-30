@@ -4,16 +4,29 @@
 
 ## Prerequisites
 
-- sigma-cli 3.x installed via pipx:
+### sigma-cli 3.x
 
 ```bash
+pip install pipx
+pipx ensurepath          # restart your terminal after this
 pipx install sigma-cli
+sigma version            # should print 3.x.x
 ```
 
-- Required plugins (verify with `sigma plugin list`):
-  - `sysmon` : pipeline — Compatible = yes
-  - `windows` : pipeline — Compatible = yes
-  - `opensearch` : backend — Compatible = yes
+### Required plugins
+
+```bash
+sigma plugin install opensearch    # OpenSearch / Wazuh backend
+sigma plugin install sysmon        # Sysmon pipeline (field mapping)
+sigma plugin install windows       # Windows log source pipeline (Security logs variant)
+```
+
+Verify:
+
+```bash
+sigma plugin list | grep -E "opensearch|sysmon|windows"
+sigma list targets | grep opensearch
+```
 
 ---
 
@@ -116,14 +129,14 @@ sigma convert -t opensearch_lucene CVE-XXXX/rules/my_rule.yml
 
 ## Using the queries in Wazuh
 
-### Option 1 — OpenSearch Dashboards (Discover)
+### Option 1 - OpenSearch Dashboards (Discover)
 
 1. Open Wazuh → Threat Intelligence → Discover
 2. Select the `wazuh-alerts-*` index pattern
 3. Paste the query from `raw/` into the search bar
 4. Adapt field names if needed (see field mapping section below)
 
-### Option 2 — OpenSearch Alerting (automatic monitor)
+### Option 2 - OpenSearch Alerting (automatic monitor)
 
 1. OpenSearch Dashboards → Alerting → Monitors → Create monitor
 2. Choose **Per query monitor** → **Extraction query editor**
@@ -157,7 +170,7 @@ Example monitor JSON:
 }
 ```
 
-### Option 3 — Wazuh dashboard saved search
+### Option 3 - Wazuh dashboard saved search
 
 1. Discover → enter the query → Save
 2. The saved search can then be added to a Wazuh dashboard
@@ -168,7 +181,7 @@ Example monitor JSON:
 
 The `sysmon` pipeline generates ECS field names. Wazuh stores events differently depending on version and pipeline configuration.
 
-### Windows — sysmon pipeline
+### Windows - sysmon pipeline
 
 | Sigma / ECS field | Wazuh 4.x + ECS module | Wazuh < 4.x (raw agent) |
 | :--- | :--- | :--- |
@@ -183,7 +196,7 @@ The `sysmon` pipeline generates ECS field names. Wazuh stores events differently
 | `user.name` | `user.name` | `data.win.eventdata.user` |
 | `host.name` | `agent.name` | `agent.name` |
 
-### Windows — windows pipeline (Security logs)
+### Windows - windows pipeline (Security logs)
 
 | Sigma field | Wazuh / Windows Security log |
 | :--- | :--- |

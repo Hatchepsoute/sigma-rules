@@ -1,6 +1,6 @@
 type,value,context,source,date_added,last_verified,status,confidence,notes
-staging_path,\GentlemenCollection\,Invariant staging directory used across multiple unrelated Gentlemen intrusions,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Most durable IoC in this pack — path found consistently across intrusions. Costly for attacker to change. Anchor for STRICT Sigma rule.
-staging_path,\Temp\,Generic drop zone for EDR killer binaries before execution,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,low,Generic — present in many threat families. Only actionable when combined with security product name impersonation or known hash.
-staging_path,\AppData\Roaming\,Secondary drop zone observed in Gentlemen staging,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,low,Generic — combine with filename or hash for confidence.
-staging_path,\Users\Public\,Tertiary drop zone — used for lateral movement staging,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,low,Generic — combine with filename or hash for confidence.
-staging_path,\ProgramData\,Observed in post-exploitation dropper staging,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,low,Generic — combine with filename or hash for confidence.
+staging_path,\GentlemenCollection\,Invariant staging directory used across multiple unrelated Gentlemen intrusions,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,high,Most durable IoC in this pack - path found consistently across intrusions. Costly for attacker to change. Anchor for STRICT Sigma rule.
+staging_path,\Temp\,Generic drop zone for EDR killer binaries before execution,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,low,Generic - present in many threat families. Only actionable when combined with security product name impersonation or known hash.
+staging_path,\AppData\Roaming\,Secondary drop zone observed in Gentlemen staging,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,low,Generic - combine with filename or hash for confidence.
+staging_path,\Users\Public\,Tertiary drop zone - used for lateral movement staging,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,low,Generic - combine with filename or hash for confidence.
+staging_path,\ProgramData\,Observed in post-exploitation dropper staging,ESET WeLiveSecurity,2026-06-19,2026-06-19,active,low,Generic - combine with filename or hash for confidence.

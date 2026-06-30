@@ -52,7 +52,7 @@ detection:
 
   # BLIND SPOT FIX 2026-06-21 (second pass): DPAPI offline exfiltration bypasses this rule.
   # An attacker can copy NTUSER.DAT (contains DPAPI master keys) via Volume Shadow Copy, then
-  # decrypt browser secrets on an attacker-controlled machine — no direct access to Login Data
+  # decrypt browser secrets on an attacker-controlled machine - no direct access to Login Data
   # or Cookies files is required. Coverage: add DPAPI master key store paths.
   selection_dpapi_masterkey:
     TargetFilename|contains:

@@ -4,16 +4,29 @@
 
 ## Prérequis
 
-- sigma-cli 3.x installé via pipx :
+### sigma-cli 3.x
 
 ```bash
+pip install pipx
+pipx ensurepath          # redémarrer le terminal après cette commande
 pipx install sigma-cli
+sigma version            # doit afficher 3.x.x
 ```
 
-- Plugins nécessaires (vérifier avec `sigma plugin list`) :
-  - `sysmon` : pipeline — Compatible = yes
-  - `windows` : pipeline — Compatible = yes
-  - `opensearch` : backend — Compatible = yes
+### Plugins nécessaires
+
+```bash
+sigma plugin install opensearch    # backend OpenSearch / Wazuh
+sigma plugin install sysmon        # pipeline sysmon (mapping de champs)
+sigma plugin install windows       # pipeline logsources Windows (variante Security logs)
+```
+
+Vérifier :
+
+```bash
+sigma plugin list | grep -E "opensearch|sysmon|windows"
+sigma list targets | grep opensearch
+```
 
 ---
 
@@ -116,14 +129,14 @@ sigma convert -t opensearch_lucene CVE-XXXX/rules/ma_regle.yml
 
 ## Utiliser les requêtes dans Wazuh
 
-### Option 1 — OpenSearch Dashboards (Discover)
+### Option 1 - OpenSearch Dashboards (Discover)
 
 1. Ouvrir Wazuh → Threat Intelligence → Discover
 2. Sélectionner l'index pattern `wazuh-alerts-*`
 3. Coller la requête depuis `raw/` dans la barre de recherche
 4. Adapter les noms de champs si nécessaire (voir section ci-dessous)
 
-### Option 2 — OpenSearch Alerting (monitor automatique)
+### Option 2 - OpenSearch Alerting (monitor automatique)
 
 1. OpenSearch Dashboards → Alerting → Monitors → Create monitor
 2. Choisir **Per query monitor** → **Extraction query editor**
@@ -157,7 +170,7 @@ Exemple de monitor JSON :
 }
 ```
 
-### Option 3 — Saved search Wazuh dashboard
+### Option 3 - Saved search Wazuh dashboard
 
 1. Discover → saisir la requête → Save
 2. La saved search peut être ajoutée à un dashboard Wazuh
@@ -168,7 +181,7 @@ Exemple de monitor JSON :
 
 Le pipeline `sysmon` génère des noms de champs ECS. Wazuh stocke les événements différemment selon la version et la configuration.
 
-### Windows — pipeline sysmon
+### Windows - pipeline sysmon
 
 | Champ sigma / ECS | Wazuh 4.x + module ECS | Wazuh < 4.x (agent brut) |
 | :--- | :--- | :--- |
@@ -183,7 +196,7 @@ Le pipeline `sysmon` génère des noms de champs ECS. Wazuh stocke les événeme
 | `user.name` | `user.name` | `data.win.eventdata.user` |
 | `host.name` | `agent.name` | `agent.name` |
 
-### Windows — pipeline windows (Security logs)
+### Windows - pipeline windows (Security logs)
 
 | Champ sigma | Wazuh / Windows Security log |
 | :--- | :--- |

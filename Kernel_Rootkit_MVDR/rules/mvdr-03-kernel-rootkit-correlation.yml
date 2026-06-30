@@ -23,7 +23,7 @@ logsource:
   product: windows
 
 detection:
-  # BLIND SPOT FIX 2026-06-21: EventID 6 without product/service constraint is ambiguous —
+  # BLIND SPOT FIX 2026-06-21: EventID 6 without product/service constraint is ambiguous -
   # other applications can emit EID 6 for unrelated reasons (e.g. Windows Filtering Platform logs).
   # Added Sysmon provider context via Provider field. In environments without Sysmon, this rule will
   # not fire; run mvdr-01 and mvdr-02 independently for full coverage.

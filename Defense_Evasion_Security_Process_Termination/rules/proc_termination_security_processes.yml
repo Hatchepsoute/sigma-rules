@@ -69,8 +69,8 @@ fields:
 falsepositives:
   - MsMpEng.exe self-terminating during Defender updates (filtered via filter_legit_system_activity)
   - services.exe terminating a security process during a normal controlled shutdown (filtered)
-  - svchost.exe is intentionally NOT filtered: injected svchost under SYSTEM can terminate EDR processes while appearing legitimate — any such event requires investigation
+  - svchost.exe is intentionally NOT filtered: injected svchost under SYSTEM can terminate EDR processes while appearing legitimate - any such event requires investigation
   - wmiprvse.exe terminating a security process via WMI call is intentionally NOT filtered: this is a known attack vector and should trigger an alert
-  - Authorized EDR reinstallation or upgrade may briefly terminate the monitored process — correlate with change management tickets
+  - Authorized EDR reinstallation or upgrade may briefly terminate the monitored process - correlate with change management tickets
 
 level: high
