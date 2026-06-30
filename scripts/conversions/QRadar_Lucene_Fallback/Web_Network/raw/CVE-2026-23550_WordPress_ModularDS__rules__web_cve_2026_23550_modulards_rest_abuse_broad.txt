@@ -1,0 +1,13 @@
+Usage: sigma convert [OPTIONS] INPUT...
+Try 'sigma convert --help' for help.
+
+Error: 
+Processing pipeline required by backend! Define a custom pipeline or choose a predefined one.
+
+Get all available pipelines for opensearch_lucene with:
+sigma list pipelines opensearch_lucene
+
+If you never heard about processing pipelines you should get familiar with them
+(https://sigmahq-pysigma.readthedocs.io/en/latest/Processing_Pipelines.html).
+If you know what you're doing add --without-pipeline to your command line to suppress this error.
+

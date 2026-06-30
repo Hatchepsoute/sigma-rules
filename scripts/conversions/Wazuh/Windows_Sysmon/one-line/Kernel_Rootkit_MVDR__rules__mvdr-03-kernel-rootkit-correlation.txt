@@ -1,0 +1,1 @@
+(EventID:6 AND Provider:Microsoft\-Windows\-Sysmon) AND (EventID:7045 AND ServiceType:kernel\ driver)

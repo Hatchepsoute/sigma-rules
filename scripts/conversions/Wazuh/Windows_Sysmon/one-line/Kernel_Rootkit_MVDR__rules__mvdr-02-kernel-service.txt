@@ -1,0 +1,1 @@
+(EventID:7045 AND (ServiceType:(kernel\ driver OR file\ system\ driver))) OR (EventID:7045 AND (ImagePath:(*\\Temp\\* OR *\\AppData\\* OR *\\Users\\Public\\* OR *\\ProgramData\\* OR *\\Downloads\\* OR *\\PerfLogs\\*)))

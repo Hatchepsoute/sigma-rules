@@ -1,0 +1,1 @@
+((TargetFilename:(*system\-updater* OR *cups\-lpd*)) AND TargetFilename:*.service) OR (((TargetFilename:(*\/etc\/systemd\/system\/* OR *\/lib\/systemd\/system\/* OR *\/usr\/lib\/systemd\/system\/*)) AND TargetFilename:*.service) AND (FileContent:*Description\=Updater\ Service* AND FileContent:*ExecStart\=* AND FileContent:*Restart\=on\-failure*))

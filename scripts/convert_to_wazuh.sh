@@ -8,11 +8,14 @@
 #
 # Applies the correct pipeline per logsource category:
 #   product: windows       ->  --pipeline sysmon (or --windows-pipeline windows)
-#   product: linux         ->  no pipeline
+#   product: linux         ->  --pipeline sysmon (pass-through, required by opensearch_lucene)
 #   category: webserver,
 #   category: firewall,
-#   category: proxy, etc.  ->  no pipeline
-#   other                  ->  no pipeline
+#   category: proxy, etc.  ->  --pipeline sysmon (pass-through, required by opensearch_lucene)
+#   other                  ->  --pipeline sysmon (pass-through, required by opensearch_lucene)
+#
+# Note: opensearch_lucene requires a pipeline for every rule (Processing Pipeline Required = Yes).
+# The sysmon pipeline acts as a no-op / pass-through for non-Windows logsources.
 #
 # Usage:
 #   ./convert_to_wazuh.sh [OPTIONS]
@@ -175,15 +178,15 @@ for r in "${RULES[@]}"; do
     outdir="$OUTROOT/Windows_${WIN_PIPELINE^}"
   elif grep -qE "^\s+product: linux" "$r"; then
     group="linux"
-    pipeline=""
+    pipeline="sysmon"
     outdir="$OUTROOT/Linux"
   elif grep -qE "^\s+category: webserver|^\s+category: firewall|^\s+category: proxy|^\s+category: dns|^\s+product: fortinet|^\s+product: palo_alto|^\s+product: hpe" "$r"; then
     group="web"
-    pipeline=""
+    pipeline="sysmon"
     outdir="$OUTROOT/Web_Network"
   else
     group="other"
-    pipeline=""
+    pipeline="sysmon"
     outdir="$OUTROOT/Other"
   fi
 

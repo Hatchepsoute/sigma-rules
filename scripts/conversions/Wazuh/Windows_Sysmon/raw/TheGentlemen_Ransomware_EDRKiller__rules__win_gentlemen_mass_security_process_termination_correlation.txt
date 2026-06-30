@@ -1,0 +1,2 @@
+Parsing Sigma rules
+Error: Feature required for conversion of Sigma rule is not supported by backend: Backend does not support correlation rules.

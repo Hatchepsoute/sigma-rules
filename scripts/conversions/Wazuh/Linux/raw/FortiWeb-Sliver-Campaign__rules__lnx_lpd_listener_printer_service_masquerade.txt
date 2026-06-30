@@ -1,0 +1,1 @@
+(DestinationPort:515 OR SourcePort:515) AND (NOT (Image:(*cupsd* OR *lpd* OR *cups\-browsed*)))

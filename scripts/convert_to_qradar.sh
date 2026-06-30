@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 # ============================================================
 # convert_to_qradar.sh
-# Generates IBM QRadar AQL queries from Sigma rules.
+# Generates IBM QRadar queries from Sigma rules.
 #
-# REQUIRES sigma-cli 3.x + qradar plugin.
-# The installed version (2.x) does not support the qradar backend.
+# Native AQL output requires sigma-cli 2.x + qradar plugin.
+# Both QRadar plugins (qradar, ibm-qradar-aql) are Compatible=no
+# with sigma-cli 3.x — they were written for the 2.x API.
 #
 # This script:
 #   1. Checks the installed sigma-cli version.
-#   2. If compatible (>= 3.x): converts rules to AQL using the
-#      'qradar' backend.
-#   3. If incompatible (2.x): prints the exact upgrade commands
-#      and generates a Lucene fallback (usable via QRadar
-#      Elasticsearch App or QRadar on Cloud).
+#   2. If sigma 2.x with a compatible qradar plugin: converts to AQL.
+#   3. If sigma 3.x (or plugin not available): generates a Lucene
+#      fallback usable via QRadar on Cloud or Elasticsearch integration.
 #
 # Usage:
 #   ./convert_to_qradar.sh [OPTIONS]
@@ -66,46 +65,37 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ─────────────────────────────────────────────
-# Upgrade instructions (always shown when sigma 2.x is detected)
+# AQL availability notice (shown when native AQL is not possible)
 # ─────────────────────────────────────────────
-print_upgrade_instructions() {
+print_aql_notice() {
   cat << 'EOF'
 
   ┌──────────────────────────────────────────────────────────────┐
-  │  sigma-cli 2.x detected — QRadar backend is NOT compatible   │
+  │  Native AQL output not available with sigma-cli 3.x          │
   │                                                              │
-  │  The 'qradar' and 'ibm-qradar-aql' plugins require          │
-  │  sigma-cli 3.x to function.                                  │
+  │  Both QRadar plugins (qradar, ibm-qradar-aql) are marked    │
+  │  Compatible = no with sigma-cli 3.x. They were written for   │
+  │  the sigma-cli 2.x API and have not yet been ported.         │
   │                                                              │
-  │  Upgrade steps:                                              │
+  │  Options to get native AQL output:                           │
   │                                                              │
-  │  1. Upgrade sigma-cli to the latest version:                 │
+  │  Option A — Use sigma-cli 2.x in a separate virtualenv:      │
   │                                                              │
-  │       pip install --upgrade sigma-cli                        │
-  │                                                              │
-  │  2. Verify the version is now 3.x:                          │
-  │                                                              │
-  │       sigma version                                          │
-  │                                                              │
-  │  3. Check QRadar plugin compatibility:                       │
-  │                                                              │
-  │       sigma plugin list | grep -i qradar                    │
-  │                                                              │
-  │  4. Install the QRadar plugin if Compatible = no:            │
-  │                                                              │
-  │       sigma plugin install ibm-qradar-aql                   │
-  │         or                                                   │
+  │       python3 -m venv .venv-sigma2                           │
+  │       source .venv-sigma2/bin/activate                       │
+  │       pip install "sigma-cli<3"                              │
   │       sigma plugin install qradar                           │
+  │       sigma convert -t qradar <rule.yml>                    │
   │                                                              │
-  │  5. Re-run this script:                                      │
-  │                                                              │
-  │       ./scripts/convert_to_qradar.sh                        │
+  │  Option B — Wait for IBM to release a sigma 3.x-compatible   │
+  │  plugin. Check: sigma plugin list | grep -i qradar           │
+  │  When Compatible = yes, re-run this script.                  │
   │                                                              │
   │  In the meantime, a Lucene fallback is generated below.      │
   │  These queries can be used via:                              │
-  │    - QRadar App: Elasticsearch/OpenSearch integration        │
   │    - QRadar on Cloud: native Elasticsearch backend           │
-  │    - QRadar Log Source Extension: custom field mapping       │
+  │    - QRadar + Elasticsearch/OpenSearch integration           │
+  │    - Manual translation to AQL (see QRADAR_USAGE.md)        │
   └──────────────────────────────────────────────────────────────┘
 
 EOF
@@ -114,40 +104,43 @@ EOF
 if [[ "$UPGRADE_ONLY" -eq 1 ]]; then
   SIGMA_VER=$(sigma version 2>/dev/null | awk '{print $1}')
   echo "[i] Installed sigma-cli: $SIGMA_VER"
-  print_upgrade_instructions
+  echo "[i] QRadar plugin status:"
+  sigma plugin list 2>/dev/null | grep -i qradar || echo "    (no qradar plugin installed)"
+  print_aql_notice
   exit 0
 fi
 
 # ─────────────────────────────────────────────
 # Version check
+# sigma 2.x + qradar plugin = AQL output
+# sigma 3.x                 = Compatible=no → Lucene fallback
 # ─────────────────────────────────────────────
 SIGMA_VER=$(sigma version 2>/dev/null | awk '{print $1}')
 SIGMA_MAJOR=$(echo "$SIGMA_VER" | cut -d. -f1)
 
 echo "[*] convert_to_qradar.sh — sigma-cli $SIGMA_VER"
 
+AQL_TARGET=""
 if [[ "$FORCE_LUCENE" -eq 1 ]]; then
   BACKEND_MODE="lucene"
-elif [[ "$SIGMA_MAJOR" -ge 3 ]]; then
-  # Check if qradar plugin is actually compatible
-  if sigma plugin list 2>/dev/null | grep -qE "qradar.*yes|ibm-qradar.*yes"; then
-    BACKEND_MODE="aql"
-    AQL_TARGET=$(sigma plugin list 2>/dev/null | grep -E "qradar.*yes|ibm-qradar.*yes" | awk '{print $2}' | head -1)
+elif [[ "$SIGMA_MAJOR" -le 2 ]]; then
+  # sigma 2.x: qradar plugins are compatible
+  if sigma plugin list 2>/dev/null | grep -qE "(qradar|ibm-qradar-aql).*\|\s*yes"; then
+    AQL_TARGET=$(sigma plugin list 2>/dev/null \
+      | grep -E "(qradar|ibm-qradar-aql).*\|\s*yes" \
+      | awk -F'|' '{gsub(/ /,"",$2); print $2}' | head -1)
     echo "[*] QRadar backend available: $AQL_TARGET"
+    BACKEND_MODE="aql"
   else
-    echo "[!] sigma 3.x detected but QRadar plugin is not marked compatible."
-    echo "    Installing ibm-qradar-aql plugin..."
-    sigma plugin install ibm-qradar-aql 2>/dev/null && {
-      BACKEND_MODE="aql"
-      AQL_TARGET="ibm-qradar-aql"
-    } || {
-      echo "    [warn] Plugin install failed. Falling back to Lucene."
-      BACKEND_MODE="lucene"
-    }
+    echo "[!] sigma 2.x detected but no compatible qradar plugin found."
+    echo "    Install one with: sigma plugin install qradar"
+    print_aql_notice
+    BACKEND_MODE="lucene"
   fi
 else
-  echo "[!] sigma-cli $SIGMA_VER is not compatible with the QRadar backend."
-  print_upgrade_instructions
+  # sigma 3.x: both qradar plugins are Compatible=no
+  echo "[!] sigma-cli $SIGMA_VER: QRadar plugins are Compatible=no with sigma 3.x."
+  print_aql_notice
   BACKEND_MODE="lucene"
 fi
 
@@ -248,21 +241,21 @@ echo "[*] Converting..."
 for r in "${RULES[@]}"; do
   [[ ! -f "$r" ]] && continue
 
-  if grep -q "product: windows" "$r"; then
+  if grep -qE "^\s+product: windows" "$r"; then
     group="windows"
     pipeline="$WIN_PIPELINE"
     outdir="$OUTROOT/Windows"
   elif grep -qE "^\s+product: linux" "$r"; then
     group="linux"
-    pipeline=""
+    pipeline="sysmon"
     outdir="$OUTROOT/Linux"
   elif grep -qE "^\s+category: webserver|^\s+category: firewall|^\s+category: proxy|^\s+category: dns|^\s+product: fortinet|^\s+product: palo_alto|^\s+product: hpe" "$r"; then
     group="web"
-    pipeline=""
+    pipeline="sysmon"
     outdir="$OUTROOT/Web_Network"
   else
     group="other"
-    pipeline=""
+    pipeline="sysmon"
     outdir="$OUTROOT/Other"
   fi
 
@@ -280,26 +273,24 @@ if [[ "$BACKEND_MODE" == "lucene" ]]; then
   cat > "$OUTROOT/QRADAR_USAGE.md" << 'EOF'
 # Using these queries in QRadar (Lucene fallback)
 
-These queries were generated with the `opensearch_lucene` backend
-because the QRadar AQL backend requires sigma-cli 3.x.
+These queries were generated with the `opensearch_lucene` backend.
+Native AQL output is not available because both QRadar plugins
+(qradar, ibm-qradar-aql) are Compatible=no with sigma-cli 3.x.
+They were written for the sigma-cli 2.x API.
 
-## Why Lucene and not AQL?
-
-The `qradar` and `ibm-qradar-aql` sigma plugins are marked as
-incompatible with sigma-cli 2.x. Run `./convert_to_qradar.sh --upgrade`
-to see the upgrade steps.
+Run `./convert_to_qradar.sh --upgrade` to see the options.
 
 ## Using Lucene queries in QRadar
 
-### Option 1 — QRadar App: Elasticsearch/OpenSearch integration
-If you have the QRadar App for Elasticsearch (IBM Store):
-1. Configure the Elasticsearch data source pointing to your OpenSearch
-   cluster (if you forward Wazuh/ECS events there).
-2. Use the Lucene queries from `raw/` as search filters.
-
-### Option 2 — QRadar on Cloud (QRoC)
+### Option 1 — QRadar on Cloud (QRoC)
 QRadar on Cloud uses an Elasticsearch backend. Lucene queries
 can be used directly in the QRoC search interface.
+
+### Option 2 — QRadar + Elasticsearch/OpenSearch integration
+If you forward events to an OpenSearch or Elasticsearch cluster
+alongside QRadar (common with Wazuh or Logstash):
+1. Use the Lucene queries from `raw/` in OpenSearch Dashboards.
+2. Correlate with QRadar offenses via source IP or host name.
 
 ### Option 3 — Manual AQL translation
 The Lucene query syntax translates approximately to AQL as follows:
@@ -309,28 +300,32 @@ The Lucene query syntax translates approximately to AQL as follows:
 | `process.executable:*cmd.exe`              | `"process_path" ILIKE '%cmd.exe'`               |
 | `process.command_line:*-enc*`              | `"command_args" ILIKE '%-enc%'`                 |
 | `winlog.event_id:4688`                     | `"EventID" = '4688'`                            |
-| `event.category:process`                   | `devicetype = <Windows Security log source ID>` |
+| `event.category:process`                   | `devicetype = <Windows log source ID>`          |
 | `A AND B`                                  | `A AND B`                                       |
 | `A OR B`                                   | `(A OR B)`                                      |
 | `NOT A`                                    | `NOT A`                                         |
 
-AQL prefix:
+AQL structure:
 ```sql
 SELECT * FROM events WHERE
   <translated condition>
   START '%s' STOP '%s'
 ```
 
-## Upgrade to get real AQL output
+## To get native AQL output
 
+Option A — sigma-cli 2.x in a separate virtualenv:
 ```bash
-pip install --upgrade sigma-cli
-sigma version                          # confirm >= 3.x
-sigma plugin list | grep qradar        # confirm Compatible = yes
-# If Compatible = no:
-sigma plugin install ibm-qradar-aql
-# Re-run:
-./scripts/convert_to_qradar.sh
+python3 -m venv .venv-sigma2
+source .venv-sigma2/bin/activate
+pip install "sigma-cli<3"
+sigma plugin install qradar
+sigma convert -t qradar <rule.yml>
+```
+
+Option B — wait for IBM to publish a sigma 3.x-compatible plugin:
+```bash
+sigma plugin list | grep -i qradar   # watch for Compatible = yes
 ```
 EOF
 else

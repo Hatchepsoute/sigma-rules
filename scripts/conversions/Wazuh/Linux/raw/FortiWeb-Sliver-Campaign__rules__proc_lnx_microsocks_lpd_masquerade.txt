@@ -1,0 +1,1 @@
+(Image:*\/cups\-lpd AND (CommandLine:/-p\s*515/ OR CommandLine:*\ \-1* OR CommandLine:*\ \-w*)) OR ((Image:(*\/tmp\/* OR *\/dev\/shm\/* OR *\/var\/tmp\/* OR *\/run\/user\/*)) AND (CommandLine:/-p\s*515/ OR (CommandLine:*\ \-1* AND CommandLine:*\ \-w*)))
