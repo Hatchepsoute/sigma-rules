@@ -84,20 +84,18 @@ See [GUIDE_QRADAR_EN.md](GUIDE_QRADAR_EN.md) for full details.
 
 | Script | Platform | Purpose |
 | :--- | :--- | :--- |
-| [`validate_all_rules.sh`](validate_all_rules.sh) | Linux / macOS | CI gate: validates all rules with `sigma check` |
-| [`Linux_MacOS/validate_all_rules_portable.sh`](Linux_MacOS/validate_all_rules_portable.sh) | Linux / macOS | Portable: auto-installs sigma-cli if missing |
-| [`windows/validate_all_rules.ps1`](windows/validate_all_rules.ps1) | Windows | PowerShell equivalent with auto-install |
-| [`convert_all_rules.sh`](convert_all_rules.sh) | Linux / macOS | Converts all rules to 11 SIEM targets in one run |
-| [`convert_to_wazuh.sh`](convert_to_wazuh.sh) | Linux / macOS | Wazuh-specific conversion with logsource classification |
-| [`convert_to_qradar.sh`](convert_to_qradar.sh) | Linux / macOS | QRadar conversion (AQL with sigma 2.x, Lucene fallback with sigma 3.x) |
+| [`validate_all_rules.sh`](validate_all_rules.sh) | Linux / macOS / WSL | Validates all rules with `sigma check`, auto-installs sigma-cli if missing |
+| [`convert_all_rules.sh`](convert_all_rules.sh) | Linux / macOS / WSL | Converts all rules to 11 SIEM targets in one run, auto-installs prerequisites |
+| [`convert_to_wazuh.sh`](convert_to_wazuh.sh) | Linux / macOS / WSL | Wazuh-specific conversion with logsource classification, auto-installs prerequisites |
+| [`convert_to_qradar.sh`](convert_to_qradar.sh) | Linux / macOS / WSL | QRadar conversion (AQL with sigma 2.x, Lucene fallback with sigma 3.x), auto-installs prerequisites |
 
 ---
 
 ## Validation
 
-### `validate_all_rules.sh` - CI gate
+### `validate_all_rules.sh`
 
-Scans all `**/rules/*.yml` recursively and runs `sigma check`. Returns a non-zero exit code on failure.
+Scans all `**/rules/*.yml` recursively and runs `sigma check`. Auto-installs sigma-cli via pipx if missing. Returns a non-zero exit code on failure.
 
 ```bash
 bash scripts/validate_all_rules.sh
@@ -105,23 +103,7 @@ bash scripts/validate_all_rules.sh
 
 sigma-cli may report MEDIUM warnings (`InvalidATTACKTagIssue`) for some MITRE ATT&CK tags. These are non-blocking.
 
-### `Linux_MacOS/validate_all_rules_portable.sh` - local use
-
-Same as above with automatic sigma-cli installation if missing. Run from anywhere inside the repository.
-
-```bash
-bash scripts/Linux_MacOS/validate_all_rules_portable.sh
-```
-
-See [`Linux_MacOS/README.md`](Linux_MacOS/README.md) for details.
-
-### `windows/validate_all_rules.ps1` - Windows
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\windows\validate_all_rules.ps1
-```
-
-See [`windows/README.md`](windows/README.md) for details.
+Windows users: run this script from a WSL terminal.
 
 ---
 
@@ -146,7 +128,7 @@ Output: `scripts/conversions/<label>/raw/` and `scripts/conversions/<label>/one-
 | `Lucene_Sysmon` | `lucene` | `sysmon` | elasticsearch, sysmon | Elasticsearch raw |
 | `Elastic_EQL` | `eql` | `sysmon` | elasticsearch, sysmon | Elastic Security EQL |
 | `Elastic_ESQL` | `esql` | `sysmon` | elasticsearch, sysmon | Elastic Security 8.11+ |
-| `Elastic_ElastAlert` | `elastalert` | `windows-logsources` | elasticsearch, windows | ElastAlert 2 |
+| `Elastic_ElastAlert` | `elastalert` | `sysmon` | elasticsearch, sysmon | ElastAlert 2 |
 | `Splunk_Windows` | `splunk` | `splunk_windows` | splunk | Splunk Enterprise Security |
 | `Splunk_SPL2` | `splunk_spl2` | `splunk_windows` | splunk | Splunk ES 7+ / SPL2 |
 | `RSA_NetWitness` | `net_witness` | `sysmon` | netwitness, sysmon | Windows rules only |

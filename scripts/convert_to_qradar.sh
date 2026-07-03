@@ -29,7 +29,7 @@
 #       Show this help
 #
 # Output (Lucene fallback):  scripts/conversions/QRadar_Lucene_Fallback/
-# Output (AQL, if sigma 3.x): scripts/conversions/QRadar_AQL/
+# Output (AQL, if sigma 2.x): scripts/conversions/QRadar_AQL/
 # ============================================================
 
 set -euo pipefail
@@ -100,6 +100,14 @@ print_aql_notice() {
 
 EOF
 }
+
+# ─────────────────────────────────────────────
+# Pre-flight: install sigma-cli and required plugins
+# ─────────────────────────────────────────────
+# shellcheck source=lib/prerequisites.sh
+source "$SCRIPT_DIR/lib/prerequisites.sh"
+# opensearch + sysmon needed for the Lucene fallback (used when sigma 3.x active)
+ensure_prerequisites opensearch sysmon
 
 if [[ "$UPGRADE_ONLY" -eq 1 ]]; then
   SIGMA_VER=$(sigma version 2>/dev/null | awk '{print $1}')

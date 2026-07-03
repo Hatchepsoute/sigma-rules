@@ -5,6 +5,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$ROOT_DIR"
 
+# Pre-flight: install sigma-cli if missing (no SIEM plugins needed for validation)
+# shellcheck source=lib/prerequisites.sh
+source "$SCRIPT_DIR/lib/prerequisites.sh"
+ensure_prerequisites
+
 echo "[*] Sigma syntax validation"
 
 # Collect all yml/yaml under any rules/** (including rules/web, rules/host, etc.)

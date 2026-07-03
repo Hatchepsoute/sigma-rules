@@ -86,6 +86,43 @@ Each detection pack follows a **consistent and reusable structure**:
 
 ---
 
+## Getting started
+
+### 1. Install sigma-cli and the plugins
+
+```bash
+pip install pipx && pipx ensurepath   # restart terminal after this
+pipx install sigma-cli
+sigma plugin install opensearch elasticsearch splunk sysmon windows kusto netwitness
+```
+
+Full step-by-step guide: [INSTALLATION.md](INSTALLATION.md)
+
+### 2. Validate all rules
+
+```bash
+bash scripts/validate_all_rules.sh
+```
+
+### 3. Convert to your SIEM
+
+```bash
+# All SIEM targets at once (OpenSearch, Splunk, Sentinel, Defender XDR, NetWitness, ...)
+bash scripts/convert_all_rules.sh
+
+# Wazuh only
+bash scripts/convert_to_wazuh.sh
+
+# QRadar (Lucene fallback with sigma 3.x, native AQL with sigma 2.x)
+bash scripts/convert_to_qradar.sh
+```
+
+Output: `scripts/conversions/<target>/raw/` — one `.txt` file per rule.
+
+Full scripts documentation: [scripts/README.md](scripts/README.md)
+
+---
+
 ## How to use this repository
 
 - Browse CVE or campaign folders

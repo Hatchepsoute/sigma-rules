@@ -79,6 +79,13 @@ done
 OUTROOT="$SCRIPT_DIR/conversions/Wazuh"
 
 # ─────────────────────────────────────────────
+# Pre-flight: install sigma-cli and required plugins
+# ─────────────────────────────────────────────
+# shellcheck source=lib/prerequisites.sh
+source "$SCRIPT_DIR/lib/prerequisites.sh"
+ensure_prerequisites opensearch sysmon windows
+
+# ─────────────────────────────────────────────
 # Collect rules
 # ─────────────────────────────────────────────
 if [[ -n "$INPUT_PATH" ]]; then

@@ -41,6 +41,13 @@ done
 mkdir -p "$OUTROOT"
 
 # ------------------------------------------------------------
+# Pre-flight: install sigma-cli and all required plugins
+# ------------------------------------------------------------
+# shellcheck source=lib/prerequisites.sh
+source "$SCRIPT_DIR/lib/prerequisites.sh"
+ensure_prerequisites opensearch elasticsearch splunk sysmon windows kusto netwitness
+
+# ------------------------------------------------------------
 # Validate
 # ------------------------------------------------------------
 echo "[*] Sigma syntax validation"
@@ -83,7 +90,7 @@ conversions/<label>/one-line/  <- single-line variant (only if your SIEM require
 | `Lucene_Sysmon/` | Elasticsearch | Lucene | sysmon (ECS) | sigma 3.x |
 | `Elastic_EQL/` | Elastic Security | EQL | sysmon | sigma 3.x |
 | `Elastic_ESQL/` | Elastic Security 8.11+ | ES\|QL | sysmon | sigma 3.x |
-| `Elastic_ElastAlert/` | ElastAlert 2 | Lucene | windows-logsources | sigma 3.x |
+| `Elastic_ElastAlert/` | ElastAlert 2 | Lucene | sysmon | sigma 3.x |
 | `Splunk_Windows/` | Splunk Enterprise Security | SPL | splunk_windows | sigma 3.x |
 | `Splunk_SPL2/` | Splunk ES 7+ / SPL2 | SPL2 | splunk_windows | sigma 3.x |
 | `RSA_NetWitness/` | RSA NetWitness | NetWitness | sysmon | plugin netwitness |
@@ -205,7 +212,7 @@ convert_per_rule "OpenSearch_ECS"     "opensearch_lucene"   "sysmon"            
 convert_per_rule "Lucene_Sysmon"      "lucene"              "sysmon"             "yes" "all"
 convert_per_rule "Elastic_EQL"        "eql"                 "sysmon"             "no"  "all"
 convert_per_rule "Elastic_ESQL"       "esql"                "sysmon"             "no"  "all"
-convert_per_rule "Elastic_ElastAlert" "elastalert"          "windows-logsources" "no"  "all"
+convert_per_rule "Elastic_ElastAlert" "elastalert"          "sysmon"             "no"  "all"
 
 # --- Splunk ---
 convert_per_rule "Splunk_Windows"     "splunk"              "splunk_windows"     "no"  "all"
