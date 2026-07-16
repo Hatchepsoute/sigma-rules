@@ -12,9 +12,7 @@ references:
 author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026-06-19
 modified: 2026-06-20
-tags:
-    - attack.defense-evasion
-    - attack.t1562.001
+tags: []
 logsource:
     product: windows
     category: process_access
@@ -107,9 +105,7 @@ references:
 author: ASSIONGBON Adama SOC & CTI Consultant | https://www.linkedin.com/in/adama-assiongbon-9029893a/
 date: 2026-06-19
 modified: 2026-06-21
-tags:
-    - attack.defense-evasion
-    - attack.t1562.001
+tags: []
 correlation:
     type: value_count
     rules:

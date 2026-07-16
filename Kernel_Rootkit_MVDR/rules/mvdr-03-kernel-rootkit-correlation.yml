@@ -16,7 +16,6 @@ related:
     type: similar
 tags:
   - attack.persistence
-  - attack.defense-evasion
   - attack.t1014
   - attack.t1547
 logsource:

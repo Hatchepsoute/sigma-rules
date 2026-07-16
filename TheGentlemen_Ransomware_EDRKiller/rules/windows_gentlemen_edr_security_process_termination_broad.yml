@@ -21,9 +21,7 @@ related:
 
 
 tags:
-  - attack.defense-evasion
   - attack.impact
-  - attack.t1562.001
   - attack.t1489
 
 logsource:

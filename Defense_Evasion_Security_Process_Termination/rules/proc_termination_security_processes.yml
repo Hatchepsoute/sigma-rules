@@ -12,9 +12,7 @@ related:
     type: similar
   - id: 7f1a3c2e-0c9f-4e3a-9f45-1c4b2a9d6e3f
     type: similar
-tags:
-  - attack.defense-evasion
-  - attack.t1562.001
+tags: []
 logsource:
   category: process_termination
   product: windows

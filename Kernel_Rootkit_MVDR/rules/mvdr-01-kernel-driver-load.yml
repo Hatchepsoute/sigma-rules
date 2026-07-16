@@ -16,7 +16,6 @@ related:
   - id: 7998e5ca-ed58-11f0-b925-83f625c1804d
     type: similar
 tags:
-  - attack.defense-evasion
   - attack.t1014
   - attack.t1068
 logsource:

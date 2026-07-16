@@ -6,6 +6,18 @@ Detailed changes for individual detection packs are documented in each pack’s 
 
 Versioning follows **Semantic Versioning (MAJOR.MINOR.PATCH)**.
 
+## Unreleased – 2026-07-16
+
+### Added
+- Added the `Patch_Tuesday_July_2026` cross-pack index with English and French documentation.
+- Added Microsoft July 2026 detection families for CVE-2026-56155 (AD FS), CVE-2026-56164 (SharePoint), CVE-2026-50661 (BitLocker), CVE-2026-57092 (Hyper-V VMSwitch), CVE-2026-50518 (DHCP Server), CVE-2026-55010 (Minecraft Bedrock), CVE-2026-50663 (Age of Empires II: Definitive Edition), and CVE-2026-58644 (SharePoint deserialization RCE).
+- Added bilingual SOC documentation, decision tables, diagrams, and harmless validation labs for the new families.
+
+### Changed
+- Standardized the July 2026 packs on a one-STRICT-rule default, with explicit telemetry limitations and no invented network exploit signatures.
+- Removed ATT&CK tags rejected by the installed sigma-cli taxonomy from 37 legacy rule files; detection logic was unchanged.
+
+
 ## v1.0.3 – 2026-01-27
 - Initial release
 - STRICT rule for CVE-2026-24061 exploitation

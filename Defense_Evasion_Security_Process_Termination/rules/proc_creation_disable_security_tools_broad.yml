@@ -12,10 +12,7 @@ related:
     type: similar
   - id: 5d6b7a2c-3f2e-4b91-9a7e-8f9c1b2a7d11
     type: similar
-tags:
-  - attack.defense-evasion
-  - attack.t1562
-  - attack.t1562.001
+tags: []
 logsource:
   category: process_creation
   product: windows
