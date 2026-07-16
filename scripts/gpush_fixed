@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+REMOTE="origin"
+DEFAULT_USER="Hatchepsoute"
+MSG="${*:-chore: update repo content}"
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo "[!] Not a git repository"; exit 1; }
+BRANCH="$(git branch --show-current)"
+[ -n "$BRANCH" ] || { echo "[!] Detached HEAD; checkout a branch before running gpush."; exit 1; }
+echo "[*] Working on branch: $BRANCH"
+
+git add .
+if git diff --cached --quiet; then
+    echo "[i] Nothing to commit, skipping to sync..."
+else
+    echo "[*] Committing: $MSG"
+    git commit -m "$MSG" || { echo "[!] Commit failed."; exit 1; }
+fi
+
+echo "[*] Fetching $REMOTE..."
+git fetch "$REMOTE" --prune || { echo "[!] Fetch failed."; exit 1; }
+
+if git show-ref --verify --quiet "refs/remotes/$REMOTE/$BRANCH"; then
+    echo "[*] Rebasing on $REMOTE/$BRANCH..."
+    git rebase "$REMOTE/$BRANCH" || { echo "[!] Rebase failed. Resolve conflicts, then rerun gpush."; exit 1; }
+    echo "[*] Pushing to $REMOTE/$BRANCH..."
+    git push -u "$REMOTE" "$BRANCH" --force-with-lease || { echo "[!] Push failed."; exit 1; }
+else
+    BASE_BRANCH="$(git symbolic-ref --quiet --short "refs/remotes/$REMOTE/HEAD" 2>/dev/null | sed "s#^$REMOTE/##")"
+    BASE_BRANCH="${BASE_BRANCH:-main}"
+    if git show-ref --verify --quiet "refs/remotes/$REMOTE/$BASE_BRANCH"; then
+        echo "[i] Remote branch $BRANCH is new; rebasing on $REMOTE/$BASE_BRANCH..."
+        git rebase "$REMOTE/$BASE_BRANCH" || { echo "[!] Rebase failed. Resolve conflicts, then rerun gpush."; exit 1; }
+    else
+        echo "[i] Remote branch $BRANCH is new and no $REMOTE/$BASE_BRANCH was found; skipping rebase."
+    fi
+    echo "[*] First push to $REMOTE/$BRANCH..."
+    git push -u "$REMOTE" "HEAD:$BRANCH" || { echo "[!] Initial push failed."; exit 1; }
+fi
+
+git config --global credential.username "$DEFAULT_USER"
+echo "[✓] Done for project: $(basename "$(git rev-parse --show-toplevel)")"
