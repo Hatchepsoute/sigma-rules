@@ -6,6 +6,13 @@ Detailed changes for individual detection packs are documented in each pack’s 
 
 Versioning follows **Semantic Versioning (MAJOR.MINOR.PATCH)**.
 
+## Unreleased – 2026-07-19
+
+### Added
+- Added the `CVE-2026-63030_wordpress_wp2shell_RCE` detection pack for the WordPress REST API batch route confusion (CVE-2026-63030) chained with the `WP_Query` `author__not_in` SQL injection (CVE-2026-60137), pre-authentication RCE.
+- 3 STRICT Sigma rules: web-layer (batch route confusion + SQLi fingerprint), Linux process_creation, and Windows process_creation confirmation signals.
+- Bilingual SOC documentation, decision tables, playbook, Mermaid diagrams, and a red-teamed lab (`labs/wp2shell_batch_route_confusion/`) with 5 blind spots found and fixed directly in the web rule, verified programmatically against every PoC scenario.
+
 ## Unreleased – 2026-07-16
 
 ### Added
