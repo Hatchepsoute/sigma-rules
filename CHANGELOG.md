@@ -6,6 +6,13 @@ Detailed changes for individual detection packs are documented in each pack’s 
 
 Versioning follows **Semantic Versioning (MAJOR.MINOR.PATCH)**.
 
+## Unreleased – 2026-08-08
+
+### Added
+- Added the `CVE-2026-64638_wordpress_xss2shell_RCE` detection pack for WordPress XSS2Shell, a pre-authentication reflected XSS on the login screen (`log` field of wp-login.php) with a demonstrated escalation chain (DOM clobbering, SOME, Application Password theft, malicious plugin upload) to remote code execution.
+- 3 STRICT Sigma rules: web-layer login XSS injection (the CVE's actual root cause), and Linux/Windows process_creation confirmation signals for the final webshell-execution stage, mirroring the `CVE-2026-63030_wordpress_wp2shell_RCE` pattern.
+- Bilingual SOC documentation, decision tables, Mermaid diagrams, playbook, and a red-teamed lab (`labs/xss2shell_login_dom_clobbering/`). Two blind spots found and fixed directly in the web rule across two red team passes (regex anchored to the start of the `log` field; `multipart/form-data` encoding entirely unmatched by the urlencoded-only pattern), each verified by unit-testing the regex against reference, evasion, and benign payloads before committing to the rule. One structural limitation of the process-creation logsource (in-process PHP webshells that never spawn a child process) documented as a residual, non-fixable gap rather than worked around.
+
 ## Unreleased – 2026-07-19
 
 ### Added
