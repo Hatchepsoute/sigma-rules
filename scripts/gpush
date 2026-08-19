@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REMOTE="origin"
+MSG="${*:-chore: update repo content}"
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo "[!] Not a git repository"; exit 1; }
+BRANCH="$(git branch --show-current)"
+[ -n "$BRANCH" ] || { echo "[!] Detached HEAD; checkout a branch first."; exit 1; }
+
+DEFAULT_BRANCH="$(
+  git remote show "$REMOTE" 2>/dev/null |
+  sed -n 's/^  HEAD branch: //p' |
+  head -n 1
+)"
+TARGET_BRANCH="${GPUSH_TARGET:-${DEFAULT_BRANCH:-main}}"
+
+echo "[*] Working on branch: $BRANCH"
+git add .
+if ! git diff --cached --quiet; then
+  git commit -m "$MSG"
+fi
+
+echo "[*] Fetching from $REMOTE..."
+git fetch "$REMOTE" --prune
+if git show-ref --verify --quiet "refs/remotes/$REMOTE/$TARGET_BRANCH"; then
+  echo "[i] Rebasing on $REMOTE/$TARGET_BRANCH..."
+  git rebase "$REMOTE/$TARGET_BRANCH"
+fi
+
+echo "[*] Pushing HEAD to $REMOTE/$TARGET_BRANCH..."
+git push "$REMOTE" "HEAD:$TARGET_BRANCH"
+echo "[✓] Done"
