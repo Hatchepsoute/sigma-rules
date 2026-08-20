@@ -1,13 +1,9 @@
 title: Possible Sliver implant deployment on FortiWeb or Linux host
 id: 5b8c3a2d-7f1e-4e32-b1d9-64f9c8a1e3f2
 status: experimental
-description: >
-  Detects Sliver implant deployment: system-updater or cups-lpd binary creation in hidden directories (FortiWeb campaign).
-custom:
-  description_fr: >
-    Détecte la création du binaire system-updater ou cups-lpd dans des répertoires cachés spécifiques
-    à la campagne FortiWeb Sliver, ou la création de fichiers dans des répertoires temporaires cachés
-    génériques. Correspond au pattern de déploiement d'artefact post-exploitation de la campagne.
+description: |
+  Detects Sliver implant deployment: system-updater or cups-lpd binary creation in hidden directories (FortiWeb campaign). SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détecte la création du binaire system-updater ou cups-lpd dans des répertoires cachés spécifiques à la campagne FortiWeb Sliver, ou la création de fichiers dans des répertoires temporaires cachés génériques. Correspond au pattern de déploiement d'artefact post-exploitation de la campagne. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a

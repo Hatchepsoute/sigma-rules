@@ -1,9 +1,9 @@
 title: Microsoft Office spawning LOLBin with download or obfuscation indicators
 id: a6f0558c-14a3-44e0-88f9-605044bb3ecc
 status: experimental
-description: High-confidence detection for Office spawning LOLBins with download-and-execute or obfuscation CLI. STRICT rule for SOC alerting.
-custom:
-  description_fr: "Détection haute confiance des applications Microsoft Office lançant des LOLBins avec des patterns CLI de téléchargement/exécution ou obfuscation (PowerShell -enc, IEX, FromBase64String). Règle STRICT pour les alertes SOC opérationnelles sur les chaînes d'exploitation Office."
+description: |
+  High-confidence detection for Office spawning LOLBins with download-and-execute or obfuscation CLI. STRICT rule for SOC alerting. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détection haute confiance des applications Microsoft Office lançant des LOLBins avec des patterns CLI de téléchargement/exécution ou obfuscation (PowerShell -enc, IEX, FromBase64String). Règle STRICT pour les alertes SOC opérationnelles sur les chaînes d'exploitation Office. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://attack.mitre.org/techniques/T1105/
   - https://attack.mitre.org/techniques/T1059/001/

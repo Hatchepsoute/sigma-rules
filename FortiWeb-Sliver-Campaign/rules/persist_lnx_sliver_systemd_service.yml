@@ -1,16 +1,9 @@
 title: Suspicious systemd service creation for Sliver persistence
 id: a9f2b4c1-8d3e-45f6-92a7-12b345c6d789
 status: experimental
-description: >
-  Detects systemd service file creation matching Sliver persistence pattern from FortiWeb campaign.
-custom:
-  description_fr: >
-    Détecte la création d'un fichier de service systemd correspondant au pattern de persistence
-    Sliver observé dans la campagne FortiWeb : description de service "Updater Service", ExecStart
-    pointant vers le binaire implanté, et Restart=on-failure pour la résilience. Le champ FileContent
-    n'est pas standard Sigma : il nécessite un pipeline d'ingestion avec logging du contenu de fichier.
-    ANGLE MORT : si FileContent n'est pas disponible, seule selection_filename_campaign déclenche
-    (noms système-updater/cups-lpd), pas selection_filename_systemd qui couvre tous les services.
+description: |
+  Detects systemd service file creation matching Sliver persistence pattern from FortiWeb campaign. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détecte la création d'un fichier de service systemd correspondant au pattern de persistence Sliver observé dans la campagne FortiWeb : description de service "Updater Service", ExecStart pointant vers le binaire implanté, et Restart=on-failure pour la résilience. Le champ FileContent n'est pas standard Sigma : il nécessite un pipeline d'ingestion avec logging du contenu de fichier. ANGLE MORT : si FileContent n'est pas disponible, seule selection_filename_campaign déclenche (noms système-updater/cups-lpd), pas selection_filename_systemd qui couvre tous les services. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://bishopfox.com/blog/sliver-command-and-control-framework
   - https://attack.mitre.org/techniques/T1543/002/

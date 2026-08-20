@@ -1,9 +1,9 @@
 title: Microsoft Office spawning LOLBin or script engine
 id: f94eb6ef-dccf-481b-92c8-8a6c844b8355
 status: experimental
-description: Broad detection for Office apps spawning LOLBins or script engines. Use for triage and hunting across Office-based exploitation chains.
-custom:
-  description_fr: "Détection large des applications Microsoft Office lançant des LOLBins communs ou des moteurs de script. Destinée au triage et au hunting. Comportement fréquemment observé dans les chaînes d'exploitation Office (documents malveillants, exécution de contenu externe), incluant plusieurs CVE Office."
+description: |
+  Broad detection for Office apps spawning LOLBins or script engines. Use for triage and hunting across Office-based exploitation chains. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détection large des applications Microsoft Office lançant des LOLBins communs ou des moteurs de script. Destinée au triage et au hunting. Comportement fréquemment observé dans les chaînes d'exploitation Office (documents malveillants, exécution de contenu externe), incluant plusieurs CVE Office. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://attack.mitre.org/techniques/T1204/002/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a

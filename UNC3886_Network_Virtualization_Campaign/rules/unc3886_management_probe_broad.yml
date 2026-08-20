@@ -1,13 +1,9 @@
 title: Suspicious management surface probing associated with UNC3886 - BROAD
 id: 20baa300-087b-43eb-adac-f1d01ae015e9
 status: experimental
-description: >
-  Detects suspicious external access to network appliance or virtualization management surfaces associated with UNC3886-style probing.
-  Variant 1 fires on appliance-specific URIs (VMware, Juniper, FortiGate, Cisco) regardless of user agent. Variant 2 fires on generic admin URIs when an automation user agent is present.
-custom:
-  description_fr: >
-    Détecte des accès externes suspects vers des surfaces d'administration d'appliances réseau ou de virtualisation, cohérents avec une phase de repérage de type UNC3886. Variante 1 : URIs spécifiques aux appliances (VMware, Juniper, FortiGate, Cisco) déclenchent sans condition sur le User-Agent. Variante 2 : URIs génériques nécessitent un UA d'automatisation.
-
+description: |
+  Detects suspicious external access to network appliance or virtualization management surfaces associated with UNC3886-style probing. Variant 1 fires on appliance-specific URIs (VMware, Juniper, FortiGate, Cisco) regardless of user agent. Variant 2 fires on generic admin URIs when an automation user agent is present. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détecte des accès externes suspects vers des surfaces d'administration d'appliances réseau ou de virtualisation, cohérents avec une phase de repérage de type UNC3886. Variante 1 : URIs spécifiques aux appliances (VMware, Juniper, FortiGate, Cisco) déclenchent sans condition sur le User-Agent. Variante 2 : URIs génériques nécessitent un UA d'automatisation. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://www.techradar.com/pro/security/singapore-says-its-four-largest-phone-companies-were-hit-by-chinese-hackers
   - https://www.cve.org/CVERecord?id=CVE-2023-20867

@@ -1,9 +1,9 @@
 title: Kernel driver load from unsigned source or suspicious path
 id: 7e2a6a12-9c6d-4c2a-8b2f-2e8bb6b2b6a1
 status: experimental
-description: >
-  Detects unsigned kernel driver load (Sysmon EID 6) or driver load from user-writable path,
-  or revoked/expired signature from a system path. Covers BYOVD and rootkit installation.
+description: |
+  Detects unsigned kernel driver load (Sysmon EID 6) or driver load from user-writable path, or revoked/expired signature from a system path. Covers BYOVD and rootkit installation. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  La règle signale un comportement potentiellement suspect. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
   - https://attack.mitre.org/techniques/T1014/

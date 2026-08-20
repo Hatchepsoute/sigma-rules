@@ -1,18 +1,9 @@
 title: Suspicious network listener on TCP 515 (LPD masquerade, non-CUPS)
 id: 8f3c2e91-7b6a-4e77-9cfa-2a1e9d4cbe12
 status: experimental
-description: >
-  Detects a non-CUPS process binding to TCP 515 (LPD), indicating microsocks masquerade (Sliver campaign).
-custom:
-  description_fr: >
-    Règle : détecte un processus non-CUPS qui établit une connexion ou écoute sur le port TCP 515
-    (LPD/Line Printer Daemon). Dans la campagne FortiWeb Sliver, les attaquants déploient microsocks
-    renommé en 'cups-lpd' pour se faire passer pour le daemon d'impression CUPS et exposer un tunnel
-    d'accès distant. ANGLE MORT : la logsource network_connection (Sysmon EventID 3) logue les
-    connexions initiées (Initiated=true) ET les connexions entrantes acceptées (Initiated=false).
-    Pour détecter un listener sur port 515, il faut chercher des événements où le processus LOCAL
-    reçoit des connexions (Initiated=false, DestinationPort=515) ou surveiller le port source
-    (SourcePort=515 pour les réponses). La règle couvre les deux scénarios via le filtre Image.
+description: |
+  Detects a non-CUPS process binding to TCP 515 (LPD), indicating microsocks masquerade (Sliver campaign). SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Règle : détecte un processus non-CUPS qui établit une connexion ou écoute sur le port TCP 515 (LPD/Line Printer Daemon). Dans la campagne FortiWeb Sliver, les attaquants déploient microsocks renommé en 'cups-lpd' pour se faire passer pour le daemon d'impression CUPS et exposer un tunnel d'accès distant. ANGLE MORT : la logsource network_connection (Sysmon EventID 3) logue les connexions initiées (Initiated=true) ET les connexions entrantes acceptées (Initiated=false). Pour détecter un listener sur port 515, il faut chercher des événements où le processus LOCAL reçoit des connexions (Initiated=false, DestinationPort=515) ou surveiller le port source (SourcePort=515 pour les réponses). La règle couvre les deux scénarios via le filtre Image. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://ctrlaltintel.com/threat%20research/FortiWeb-Sliver/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a

@@ -1,10 +1,9 @@
 title: Kernel or filesystem driver service creation via EventID 7045
 id: 6778f01a-ed58-11f0-a580-aff152632512
 status: experimental
-description: >
-  Detects creation of a kernel driver or file system driver service (EID 7045, Windows System
-  log). Covers rootkit persistence and BYOVD; adds file system driver type and user-writable
-  ImagePath to catch evasion variants missed by kernel driver type alone.
+description: |
+  Detects creation of a kernel driver or file system driver service (EID 7045, Windows System log). Covers rootkit persistence and BYOVD; adds file system driver type and user-writable ImagePath to catch evasion variants missed by kernel driver type alone. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  La règle signale un comportement potentiellement suspect. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
   - https://attack.mitre.org/techniques/T1547/

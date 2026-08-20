@@ -1,7 +1,9 @@
 title: Kernel rootkit high-confidence correlation (driver load + service creation)
 id: 7998e5ca-ed58-11f0-b925-83f625c1804d
 status: experimental
-description: "Correlates Sysmon kernel driver load and kernel service creation for high-confidence rootkit detection."
+description: |
+  Correlates Sysmon kernel driver load and kernel service creation for high-confidence rootkit detection. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  La règle signale un comportement potentiellement suspect. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://securelist.com/honeymyte-kernel-mode-rootkit/118590/
   - https://attack.mitre.org/techniques/T1014/

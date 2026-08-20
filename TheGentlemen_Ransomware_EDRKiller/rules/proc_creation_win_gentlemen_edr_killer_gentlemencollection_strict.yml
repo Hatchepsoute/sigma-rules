@@ -1,7 +1,9 @@
 title: TheGentlemen ransomware - GentleKiller EDR-killer staging and execution
 id: b7d3e8f2-4a16-4c9b-9d27-5e8a1f0c3b62
 status: experimental
-description: "Detects TheGentlemen EDR-killer execution via GentlemenCollection staging path or known killer hashes."
+description: |
+  Detects TheGentlemen EDR-killer execution via GentlemenCollection staging path or known killer hashes. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  La règle signale un comportement potentiellement suspect. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 related:
   - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
     type: derived

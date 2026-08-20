@@ -1,7 +1,9 @@
 title: TheGentlemen ransomware - GentleKiller security tool impersonation from suspicious path
 id: d5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091
 status: experimental
-description: "Detects security product impersonation from suspicious paths consistent with TheGentlemen EDR killer staging."
+description: |
+  Detects security product impersonation from suspicious paths consistent with TheGentlemen EDR killer staging. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  La règle signale un comportement potentiellement suspect. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 related:
   - id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
     type: similar

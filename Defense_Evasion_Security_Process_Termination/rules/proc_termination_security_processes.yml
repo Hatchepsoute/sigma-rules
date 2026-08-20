@@ -1,7 +1,9 @@
 title: Termination of known security or EDR process
 id: 5d6b7a2c-3f2e-4b91-9a7e-8f9c1b2a7d11
 status: experimental
-description: Detects termination of known EDR/AV/security processes, commonly used during ransomware pre-encryption or post-exploitation.
+description: |
+  Detects termination of known EDR/AV/security processes, commonly used during ransomware pre-encryption or post-exploitation. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  La règle signale un comportement potentiellement suspect. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://attack.mitre.org/techniques/T1562/001/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a

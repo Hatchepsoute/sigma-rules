@@ -1,13 +1,9 @@
 title: Appliance log tampering or suspicious shelling associated with UNC3886 - STRICT
 id: 920ac17c-7dea-49f1-aed3-a9a57fe1d89c
 status: experimental
-description: >
-  Detects appliance-side log tampering, persistence or shell spawning behavior associated with UNC3886-style post-exploitation.
-  High-risk children (python3, nc, socat) spawned from service daemons fire without a CLI requirement. Shell and download tools require a suspicious CLI indicator.
-custom:
-  description_fr: >
-    Détecte des signaux post-compromission à forte confiance sur une appliance ou un hôte Linux de type réseau : désactivation des logs, modification de la persistance, shelling ou démarrage d'un interpréteur Python depuis un processus de service. Python3, nc et socat déclenchent sans condition sur le CommandLine car leur spawn depuis un démon de service est intrinsèquement suspect (VirtualPie, REPTILE). Les shells et outils de download nécessitent un indicateur CLI.
-
+description: |
+  Detects appliance-side log tampering, persistence or shell spawning behavior associated with UNC3886-style post-exploitation. High-risk children (python3, nc, socat) spawned from service daemons fire without a CLI requirement. Shell and download tools require a suspicious CLI indicator. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détecte des signaux post-compromission à forte confiance sur une appliance ou un hôte Linux de type réseau : désactivation des logs, modification de la persistance, shelling ou démarrage d'un interpréteur Python depuis un processus de service. Python3, nc et socat déclenchent sans condition sur le CommandLine car leur spawn depuis un démon de service est intrinsèquement suspect (VirtualPie, REPTILE). Les shells et outils de download nécessitent un indicateur CLI. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://www.techradar.com/pro/security/singapore-says-its-four-largest-phone-companies-were-hit-by-chinese-hackers
   - https://www.cve.org/CVERecord?id=CVE-2023-20867

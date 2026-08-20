@@ -1,7 +1,9 @@
 title: Security tool disable attempt via command line utilities
 id: 3c2d9b7a-9f4d-4b8f-8c2a-6a7a2f7b1c4e
 status: experimental
-description: Detects attempts to disable/stop security tools via CLI utilities (taskkill, sc, net, PS, wmic, WMI).
+description: |
+  Detects attempts to disable/stop security tools via CLI utilities (taskkill, sc, net, PS, wmic, WMI). SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  La règle signale un comportement potentiellement suspect. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://attack.mitre.org/techniques/T1562/001/
 author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a

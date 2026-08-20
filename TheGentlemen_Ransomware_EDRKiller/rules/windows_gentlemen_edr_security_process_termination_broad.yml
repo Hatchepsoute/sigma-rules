@@ -1,7 +1,9 @@
 title: TheGentlemen ransomware - EDR killer security process or service termination
 id: c4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80
 status: experimental
-description: "Detects CLI-based termination or disabling of security processes and services used by TheGentlemen-style EDR killers."
+description: |
+  Detects CLI-based termination or disabling of security processes and services used by TheGentlemen-style EDR killers. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  La règle signale un comportement potentiellement suspect. Le SOC L1 doit vérifier la source, l’hôte affecté, l’utilisateur, les champs de processus ou de requête, la chronologie et les activités associées.
 references:
   - https://www.bleepingcomputer.com/news/security/gentlemen-ransomware-uses-multiple-edr-killers-to-disable-defenses/
   - https://www.welivesecurity.com/en/eset-research/killing-me-gently-inside-gentlemens-edr-killer-framework/
