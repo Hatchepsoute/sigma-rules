@@ -1,7 +1,9 @@
 title: AI agent cryptographic identity file access from suspicious context
 id: f59de936-0c3e-11f1-97ae-9704b79e784d
 status: experimental
-description: "Detects suspicious access to AI agent cryptographic identity files."
+description: |
+  Detects suspicious access to AI agent cryptographic identity files. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détecte un accès suspect aux fichiers d’identité cryptographique d’un agent IA. Cela peut exposer des clés privées ou des identifiants de signature, mais une opération autorisée peut aussi les lire. Le SOC L1 doit vérifier le processus, l’utilisateur, le chemin, le parent, la ligne de commande et toute utilisation ou sortie ultérieure.
 related:
   - id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
     type: similar

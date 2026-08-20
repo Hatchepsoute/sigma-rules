@@ -1,7 +1,9 @@
 title: Single process accessing multiple critical AI agent files
 id: a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d
 status: experimental
-description: "Detects one process accessing multiple critical AI agent files from suspicious context."
+description: |
+  Detects one process accessing multiple critical AI agent files from suspicious context. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détecte un même processus qui accède à plusieurs fichiers critiques d’un agent IA depuis un contexte suspect. Ce schéma peut indiquer une collecte par un voleur d’informations, mais une maintenance légitime peut accéder à plusieurs fichiers. Le SOC L1 doit vérifier le processus, l’utilisateur, les chemins, la chronologie et les activités d’archivage ou de sortie.
 related:
   - id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
     type: similar

@@ -1,7 +1,9 @@
 title: Suspicious access to AI agent configuration or memory files
 id: f1c4f294-0c3b-11f1-91a0-43ffe196cff2
 status: experimental
-description: "Detects suspicious access to AI agent configuration or memory files."
+description: |
+  Detects suspicious access to AI agent configuration or memory files. SOC L1 should verify the source, affected host, user, process or request fields, timing, and related activity.
+  Détecte un accès à des fichiers de configuration ou de mémoire d’un agent IA depuis un contexte suspect. Cela peut exposer des prompts, des jetons ou l’état de l’agent, mais l’accès seul ne prouve pas un vol. Le SOC L1 doit vérifier le processus, l’utilisateur, le chemin, le parent, la ligne de commande et les activités proches.
 related:
   - id: f59de936-0c3e-11f1-97ae-9704b79e784d
     type: similar
