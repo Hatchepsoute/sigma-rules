@@ -1,0 +1,65 @@
+title: Web Runtime Shell Execution Consistent With Jupiter X Core RCE - STRICT
+id: 5b9c1fd2-2e80-4f70-9a67-2f43c9b6d812
+status: experimental
+description: |
+  Detects a PHP or web server runtime spawning a shell with reconnaissance, download, interpreter, or public-PoC command markers. This is a high-confidence post-exploitation signal that can follow CVE-2025-0366, but it is not sufficient by itself to attribute the activity to that CVE. SOC L1 should correlate the process with web requests, the hosting account, the working directory, and file changes.
+  Détecte un moteur PHP ou un serveur web qui lance un shell avec des marqueurs de reconnaissance, de téléchargement, d'interpréteur ou du PoC public. Il s'agit d'un signal post-exploitation à haute confiance qui peut suivre CVE-2025-0366, mais il ne suffit pas à attribuer l'activité à cette CVE. Le SOC L1 doit corréler le processus avec les requêtes web, le compte d'hébergement, le répertoire courant et les modifications de fichiers.
+references:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-0366
+  - https://sec.stealthcopter.com/jupiterx-chaining-svg-to-rce/
+  - https://github.com/stealthcopter/wordpress-hacking/blob/main/reports/jupiterx-rce/jupiterx-core-rce.py
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-08-21
+logsource:
+  product: linux
+  category: process_creation
+detection:
+  selection_web_runtime:
+    ParentImage|endswith:
+      - '/php-fpm'
+      - '/php-fpm8.1'
+      - '/php-fpm8.2'
+      - '/php-fpm8.3'
+      - '/apache2'
+      - '/httpd'
+  selection_shell:
+    Image|endswith:
+      - '/sh'
+      - '/bash'
+      - '/dash'
+      - '/zsh'
+  selection_command:
+    CommandLine|contains:
+      - ' id'
+      - 'whoami'
+      - 'uname'
+      - 'ls -'
+      - 'curl '
+      - 'wget '
+      - 'python'
+      - 'perl'
+      - 'base64'
+      - 'stealthcopter_reflection_test'
+  condition: selection_web_runtime and selection_shell and selection_command
+fields:
+  - EventTime
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - CurrentDirectory
+  - ProcessId
+  - ParentProcessId
+  - IntegrityLevel
+falsepositives:
+  - An explicitly approved web application maintenance script that invokes a shell and is allowlisted by host and account
+  - Authorized penetration testing in a dedicated lab
+level: high
+tags:
+  - attack.execution
+  - attack.t1059
+  - attack.t1059.004
+  - attack.t1505.003
+  - cve.2025-0366

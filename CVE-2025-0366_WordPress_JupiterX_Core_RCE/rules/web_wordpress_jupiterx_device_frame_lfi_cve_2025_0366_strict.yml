@@ -1,0 +1,68 @@
+title: Jupiter X Core Elementor Device Frame Path Traversal - STRICT
+id: 7f0f8f0e-8c3f-4c5b-9c11-0b0e7f4c36a1
+status: experimental
+description: |
+  Detects a WordPress Elementor save request that uses the Jupiter X Core raven-video widget and a device_frame path traversal to a Jupiter X form upload. This combination is highly consistent with the CVE-2025-0366 SVG-to-local-file-inclusion chain, but the event alone does not prove code execution. SOC L1 should verify the authenticated account, source IP, plugin version, nearby SVG uploads, and subsequent page or process activity.
+  Détecte une requête de sauvegarde Elementor WordPress qui utilise le widget raven-video de Jupiter X Core et une traversée de chemin device_frame vers un téléversement de formulaire Jupiter X. Cette combinaison est fortement cohérente avec la chaîne SVG vers inclusion de fichier local de CVE-2025-0366, mais l'événement seul ne prouve pas l'exécution de code. Le SOC L1 doit vérifier le compte authentifié, l'adresse IP source, la version du plugin, les téléversements SVG proches et les activités ultérieures de page ou de processus.
+references:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-0366
+  - https://sec.stealthcopter.com/jupiterx-chaining-svg-to-rce/
+  - https://plugins.trac.wordpress.org/changeset/3231122/jupiterx-core/trunk/includes/extensions/raven/includes/modules/video/widgets/video.php
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-08-21
+logsource:
+  category: webserver
+  definition: WordPress or WAF request logs with URL-decoded POST bodies.
+detection:
+  selection_post:
+    HttpMethod: POST
+  selection_endpoint_uri:
+    Uri|contains: '/wp-admin/admin-ajax.php'
+  selection_endpoint_url:
+    Url|contains: '/wp-admin/admin-ajax.php'
+  selection_elementor_action:
+    RequestBody|contains: 'action=elementor_ajax'
+  selection_elementor_action_json:
+    RequestBody|contains: '"action":"elementor_ajax"'
+  selection_raven_video:
+    RequestBody|contains:
+      - 'widgetType":"raven-video'
+      - 'widgetType=raven-video'
+  selection_device_frame:
+    RequestBody|contains: 'device_frame'
+  selection_traversal:
+    RequestBody|contains:
+      - '../'
+      - '..%2f'
+      - '..%2F'
+      - '%2e%2e%2f'
+      - '%2e%2e%2F'
+  selection_jupiterx_upload_path:
+    RequestBody|contains:
+      - 'uploads/jupiterx/forms/'
+      - 'uploads%2Fjupiterx%2Fforms%2F'
+      - 'uploads%2fjupiterx%2fforms%2f'
+  condition: selection_post and (selection_endpoint_uri or selection_endpoint_url) and (selection_elementor_action or selection_elementor_action_json) and selection_raven_video and selection_device_frame and selection_traversal and selection_jupiterx_upload_path
+fields:
+  - EventTime
+  - SourceIp
+  - User
+  - HttpMethod
+  - Host
+  - Url
+  - Uri
+  - QueryString
+  - RequestBody
+  - UserAgent
+  - StatusCode
+  - RequestId
+falsepositives:
+  - Authorized Jupiter X or Elementor security testing on a staging site
+  - A legitimate administrator restoring a known-good Elementor layout containing a path-like value
+level: high
+tags:
+  - attack.initial-access
+  - attack.execution
+  - attack.t1190
+  - attack.t1505.003
+  - cve.2025-0366
