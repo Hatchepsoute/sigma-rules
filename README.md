@@ -31,8 +31,8 @@ This framework is designed to help SOC teams:
 This project avoids static IoCs (hashes, filenames, IPs) and instead relies on behavior-based detection using attack patterns and invariants, validated in real SOC environments.
 Detection logic follows a **layered, SOC-tested, and resilient approach**:
 
-- **BROAD rules** for visibility and threat hunting
-- **STRICT rules** for confirmation and high-confidence alerting
+- **STRICT rules** by default for high-confidence alerting
+- **BROAD rules** only when they provide distinct, actionable visibility or hunting value
 - **Behavioral detections** resilient to payload renaming
 - **Network invariants** for edge devices and appliances without EDR
 - **Correlation logic** to confirm and contextualize incidents
@@ -64,7 +64,7 @@ They provide:
   - Azure Monitor Agent vulnerabilities
   - Microsoft Copilot vulnerabilities
 
-CVE packs help SOC teams anticipate **weaponization phases** using BROAD and STRICT rules combined with SOC-ready artifacts (decision tables, playbooks, diagrams).
+CVE packs help SOC teams anticipate **weaponization phases** using the smallest justified set of STRICT, BROAD, and support rules with SOC-ready artifacts (decision tables, playbooks, diagrams).
 
 ---
 
@@ -126,8 +126,8 @@ Full scripts documentation: [scripts/README.md](scripts/README.md)
 ## How to use this repository
 
 - Browse CVE or campaign folders
-- Start with **BROAD rules** for visibility and hunting
-- Escalate to **STRICT rules** for confirmation
+- Start with **STRICT rules** by default
+- Use **BROAD rules** only when their distinct source or attack phase adds actionable coverage
 - Use decision tables and playbooks for SOC response and triage
 
 ---

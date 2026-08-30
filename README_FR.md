@@ -27,8 +27,8 @@ Ce framework est conçu pour aider les équipes SOC à :
 
 ## Philosophie de détection
 Les règles de ce projet sont comportementales par conception : elles ne reposent pas sur des IoC statiques, mais sur des invariants d’attaque et des comportements observables, validés en conditions SOC.:
-- **Règles BROAD** pour la visibilité et le threat hunting
-- **Règles STRICT** pour la confirmation et l’alerte à haute confiance
+- **Règles STRICT** par défaut pour les alertes à haute confiance
+- **Règles BROAD** uniquement lorsqu’elles apportent une visibilité ou un hunting distinct et exploitable
 - **Détections comportementales** résistantes au renommage des payloads
 - **Invariants réseau** pour les équipements périmétriques ou sans EDR
 - **Logiques de corrélation** pour confirmer et contextualiser les incidents
@@ -61,7 +61,7 @@ Ils offrent :
   - Vulnérabilités Azure Monitor Agent
   - Vulnérabilités Microsoft Copilot
 
-Les packs CVE permettent aux équipes SOC d’anticiper les **phases de weaponization**  en combinant règles BROAD et STRICT avec des artefacts SOC prêts à l’emploi  (tables de décision, playbooks, diagrammes).
+Les packs CVE permettent aux équipes SOC d’anticiper les **phases de weaponization** avec le plus petit ensemble de règles STRICT, BROAD et de support justifié par l’analyse  (tables de décision, playbooks, diagrammes).
 
 ---
 ## Intégration SOC & SOAR
@@ -121,8 +121,8 @@ Documentation complète des scripts : [scripts/README_FR.md](scripts/README_FR.m
 ## Comment utiliser ce dépôt
 
 - Parcourir les dossiers CVE ou campagnes
-- Commencer par les **règles BROAD** pour la visibilité et le hunting
-- Monter en **STRICT** pour la confirmation
+- Commencer par les **règles STRICT** par défaut
+- Utiliser les **règles BROAD** uniquement lorsqu’une source ou une phase d’attaque distincte apporte une couverture exploitable
 - Utiliser les tables de décision et playbooks pour la réponse SOC et le triage
 
 ---
