@@ -1,0 +1,110 @@
+title: WatchGuard Fireware EPM abnormal termination - STRICT
+id: 63f21db7-3a0e-4f8a-96d4-7b2e1c50a986
+status: experimental
+description: |
+  Alerts when a WatchGuard Fireware event or diagnostic record identifies the epm process and reports an abnormal termination, crash, segmentation fault, core dump, or crash-driven restart. On a Firebox with the deprecated Mobile Security feature enabled, this high-confidence signal is consistent with a failed CVE-2026-13086 exploitation attempt, but the event alone does not prove exploitation or successful code execution because an unrelated software fault can also crash the service. SOC L1 should confirm the Fireware version and Mobile Security state, collect the fault report, and correlate the event time with connections from Trusted interfaces to the EPM service.
+  Alerte lorsqu'un événement ou un enregistrement de diagnostic WatchGuard Fireware identifie le processus epm et signale une terminaison anormale, un crash, une erreur de segmentation, un core dump ou un redémarrage provoqué par un crash. Sur un Firebox avec la fonctionnalité obsolète Mobile Security activée, ce signal à haute confiance est compatible avec une tentative d'exploitation échouée de CVE-2026-13086, mais l'événement seul ne prouve ni l'exploitation ni une exécution de code réussie, car un défaut logiciel sans rapport peut également faire planter le service. Le SOC L1 doit confirmer la version de Fireware et l'état de Mobile Security, collecter le rapport de panne et corréler l'heure de l'événement avec les connexions provenant des interfaces Trusted vers le service EPM.
+references:
+  - https://psirt.watchguard.com/CVE-2026-13086
+  - https://www.cve.org/CVERecord?id=CVE-2026-13086
+  - https://www.watchguard.com/help/docs/help-center/en-us/Content/en-US/Fireware/logging/set_diagnostic_log_level_c.html
+  - https://www.watchguard.com/help/docs/help-center/en-us/Content/en-US/Fireware/logging/send_logs_to_syslog_c.html
+  - https://www.watchguard.com/help/docs/help-center/en-us/Content/en-US/Fireware/fsm/fault-reports_manage_c.html
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-08-29
+scope:
+  - WatchGuard Firebox appliances with the deprecated Mobile Security feature enabled
+logsource:
+  product: watchguard
+  category: system
+  definition: >
+    Requires WatchGuard Fireware event or diagnostic messages forwarded to the SIEM,
+    typically through syslog, Dimension or an equivalent collector. Normalize the
+    displayed Process, Priority and Message values or preserve the raw proc_id, msg
+    and message fields. Fireware diagnostic level Error is sufficient for serious
+    errors that terminate a service or process; Debug is neither required nor recommended.
+detection:
+  selection_component_process:
+    Process: 'epm'
+  selection_component_proc_id:
+    proc_id: 'epm'
+  selection_component_message:
+    Message|contains: 'epm'
+  selection_component_message_lower:
+    message|contains: 'epm'
+  selection_component_msg:
+    msg|contains: 'epm'
+  selection_crash_message:
+    Message|contains:
+      - 'abnormal termination'
+      - 'core dump'
+      - 'core dumped'
+      - 'crashed'
+      - 'exited on signal'
+      - 'killed by signal'
+      - 'program crash'
+      - 'restarting after crash'
+      - 'segfault'
+      - 'segmentation fault'
+      - 'signal 11'
+      - 'SIGSEGV'
+      - 'terminated unexpectedly'
+  selection_crash_message_lower:
+    message|contains:
+      - 'abnormal termination'
+      - 'core dump'
+      - 'core dumped'
+      - 'crashed'
+      - 'exited on signal'
+      - 'killed by signal'
+      - 'program crash'
+      - 'restarting after crash'
+      - 'segfault'
+      - 'segmentation fault'
+      - 'signal 11'
+      - 'SIGSEGV'
+      - 'terminated unexpectedly'
+  selection_crash_msg:
+    msg|contains:
+      - 'abnormal termination'
+      - 'core dump'
+      - 'core dumped'
+      - 'crashed'
+      - 'exited on signal'
+      - 'killed by signal'
+      - 'program crash'
+      - 'restarting after crash'
+      - 'segfault'
+      - 'segmentation fault'
+      - 'signal 11'
+      - 'SIGSEGV'
+      - 'terminated unexpectedly'
+  condition: 1 of selection_component_* and 1 of selection_crash_*
+fields:
+  - EventTime
+  - Hostname
+  - FireboxName
+  - SerialNumber
+  - Process
+  - proc_id
+  - Priority
+  - Message
+  - message
+  - msg
+  - msg_id
+  - SourceIp
+  - DestinationIp
+  - DestinationPort
+  - SourceInterface
+  - DestinationInterface
+falsepositives:
+  - An unrelated Fireware defect that crashes the epm process
+  - Authorized vulnerability research, fuzzing or resilience testing on an isolated Firebox
+  - A watchdog or maintenance event whose normalized message incorrectly labels a controlled epm restart as a crash
+level: high
+tags:
+  - attack.lateral-movement
+  - attack.t1210
+  - attack.impact
+  - attack.t1499.004
+  - cve.2026-13086

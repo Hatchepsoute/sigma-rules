@@ -1,0 +1,99 @@
+title: Citrix NetScaler Oversized SAML PrefixList Heap Overflow Attempt - STRICT
+id: f7f4b6e2-9cd8-4a87-b135-0f0ca8452001
+status: experimental
+description: |
+  Detects a POST request to an inbound NetScaler SAML endpoint where a SAML-aware parser exposes an exclusive-canonicalization PrefixList of at least 513 bytes. This high-confidence signal is consistent with a CVE-2026-8452 probe or exploitation attempt, but it does not prove memory corruption or compromise; authorized patch-state checks can also match. SOC L1 should verify the source, target virtual server, parsed PrefixList length, response, NetScaler build, and nearby nsppe crashes.
+  Détecte une requête POST vers un endpoint SAML entrant de NetScaler lorsqu'un analyseur compatible SAML expose un PrefixList de canonicalisation exclusive d'au moins 513 octets. Ce signal de haute confiance est cohérent avec une sonde ou une tentative d'exploitation de CVE-2026-8452, mais il ne prouve ni une corruption mémoire ni une compromission ; les contrôles autorisés de l'état des correctifs peuvent également correspondre. Le SOC L1 doit vérifier la source, le serveur virtuel ciblé, la longueur du PrefixList analysé, la réponse, la version de NetScaler et les crashs nsppe proches.
+references:
+  - https://support.citrix.com/external/article/CTX696604/netscaler-adc-and-netscaler-gateway-secu.html
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-8452
+  - https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-8452
+  - https://labs.watchtowr.com/youre-back-in-the-room-citrix-netscaler-pre-auth-rce-cve-2026-8452/
+  - https://bishopfox.com/blog/no-crash-required-verifying-the-citrix-netscaler-saml-patch-for-cve-2026-8452
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-08-27
+related:
+  - id: 3be8a1d0-62fd-4c73-9a54-8c6ef8452002
+    type: similar
+  - id: c1d92f44-75ab-49e6-a3c8-6b1df8452003
+    type: similar
+logsource:
+  category: webserver
+  definition: >
+    Requires NetScaler, WAF, reverse-proxy, or API-gateway telemetry that decodes and parses
+    the SAMLRequest or SAMLResponse before indexing. Raw form bodies containing only base64
+    data are insufficient unless the pipeline also populates a decoded body or PrefixList field.
+detection:
+  selection_saml_endpoint_cs_uri_stem:
+    cs-uri-stem|contains:
+      - '/saml/login'
+      - '/cgi/samlauth'
+  selection_saml_endpoint_uri:
+    Uri|contains:
+      - '/saml/login'
+      - '/cgi/samlauth'
+  selection_saml_endpoint_url:
+    Url|contains:
+      - '/saml/login'
+      - '/cgi/samlauth'
+  selection_saml_endpoint_url_path:
+    url.path|contains:
+      - '/saml/login'
+      - '/cgi/samlauth'
+  selection_http_post_cs_method:
+    cs-method:
+      - 'POST'
+      - 'post'
+  selection_http_post_method:
+    HttpMethod:
+      - 'POST'
+      - 'post'
+  selection_http_post_ecs_method:
+    http.request.method:
+      - 'POST'
+      - 'post'
+  selection_prefixlist_length:
+    SamlPrefixListLength|gte: 513
+  selection_prefixlist_length_alt:
+    saml.signature.prefix_list_length|gte: 513
+  selection_prefixlist_value:
+    SamlPrefixList|re: '(?s)^.{513,}$'
+  selection_prefixlist_value_alt:
+    saml.signature.prefix_list|re: '(?s)^.{513,}$'
+  selection_prefixlist_decoded_body_double_quote:
+    DecodedRequestBody|re: '(?is)<(?:[A-Za-z_][A-Za-z0-9_.-]*:)?InclusiveNamespaces\b[^>]*\bPrefixList\s*=\s*"[^"]{513,}"'
+  selection_prefixlist_decoded_body_single_quote:
+    DecodedRequestBody|re: "(?is)<(?:[A-Za-z_][A-Za-z0-9_.-]*:)?InclusiveNamespaces\\b[^>]*\\bPrefixList\\s*=\\s*'[^']{513,}'"
+  selection_prefixlist_ecs_body_double_quote:
+    http.request.body.decoded|re: '(?is)<(?:[A-Za-z_][A-Za-z0-9_.-]*:)?InclusiveNamespaces\b[^>]*\bPrefixList\s*=\s*"[^"]{513,}"'
+  selection_prefixlist_ecs_body_single_quote:
+    http.request.body.decoded|re: "(?is)<(?:[A-Za-z_][A-Za-z0-9_.-]*:)?InclusiveNamespaces\\b[^>]*\\bPrefixList\\s*=\\s*'[^']{513,}'"
+  condition: >
+    1 of selection_saml_endpoint_* and 1 of selection_http_post_* and 1 of selection_prefixlist_*
+fields:
+  - c-ip
+  - x-forwarded-for
+  - cs-host
+  - cs-method
+  - cs-uri-stem
+  - Uri
+  - Url
+  - url.path
+  - SamlPrefixListLength
+  - SamlPrefixList
+  - saml.signature.prefix_list_length
+  - saml.signature.prefix_list
+  - DecodedRequestBody
+  - http.request.body.decoded
+  - c-useragent
+  - sc-status
+falsepositives:
+  - Authorized CVE-2026-8452 patch-state verification, including the published 575-byte Bishop Fox safe probe
+  - Malformed or non-compliant SAML software emitting an excessive PrefixList, expected to be rare because patched NetScaler builds reject values above 512 bytes
+level: high
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.impact
+  - attack.t1499.004
+  - cve.2026-8452

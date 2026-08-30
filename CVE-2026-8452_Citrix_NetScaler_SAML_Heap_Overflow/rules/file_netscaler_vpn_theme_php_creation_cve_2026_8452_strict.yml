@@ -1,0 +1,94 @@
+title: Citrix NetScaler Unexpected PHP File in VPN Theme Directory - STRICT
+id: c1d92f44-75ab-49e6-a3c8-6b1df8452003
+status: experimental
+description: |
+  Detects creation or modification of a PHP-family file beneath the NetScaler /var/vpn/theme directory, including the public proof-of-concept path x.php. This high-confidence post-exploitation signal may indicate a webshell written after CVE-2026-8452, but the file event alone does not attribute the write or prove command execution; authorized customization can also match. SOC L1 should hash and preserve the file, identify the creating process and user, inspect nearby SAML requests and nsppe or pitboss events, and validate the NetScaler build and change ticket.
+  Détecte la création ou la modification d'un fichier de la famille PHP sous le répertoire NetScaler /var/vpn/theme, y compris le chemin x.php de la preuve de concept publique. Ce signal post-exploitation de haute confiance peut indiquer un webshell écrit après CVE-2026-8452, mais l'événement fichier seul n'attribue pas l'écriture et ne prouve pas une exécution de commande ; une personnalisation autorisée peut également correspondre. Le SOC L1 doit calculer le hash et préserver le fichier, identifier le processus et l'utilisateur créateurs, examiner les requêtes SAML proches ainsi que les événements nsppe ou pitboss, puis valider la version de NetScaler et le ticket de changement.
+references:
+  - https://support.citrix.com/external/article/CTX696604/netscaler-adc-and-netscaler-gateway-secu.html
+  - https://nvd.nist.gov/vuln/detail/CVE-2026-8452
+  - https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-8452
+  - https://labs.watchtowr.com/youre-back-in-the-room-citrix-netscaler-pre-auth-rce-cve-2026-8452/
+  - https://bishopfox.com/blog/no-crash-required-verifying-the-citrix-netscaler-saml-patch-for-cve-2026-8452
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-08-27
+related:
+  - id: f7f4b6e2-9cd8-4a87-b135-0f0ca8452001
+    type: similar
+  - id: 3be8a1d0-62fd-4c73-9a54-8c6ef8452002
+    type: similar
+logsource:
+  category: file_event
+  definition: >
+    File-integrity, audit, or EDR telemetry collected from a NetScaler appliance or from an
+    external integrity monitor. The pipeline must map the path to TargetFilename, FileName,
+    or file.path. NetScaler does not support a conventional third-party endpoint agent in every deployment.
+detection:
+  selection_theme_targetfilename:
+    TargetFilename|startswith: '/var/vpn/theme/'
+  selection_php_targetfilename:
+    TargetFilename|endswith:
+      - '.php'
+      - '.phtml'
+      - '.php3'
+      - '.php4'
+      - '.php5'
+      - '.php7'
+      - '.php8'
+      - '.phar'
+      - '.PHP'
+      - '.PHTML'
+  selection_theme_filename:
+    FileName|startswith: '/var/vpn/theme/'
+  selection_php_filename:
+    FileName|endswith:
+      - '.php'
+      - '.phtml'
+      - '.php3'
+      - '.php4'
+      - '.php5'
+      - '.php7'
+      - '.php8'
+      - '.phar'
+      - '.PHP'
+      - '.PHTML'
+  selection_theme_ecs:
+    file.path|startswith: '/var/vpn/theme/'
+  selection_php_ecs:
+    file.path|endswith:
+      - '.php'
+      - '.phtml'
+      - '.php3'
+      - '.php4'
+      - '.php5'
+      - '.php7'
+      - '.php8'
+      - '.phar'
+      - '.PHP'
+      - '.PHTML'
+  condition: >
+    (selection_theme_targetfilename and selection_php_targetfilename)
+    or (selection_theme_filename and selection_php_filename)
+    or (selection_theme_ecs and selection_php_ecs)
+fields:
+  - '@timestamp'
+  - Host
+  - Computer
+  - User
+  - Image
+  - ProcessName
+  - TargetFilename
+  - FileName
+  - file.path
+  - file.hash.sha256
+  - event.action
+falsepositives:
+  - Authorized custom theme deployment that deliberately adds server-side PHP files under /var/vpn/theme
+  - Vendor support, upgrade, or restoration activity during an approved change window
+level: high
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.persistence
+  - attack.t1505.003
+  - cve.2026-8452
