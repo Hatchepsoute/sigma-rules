@@ -1,0 +1,19 @@
+# Table de décision SOC Adobe Campaign Classic
+
+[English version](./DECISION_TABLE_ADOBE_CAMPAIGN_CLASSIC_EN.md)
+
+| Alerte et preuves | Sévérité | Confiance | Triage L1 | Condition d'escalade | Faux positif probable | Réponse recommandée | Preuves à collecter |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `nlserver web` lance un shell, un interpréteur, un binaire d'exécution par proxy ou un utilitaire d'exécution différée avec une commande encodée ou de téléchargement | Critique | Haute | Valider le chemin du parent et le module web ; collecter la commande, l'utilisateur, le hash, la destination et le build | Toujours escalader sauf si l'action exacte est couverte par un changement approuvé | Validation de sécurité autorisée ou extension personnalisée documentée | Isoler selon la politique, restreindre l'accès applicatif et préserver les preuves volatiles | Arbre de processus, lignes de commande, binaire, réseau EDR, `web.log`, `watchdog.log`, journaux proxy et WAF |
+| `nlserver web` lance un shell ou un interpréteur connu avec une commande locale simple | Haute | Moyenne à haute | Confirmer le module, l'objectif de la commande, le propriétaire de l'actif et la fenêtre de maintenance | Escalader si aucun usage exact approuvé n'existe ou si le build est vulnérable et exposé | Dépannage documenté ou extension web personnalisée | Confiner si l'activité est inexpliquée ; sinon créer une liste d'autorisation étroite fondée sur le chemin et la commande complète | Arbre de processus, ticket de changement, build Campaign, utilisateur, hash et signature de l'enfant |
+| `nlserver web` lance `curl`, `wget`, `certutil`, `bitsadmin`, `ftp`, `ssh`, `nc` ou `socat` avec un marqueur de transfert | Haute | Haute | Identifier la source et la destination, l'objet transféré, le protocole et l'intégrité du binaire enfant | Escalader pour toute destination externe non approuvée ou tout objet transféré inconnu | Intégration approuvée utilisant un client de transfert externe | Bloquer la destination si cela est autorisé ; isoler l'hôte si le transfert est inexpliqué | DNS, firewall, proxy, réseau EDR, ligne de commande, fichier téléchargé et hash |
+| Le parent est `nlserver`, mais sa ligne de commande indique `wfserver`, `mta` ou un autre module non web | Informationnel pour ces règles | Faible pour cette hypothèse de détection | Examiner selon la référence du module concerné | Escalader seulement si le comportement de l'enfant est malveillant indépendamment | Workflow Campaign ou traitement de livraison légitime | Ne pas élargir cette règle du module web à cet événement ; enquêter avec un cas d'usage séparé | Nom du module, propriétaire du workflow, historique d'exécution, preuves de commande et de fichier |
+| L'enfant est renommé hors d'un chemin temporaire ou le code s'exécute dans le processus sans événement enfant suspect | Aucune alerte attendue | Sans objet | Rechercher dans les événements applicatifs, mémoire EDR, crash, fichier et réseau | Escalader si des preuves malveillantes indépendantes existent | Sans objet | Améliorer la télémétrie ; ne pas affaiblir la règle STRICT en couvrant chaque processus enfant | Journaux Campaign, alertes mémoire, chargements de modules, écritures de fichiers, événements réseau |
+
+## Garde-fous de tuning
+
+- N'autoriser qu'un chemin enfant vérifié avec son motif de commande complet attendu et le processus de changement responsable.
+- Ne pas exclure globalement le compte de service Campaign.
+- Ne pas exclure toute l'activité pendant les fenêtres de maintenance.
+- Conserver la collecte de la ligne de commande parent, car le nom du module sépare le serveur web de l'exécution des workflows.
+- Réexaminer les listes d'autorisation après une mise à niveau Campaign ou une modification des extensions personnalisées.

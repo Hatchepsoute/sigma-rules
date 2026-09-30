@@ -1,0 +1,15 @@
+flowchart TD
+    A[Requête non fiable ou non autorisée] --> B[Adobe Campaign nlserver web]
+    B --> C{Processus enfant créé ?}
+    C -->|Non| D[Aucune alerte de règle processus]
+    C -->|Oui| E{Enfant ou commande suspecte ?}
+    E -->|Non| F[Conserver pour la référence]
+    E -->|Oui, Windows| G[Alerte STRICT Windows]
+    E -->|Oui, Linux| H[Alerte STRICT Linux]
+    G --> I[Valider l'arbre de processus et le build Campaign]
+    H --> I
+    I --> J{Activité exacte approuvée ?}
+    J -->|Oui| K[Documenter et ajuster précisément]
+    J -->|Non| L[Escalader et confiner]
+    L --> M[Collecter les preuves Campaign, proxy, EDR, DNS et firewall]
+    M --> N[Éradiquer, corriger et rétablir]

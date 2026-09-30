@@ -1,0 +1,56 @@
+title: WordPress Sudan Payment Receipt Executable File Write - Linux - STRICT
+id: a9b8c7d6-5e4f-4a3b-9c2d-f20450494002
+status: experimental
+description: |
+  Detects a web server or PHP runtime writing a PHP-executable file into the Sudan Payment Gateway receipt directory under WordPress uploads. This is a high-confidence post-upload signal consistent with successful CVE-2024-50494 exploitation, but it does not by itself prove that the file was requested or that commands ran. SOC L1 should preserve the file, verify its content and writer process, identify the matching upload request, and check for later HTTP access or child processes.
+  Détecte l’écriture par un serveur web ou un environnement d’exécution PHP d’un fichier exécutable par PHP dans le répertoire des reçus Sudan Payment Gateway sous les uploads WordPress. Il s’agit d’un signal post-upload de haute confiance cohérent avec une exploitation réussie de CVE-2024-50494, mais il ne prouve pas à lui seul que le fichier a été appelé ni que des commandes ont été exécutées. Le SOC L1 doit préserver le fichier, vérifier son contenu et le processus qui l’a écrit, identifier la requête d’upload correspondante et rechercher un accès HTTP ou des processus enfants ultérieurs.
+related:
+  - id: 5b373e3b-90ad-4dd2-8f8c-f20450494001
+    type: derived
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2024-50494
+  - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/wc-sudan-payment-gateway/sudan-payment-gateway-for-woocommerce-122-unauthenticated-arbitrary-file-upload
+  - https://patchstack.com/database/wordpress/plugin/wc-sudan-payment-gateway/vulnerability/wordpress-sudan-payment-gateway-for-woocommerce-plugin-1-2-2-arbitrary-file-upload-vulnerability
+  - https://github.com/AminOmer/WC-Sudan-Payment-Gateway/commit/0494703c98287bed55879bb44256b6bdf21a7768
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-09-25
+logsource:
+  product: linux
+  category: file_event
+  definition: >
+    Linux file creation telemetry from auditd, Sysmon for Linux, eBPF, or EDR. Required fields:
+    Image and TargetFilename; User, Computer, ProcessId, and CreationUtcTime are recommended.
+detection:
+  selection_writer:
+    Image|endswith:
+      - '/php'
+      - '/php-cgi'
+      - '/lsphp'
+      - '/apache2'
+      - '/httpd'
+      - '/nginx'
+  selection_php_fpm_writer:
+    Image|contains:
+      - '/php-fpm'
+  selection_target:
+    TargetFilename|re: '(?i)[/\\]wp-content[/\\]uploads[/\\]sudan-payment-receipts[/\\][^/\\]+\.(php[0-9]?|phtml|pht|phar|phps)$'
+  condition: (selection_writer or selection_php_fpm_writer) and selection_target
+fields:
+  - UtcTime
+  - EventID
+  - Computer
+  - User
+  - Image
+  - TargetFilename
+  - CreationUtcTime
+  - ProcessId
+falsepositives:
+  - Authorized security testing in a dedicated lab, confirm the test window and preserve the generated fixture
+  - None expected from normal plugin operation because legitimate payment receipts should use JPG, JPEG, PNG, or GIF extensions
+level: high
+tags:
+  - attack.persistence
+  - attack.t1505.003
+  - attack.initial-access
+  - attack.t1190
+  - cve.2024-50494

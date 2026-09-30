@@ -1,0 +1,96 @@
+title: Adobe Campaign web module suspicious child process on Windows - STRICT
+id: 4d0d0c3b-0a9d-49e5-b1a2-6f023f85d001
+status: experimental
+description: |
+  Detects the Adobe Campaign nlserver.exe web module starting a command shell, script interpreter, proxy-execution binary, delayed-execution utility, or an executable from a temporary directory on Windows. This high-confidence behavior may indicate code execution through a Campaign vulnerability or unauthorized server-side activity, but it does not identify a specific CVE by itself. SOC L1 should verify the complete parent and child command lines, the Campaign build, the initiating request, and whether an approved maintenance action explains the process.
+  Détecte le module web nlserver.exe d'Adobe Campaign lançant un interpréteur de commandes, un interpréteur de scripts, un binaire d'exécution par proxy, un utilitaire d'exécution différée ou un exécutable depuis un répertoire temporaire sous Windows. Ce comportement à haute confiance peut indiquer une exécution de code via une vulnérabilité de Campaign ou une activité non autorisée côté serveur, mais il n'identifie pas à lui seul une CVE précise. Le SOC L1 doit vérifier les lignes de commande complètes du parent et de l'enfant, le build de Campaign, la requête à l'origine de l'activité et si une opération de maintenance approuvée explique le processus.
+references:
+  - https://helpx.adobe.com/security/products/campaign/apsb26-142.html
+  - https://experienceleague.adobe.com/en/docs/campaign-classic/using/monitoring-campaign-classic/updating-adobe-campaign/introduction
+  - https://experienceleague.adobe.com/en/docs/campaign-classic/using/installing-campaign-classic/install-campaign-on-prem/installing-campaign-in-windows/installing-the-server
+  - https://attack.mitre.org/techniques/T1059/
+  - https://attack.mitre.org/techniques/T1218/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-09-25
+logsource:
+  product: windows
+  category: process_creation
+  definition: Requires Sysmon Event ID 1 or equivalent EDR process telemetry with Image, CommandLine, ParentImage, and ParentCommandLine.
+detection:
+  selection_parent_image:
+    ParentImage|endswith: '\nlserver.exe'
+  selection_parent_web_token:
+    ParentCommandLine|contains:
+      - ' web '
+      - ' web@'
+  selection_parent_web_terminal:
+    ParentCommandLine|endswith:
+      - ' web'
+      - ' web"'
+  selection_execution_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+      - '\msbuild.exe'
+      - '\installutil.exe'
+      - '\regasm.exe'
+      - '\regsvcs.exe'
+      - '\msiexec.exe'
+      - '\hh.exe'
+      - '\schtasks.exe'
+      - '\at.exe'
+      - '\sc.exe'
+  selection_transfer_child:
+    Image|endswith:
+      - '\certutil.exe'
+      - '\bitsadmin.exe'
+      - '\curl.exe'
+      - '\ftp.exe'
+      - '\ssh.exe'
+      - '\wmic.exe'
+  selection_encoded_or_obfuscated_command:
+    CommandLine|contains:
+      - ' -EncodedCommand '
+      - ' -enc '
+      - 'FromBase64String'
+  selection_transfer_command:
+    CommandLine|contains:
+      - 'DownloadString'
+      - 'Invoke-WebRequest'
+      - 'Invoke-RestMethod'
+      - 'http://'
+      - 'https://'
+  selection_temporary_child_path:
+    Image|contains:
+      - '\Windows\Temp\'
+      - '\AppData\Local\Temp\'
+      - '\Users\Public\'
+  condition: selection_parent_image and (selection_parent_web_token or selection_parent_web_terminal) and (selection_execution_child or selection_encoded_or_obfuscated_command or (selection_transfer_child and selection_transfer_command) or selection_temporary_child_path)
+fields:
+  - UtcTime
+  - EventID
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - CurrentDirectory
+  - IntegrityLevel
+  - ProcessId
+  - ParentProcessId
+falsepositives:
+  - Approved custom Adobe Campaign web extensions that intentionally launch a listed interpreter, scheduled task utility, or an executable from a temporary directory
+  - Documented troubleshooting or maintenance performed directly through the Campaign web module
+level: high
+tags:
+  - attack.execution
+  - attack.t1059
+  - attack.t1053
+  - attack.t1218

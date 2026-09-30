@@ -1,0 +1,100 @@
+title: Adobe Campaign web module suspicious child process on Linux - STRICT
+id: d8c7f4a1-2576-4c09-a5bd-2e931ff72642
+status: experimental
+description: |
+  Detects the Adobe Campaign nlserver web module starting a command shell, script interpreter, delayed-execution utility, or an executable from a temporary directory on Linux. This high-confidence behavior may indicate code execution through a Campaign vulnerability or unauthorized server-side activity, but it does not identify a specific CVE by itself. SOC L1 should verify the complete parent and child command lines, the Campaign build, the initiating request, and whether an approved maintenance action explains the process.
+  Détecte le module web nlserver d'Adobe Campaign lançant un interpréteur de commandes, un interpréteur de scripts, un utilitaire d'exécution différée ou un exécutable depuis un répertoire temporaire sous Linux. Ce comportement à haute confiance peut indiquer une exécution de code via une vulnérabilité de Campaign ou une activité non autorisée côté serveur, mais il n'identifie pas à lui seul une CVE précise. Le SOC L1 doit vérifier les lignes de commande complètes du parent et de l'enfant, le build de Campaign, la requête à l'origine de l'activité et si une opération de maintenance approuvée explique le processus.
+references:
+  - https://helpx.adobe.com/security/products/campaign/apsb26-142.html
+  - https://experienceleague.adobe.com/en/docs/campaign-classic/using/monitoring-campaign-classic/updating-adobe-campaign/introduction
+  - https://experienceleague.adobe.com/en/docs/campaign-classic/using/monitoring-campaign-classic/production-procedures/log-files
+  - https://attack.mitre.org/techniques/T1059/
+  - https://attack.mitre.org/techniques/T1105/
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-09-25
+logsource:
+  product: linux
+  category: process_creation
+  definition: Requires auditd, eBPF, Sysmon for Linux, or equivalent EDR process telemetry with Image, CommandLine, ParentImage, and ParentCommandLine.
+detection:
+  selection_parent_image:
+    ParentImage|endswith: '/nlserver'
+  selection_parent_web_token:
+    ParentCommandLine|contains:
+      - ' web '
+      - ' web@'
+  selection_parent_web_terminal:
+    ParentCommandLine|endswith: ' web'
+  selection_execution_child:
+    Image|endswith:
+      - '/sh'
+      - '/bash'
+      - '/dash'
+      - '/ksh'
+      - '/zsh'
+      - '/python'
+      - '/python3'
+      - '/perl'
+      - '/ruby'
+      - '/php'
+      - '/php-cgi'
+      - '/node'
+      - '/nodejs'
+      - '/lua'
+      - '/awk'
+      - '/find'
+      - '/env'
+      - '/systemd-run'
+      - '/at'
+      - '/crontab'
+      - '/nohup'
+      - '/setsid'
+  selection_transfer_child:
+    Image|endswith:
+      - '/curl'
+      - '/wget'
+      - '/nc'
+      - '/ncat'
+      - '/socat'
+      - '/ssh'
+      - '/busybox'
+  selection_encoded_or_obfuscated_command:
+    CommandLine|contains:
+      - '/dev/tcp/'
+      - 'base64 -d'
+      - 'base64 --decode'
+      - 'chmod +x'
+  selection_transfer_command:
+    CommandLine|contains:
+      - 'curl http'
+      - 'wget http'
+      - 'http://'
+      - 'https://'
+  selection_temporary_child_path:
+    Image|contains:
+      - '/tmp/'
+      - '/var/tmp/'
+      - '/dev/shm/'
+      - '/run/user/'
+  condition: selection_parent_image and (selection_parent_web_token or selection_parent_web_terminal) and (selection_execution_child or selection_encoded_or_obfuscated_command or (selection_transfer_child and selection_transfer_command) or selection_temporary_child_path)
+fields:
+  - UtcTime
+  - Computer
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+  - ParentCommandLine
+  - CurrentDirectory
+  - ProcessId
+  - ParentProcessId
+falsepositives:
+  - Approved custom Adobe Campaign web extensions that intentionally launch a listed interpreter, delayed-execution utility, or an executable from a temporary directory
+  - Documented troubleshooting or maintenance performed directly through the Campaign web module
+level: high
+tags:
+  - attack.execution
+  - attack.t1059
+  - attack.t1053
+  - attack.command-and-control
+  - attack.t1105

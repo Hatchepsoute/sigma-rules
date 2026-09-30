@@ -1,0 +1,67 @@
+title: WordPress Sudan Payment Gateway Executable Receipt Upload Attempt - STRICT
+id: 5b373e3b-90ad-4dd2-8f8c-f20450494001
+status: experimental
+description: |
+  Detects a POST request to the WordPress AJAX handler where the Sudan Payment Gateway receipt action carries a multipart file with a PHP-executable extension. This high-confidence signal is consistent with an attempt to exploit CVE-2024-50494, but the request alone does not prove that the file was written or executed. SOC L1 should verify the response status, vulnerable plugin version, source IP, full filename, and a related file creation under the Sudan receipt upload directory.
+  Détecte une requête POST vers le gestionnaire AJAX de WordPress dans laquelle l’action de reçu de Sudan Payment Gateway transporte un fichier multipart avec une extension exécutable par PHP. Ce signal de haute confiance est cohérent avec une tentative d’exploitation de CVE-2024-50494, mais la requête seule ne prouve pas que le fichier a été écrit ou exécuté. Le SOC L1 doit vérifier le statut de réponse, la version vulnérable du plugin, l’adresse IP source, le nom complet du fichier et une création de fichier associée dans le répertoire d’upload des reçus Sudan.
+related:
+  - id: a9b8c7d6-5e4f-4a3b-9c2d-f20450494002
+    type: derived
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2024-50494
+  - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/wc-sudan-payment-gateway/sudan-payment-gateway-for-woocommerce-122-unauthenticated-arbitrary-file-upload
+  - https://patchstack.com/database/wordpress/plugin/wc-sudan-payment-gateway/vulnerability/wordpress-sudan-payment-gateway-for-woocommerce-plugin-1-2-2-arbitrary-file-upload-vulnerability
+  - https://github.com/AminOmer/WC-Sudan-Payment-Gateway/commit/0494703c98287bed55879bb44256b6bdf21a7768
+author: Adama ASSIONGBON (SOC & CTI Consultant), https://linkedin.com/in/adama-assiongbon-9029893a
+date: 2026-09-25
+logsource:
+  category: webserver
+  definition: >
+    Web server, reverse proxy, or WAF logs with the full multipart POST body. Required fields:
+    HttpMethod, UriPath, RequestBody, SrcIp, StatusCode, UserAgent, and RequestId. This rule
+    cannot inspect a filename when the body is disabled, parsed into an unmapped field, or truncated.
+detection:
+  selection_method:
+    HttpMethod: POST
+  selection_endpoint:
+    UriPath|endswith: '/wp-admin/admin-ajax.php'
+  selection_action:
+    RequestBody|contains:
+      - 'invoice_response'
+  selection_action_field:
+    RequestBody|contains:
+      - 'name="action"'
+      - "name='action'"
+      - 'name=action'
+  selection_file_field:
+    RequestBody|contains:
+      - 'name="file"'
+      - "name='file'"
+      - 'name=file'
+  selection_executable_filename:
+    RequestBody|re: '(?i)filename\s*=\s*["'']?[^"'';\r\n]*\.(php[0-9]?|phtml|pht|phar|phps)(?:["'';\r\n]|$)'
+  condition: all of selection_*
+fields:
+  - EventTime
+  - SrcIp
+  - SourceIp
+  - ClientIP
+  - HttpMethod
+  - Host
+  - UriPath
+  - Url
+  - RequestBody
+  - ContentType
+  - StatusCode
+  - UserAgent
+  - RequestId
+falsepositives:
+  - Authorized security testing against a dedicated lab or staging site, confirm the source IP and change record
+  - A deliberately uploaded PHP-named test fixture through the vulnerable receipt action, which should never be expected in normal checkout traffic
+level: high
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.persistence
+  - attack.t1505.003
+  - cve.2024-50494

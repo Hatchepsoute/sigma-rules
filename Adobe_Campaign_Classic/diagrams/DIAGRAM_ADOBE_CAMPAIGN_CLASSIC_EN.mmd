@@ -1,0 +1,16 @@
+flowchart TD
+    A[Untrusted or unauthorized request] --> B[Adobe Campaign nlserver web]
+    B --> C{Child process created?}
+    C -->|No| D[No process-rule alert]
+    C -->|Yes| E{Suspicious child or command?}
+    E -->|No| F[Retain for baseline]
+    E -->|Yes, Windows| G[Windows STRICT alert]
+    E -->|Yes, Linux| H[Linux STRICT alert]
+    G --> I[Validate process tree and Campaign build]
+    H --> I
+    I --> J{Approved exact activity?}
+    J -->|Yes| K[Document and tune narrowly]
+    J -->|No| L[Escalate and contain]
+    L --> M[Collect Campaign, proxy, EDR, DNS, and firewall evidence]
+    M --> N[Eradicate, patch, and recover]
+
