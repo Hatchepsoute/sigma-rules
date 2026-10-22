@@ -16,6 +16,16 @@ This repository provides behavior-based detections for CVE exploitation, attack 
 
 A pack does not need both BROAD and STRICT rules. One accurate STRICT rule is preferred to a noisy BROAD rule.
 
+## Featured critical detections
+
+| Vulnerability | Product | Coverage | Pack | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| CVE-2026-109618 and CVE-2026-109619 | PHP | Multipart upload, OOM behavior, serialized POST probes, PHP worker execution and webshell creation | [PHP2Shell detection pack](./CVE-2026-109618_109619_PHP2Shell/) | Experimental |
+
+PHP2Shell affects internet-facing PHP deployments and has public proof-of-concept research. Prioritize patching to a fixed vendor release, then enable the pack for hunting and post-exploitation detection. Network alerts require correlation with PHP, process and file telemetry.
+
+The pack was reviewed on 2026-10-22 against public research, including the [CERT-EU advisory](https://cert.europa.eu/publications/security-advisories/2026-018/).
+
 ## Repository structure
 
 Each pack may contain:
