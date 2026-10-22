@@ -16,6 +16,16 @@ Ce dépôt fournit des détections comportementales pour l’exploitation de CVE
 
 Un pack n’a pas besoin des deux types de règles. Une règle STRICT précise est préférable à une règle BROAD bruyante.
 
+## Détections critiques mises en avant
+
+| Vulnérabilité | Produit | Couverture | Pack | Statut |
+| :--- | :--- | :--- | :--- | :--- |
+| CVE-2026-109618 et CVE-2026-109619 | PHP | Upload multipart, comportement OOM, POST sérialisés, exécution par worker PHP et création de webshell | [Pack de détection PHP2Shell](./CVE-2026-109618_109619_PHP2Shell/) | Expérimental |
+
+PHP2Shell concerne les déploiements PHP exposés sur Internet et fait l’objet de PoC publics. Prioriser la mise à jour vers une version corrigée par l’éditeur ou le fournisseur, puis activer le pack pour le hunting et la détection post-exploitation. Les alertes réseau doivent être corrélées avec la télémétrie PHP, processus et fichiers.
+
+Le pack a été revu le 2026-10-22 à partir des recherches publiques, notamment l’[avis CERT-EU](https://cert.europa.eu/publications/security-advisories/2026-018/).
+
 ## Structure du dépôt
 
 Chaque pack peut contenir :
